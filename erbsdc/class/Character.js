@@ -581,7 +581,7 @@ class Character {
                 (!this.arm ? 0 : this.arm.Attack_Speed) + 
                 (!this.leg ? 0 : this.leg.Attack_Speed) + 
                 (!this.accessory ? 0 : this.accessory.Attack_Speed)) * 
-                (1 + craftBonus + this.CRAFT_MASTERY.selectedIndex * craftBonus))) * attack_speed_minus;			
+                (1 + craftBonus + this.CRAFT_MASTERY.selectedIndex * craftBonus))) / 100 * attack_speed_minus;			
             this.ATTACK_SPEED.innerText = Math.round(this.attack_speed * 100) / 100;
 
             const shoichi_t = this.DIV.querySelector('.shoichi_t');
