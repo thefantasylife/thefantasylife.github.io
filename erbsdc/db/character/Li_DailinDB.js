@@ -292,7 +292,7 @@ const Li_Dailin = {
                         damage += baseAttackDamage(character, enemy, 0, 1 * (1 + liquid * 0.002), 0, 1) + 
                             baseAttackDamage(character, enemy, 0, (0.5 + character.T_LEVEL.selectedIndex * 0.25) * (1 + liquid * 0.002), 0, 1);
                     } else {
-                        damage += baseAttackDamage(character, enemy, 0, 1, 100, 1);
+                        damage += baseAttackDamage(character, enemy, 0, 1, 0, 1);
                     }
                 } else if (c === 'T') {
                     if (liquid) {
