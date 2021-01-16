@@ -54,9 +54,9 @@ const Fiora = {
             if (character.DIV.querySelector('.fiora_r').checked) {
                 const r = character.R_LEVEL.selectedIndex;
                 const bonus = calcSkillDamage(character, enemy, 30 + r * 5, 0.06 + r * 0.12, 1)
-                damage = Math.round((ba + bonus) * character.attack_speed * 100) / 100;
+                damage = round((ba + bonus) * character.attack_speed * 100) / 100;
             } else {
-                damage = Math.round(ba * character.attack_speed * 100) / 100;
+                damage = round(ba * character.attack_speed * 100) / 100;
             }
             return "<b class='damage'>" + damage + "</b><b> __h/s: </b><b class='heal'>" + life + '</b>';
         }
@@ -72,7 +72,8 @@ const Fiora = {
             const q = character.Q_LEVEL.selectedIndex;
             const min = calcSkillDamage(character, enemy, 60 + q * 60, 0.25, 1);
             const max = calcSkillDamage(character, enemy, (60 + q * 60) * (1.2 +character.critical_strike_damage / 100), 0.25 * (1.2 + character.critical_strike_damage / 100), 1);
-            return min + " - <b class='damage'>" + max + '</b>';
+            const cool = 10000 / ((9 - q * 1) * (100 - character.cooldown_reduction));
+            return min + " - <b class='damage'>" + max + "</b><b> __sd/s: </b><b class='damage'>" + round(max * cool) / 100 + '</b>';
         }
         return '-';
     }
@@ -86,12 +87,13 @@ const Fiora = {
             const min2 = baseAttackDamage(character, enemy, 0, 0.2 + w * 0.1, 0, 1);
             const max1 = baseAttackDamage(character, enemy, 0, 0.6 + w * 0.1, 100, 1);
             const max2 = baseAttackDamage(character, enemy, 0, 0.2 + w * 0.1, 100, 1);
+            const cool = 10000 / ((20 - w * 3) * (100 - character.cooldown_reduction));
             if (character.DIV.querySelector('.fiora_r').checked) {
                 const r = character.R_LEVEL.selectedIndex;
                 const bonus = calcSkillDamage(character, enemy, 30 + r * 5, 0.06 + r * 0.12, 1);
-                return "<b class='damage'>" + (damage1 + damage2 + bonus * 2) + '</b> ( ' +  min1 + ', ' + min2 + ', ' + bonus + ' - ' + max1 + ', ' + max2 + ', ' + bonus + ' ) ';
+                return "<b class='damage'>" + (damage1 + damage2 + bonus * 2) + '</b> ( ' +  min1 + ', ' + min2 + ', ' + bonus + ' - ' + max1 + ', ' + max2 + ', ' + bonus + " ) <b> __sd/s: </b><b class='damage'>" + round((damage1 + damage2 + bonus * 2) * cool) / 100 + '</b>';
             }
-            return "<b class='damage'>" + (damage1 + damage2) + '</b> ( ' +  min1 + ', ' + min2 + ' - ' + max1 + ', ' + max2 + ' ) ';
+            return "<b class='damage'>" + (damage1 + damage2) + '</b> ( ' +  min1 + ', ' + min2 + ' - ' + max1 + ', ' + max2 + " ) <b> __sd/s: </b><b class='damage'>" + round((damage1 + damage2) * cool) / 100 + '</b>';
         }
         return '-';
     }
@@ -101,7 +103,8 @@ const Fiora = {
             const e = character.E_LEVEL.selectedIndex;
             const min = calcSkillDamage(character, enemy, 90 + e * 40, 0.4, 1);
             const max = calcSkillDamage(character, enemy, (90 + e * 40) * (1.2 +character.critical_strike_damage / 100), 0.4 * (1.2 + character.critical_strike_damage / 100), 1);
-            return "<b class='damage'>" + min + '</b> - ' + max;
+            const cool = 10000 / ((16 - e * 2) * (100 - character.cooldown_reduction) + 200);
+            return "<b class='damage'>" + min + '</b> - ' + max + "<b> __sd/s: </b><b class='damage'>" + round(min * cool) / 100 + '</b>';
         }
         return '-';
     }
@@ -115,16 +118,19 @@ const Fiora = {
     }
     ,R_Option: "<b> _use</b><input type='checkbox' class='fiora_r' onchange='updateDisplay()'>"
     ,D_Skill: (character, enemy) => {
-        if (character.weapon && character.WEAPON_MASTERY.selectedIndex > 5) {
+        const wm = character.WEAPON_MASTERY.selectedIndex;
+        if (character.weapon && wm > 5) {
             const type = character.weapon.Type;
             if (type === 'TwoHandedSword') {
-                return "<b class='damage'>" + calcSkillDamage(character, enemy, 0, character.WEAPON_MASTERY.selectedIndex < 13 ? 2 : 2.5, 1) + '</b>';
+                return "<b class='damage'>" + calcSkillDamage(character, enemy, 0, wm < 13 ? 2 : 2.5, 1) + '</b>';
             }
             if (type === 'Rapier') {
-                return "<b class='damage'>" + calcSkillDamage(character, enemy, 0, (2 + character.critical_strike_damage / 100), 1) + '</b>';
+                const damage = calcSkillDamage(character, enemy, 0, (2 + character.critical_strike_damage / 100), 1);
+                const cool = 10000 / ((wm < 13 ? 20 : 12) * (100 - character.cooldown_reduction));
+                return "<b class='damage'>" + damage + "</b><b> __d/s: </b><b class='damage'>" + round(damage * cool) / 100 + '</b>';
             }
             if (type === 'Spear') {
-                const damage = calcSkillDamage(character, enemy, 0, character.WEAPON_MASTERY.selectedIndex < 13 ? 1 : 1.5, 1);
+                const damage = calcSkillDamage(character, enemy, 0, wm < 13 ? 1 : 1.5, 1);
                 return "<b class='damage'>" + damage * 2 + '</b> ( ' + damage + ', ' + damage + ' )';
             }
         }

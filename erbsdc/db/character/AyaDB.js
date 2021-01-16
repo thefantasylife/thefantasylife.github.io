@@ -61,8 +61,8 @@ const Aya = {
                 as = character.weapon.Ammo / ((character.weapon.Ammo - 1) / character.attack_speed + 2);
                 shot = baseAttackDamage(character, enemy, 0, 1, character.critical_strike_chance, 1);
             }
-            const damage1 = Math.round(shot * as * 100) / 100;
-            const damage2 = Math.round(shot * character.attack_speed * 100) / 100;
+            const damage1 = round(shot * as * 100) / 100;
+            const damage2 = round(shot * character.attack_speed * 100) / 100;
             const life1 = calcHeal(shot * (character.life_steal / 100), as, enemy);
             const life2 = calcHeal(shot * (character.life_steal / 100), character.attack_speed, enemy);
             return "<b class='damage'>" + damage1 + '</b> - ' + damage2 + "<b> __h/s: </b><b class='heal'>" + life1 + '</b> - ' + life2;
@@ -76,17 +76,21 @@ const Aya = {
     }
     ,Q_Skill: (character, enemy) => {
         if (character.weapon) {
+            const q = character.Q_LEVEL.selectedIndex;
             const damage1 = calcSkillDamage(character, enemy, 0, 1, 1);
-            const damage2 = calcSkillDamage(character, enemy, 20 + character.Q_LEVEL.selectedIndex * 40, 0.5, 1);
-            return "<b class='damage'>" + (damage1 + damage2) + '</b> ( ' + damage1 + ', ' + damage2 + ' )';
+            const damage2 = calcSkillDamage(character, enemy, 20 + q * 40, 0.5, 1);
+            const cool = 10000 / ((7 - q * 0.5) * (100 - character.cooldown_reduction));
+            return "<b class='damage'>" + (damage1 + damage2) + '</b> ( ' + damage1 + ', ' + damage2 + " )<b> __sd/s: </b><b class='damage'>" + round((damage1 + damage2) * cool) / 100 + '</b>';
         }
         return '-';
     }
     ,Q_Option: ''
     ,W_Skill: (character, enemy) => {
         if (character.weapon) {
-            const damage = calcSkillDamage(character, enemy, 22 + character.W_LEVEL.selectedIndex * 22, 0.3 + character.W_LEVEL.selectedIndex * 0.05, 1);
-            return "<b class='damage'>" + damage * 10 + '</b> ( ' + damage + ' x 10 )';
+            const w = character.W_LEVEL.selectedIndex;
+            const damage = calcSkillDamage(character, enemy, 22 + w * 22, 0.3 + w * 0.05, 1);
+            const cool = 10000 / ((18 - w * 1.5) * (100 - character.cooldown_reduction) * 317);
+            return "<b class='damage'>" + damage * 10 + '</b> ( ' + damage + " x 10 )<b> __sd/s: </b><b class='damage'>" + round(damage * 10 * cool) / 100 + '</b>';
         }
         return '-';
     }
@@ -103,18 +107,19 @@ const Aya = {
     }
     ,R_Option: ''
     ,D_Skill: (character, enemy) => {
-        if (character.weapon && character.WEAPON_MASTERY.selectedIndex > 5) {
+        const wm = character.WEAPON_MASTERY.selectedIndex;
+        if (character.weapon && wm > 5) {
             const type = character.weapon.Type;
             if (type === 'Pistol') {
                 return '-';
             }
             if (type === 'AssaultRifle') {
-                const as2 = calcAttackSpeed(character, character.WEAPON_MASTERY.selectedIndex < 13 ? 40 : 60);
+                const as2 = calcAttackSpeed(character, wm < 13 ? 40 : 60);
                 const as1 = 10 / (9.5 / as2 + 2);
                 const shot = baseAttackDamage(character, enemy, 0, 0.32, character.critical_strike_chance, 1) * 2 + 
                     baseAttackDamage(character, enemy, 0, 0.48, character.critical_strike_chance, 1);
-                const damage1 = Math.round(shot * as1 * 100) / 100;
-                const damage2 = Math.round(shot * as2 * 100) / 100;
+                const damage1 = round(shot * as1 * 100) / 100;
+                const damage2 = round(shot * as2 * 100) / 100;
                 const life1 = calcHeal(shot * (character.life_steal / 100), as1, enemy);
                 const life2 = calcHeal(shot * (character.life_steal / 100), as2, enemy);
                 const shield = 100 + character.T_LEVEL.selectedIndex * 50 + character.attack_power * 0.3 | 0;
@@ -122,7 +127,7 @@ const Aya = {
                     "<b> __s/s: </b><b class='shield'>" + (shield * (1 + as1 * 6) / 0.3 | 0) / 100 + '</b> - ' + (shield * (1 + as2 * 6) / 0.3 | 0) / 100;
             }
             if (type === 'SniperRifle') {
-                return "<b class='damage'>" + calcSkillDamage(character, enemy, 0, character.WEAPON_MASTERY.selectedIndex < 13 ? 2.5 : 3, 1) + '</b>';
+                return "<b class='damage'>" + calcSkillDamage(character, enemy, 0, wm < 13 ? 2.5 : 3, 1) + '</b>';
             }
         }
         return '-';

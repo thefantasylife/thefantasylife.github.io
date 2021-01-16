@@ -40,7 +40,7 @@ const Hyejin = {
     ,DPS: (character, enemy) => {
         if (character.weapon) {
             const ba = baseAttackDamage(character, enemy, 0, 1, character.critical_strike_chance, 1);
-            const damage = Math.round(ba * character.attack_speed * 100) / 100;
+            const damage = round(ba * character.attack_speed * 100) / 100;
             const life = calcHeal(ba * (character.life_steal / 100), character.attack_speed, enemy);
             return "<b class='damage'>" + damage + "</b><b> __h/s: </b><b class='heal'>" + life + '</b>';
         }
@@ -53,7 +53,10 @@ const Hyejin = {
     }
     ,Q_Skill: (character, enemy) => {
         if (character.weapon) {
-            return "<b class='damage'>" + calcSkillDamage(character, enemy, 100 + character.Q_LEVEL.selectedIndex * 25, 0.4, 1) + '</b>';
+            const q = character.Q_LEVEL.selectedIndex;
+            const damage = calcSkillDamage(character, enemy, 100 + character.Q_LEVEL.selectedIndex * 25, 0.4, 1);
+            const cool = 10000 / ((20 - q * 3) * (100 - character.cooldown_reduction));
+            return "<b class='damage'>" + damage + "</b><b> __sd/s: </b><b class='damage'>" + round(damage * cool) / 100 + '</b>';
         }
         return '-';
     }
@@ -63,7 +66,8 @@ const Hyejin = {
             const w = character.W_LEVEL.selectedIndex;
             const min = calcSkillDamage(character, enemy, 15 + w * 5, 0.5, 1);
             const max = calcSkillDamage(character, enemy, 140 + w * 65, 0.5, 1);
-            return "<b class='damage'>" + min + ' ~ ' + max + '</b>';
+            const cool = 10000 / ((22 - w * 3) * (100 - character.cooldown_reduction));
+            return "<b class='damage'>" + min + ' ~ ' + max + "</b><b> __sd/s: </b><b class='damage'>" + round(min * cool) / 100 + '</b>';
         }
         return '-';
     }
@@ -73,7 +77,8 @@ const Hyejin = {
             const e = character.E_LEVEL.selectedIndex;
             const damage1 = calcSkillDamage(character, enemy, 45 + e * 25, 0.3, 1);
             const damage2 = calcSkillDamage(character, enemy, 50 + e * 25, 0.5, 1);
-            return "<b class='damage'>" + (damage1 + damage2) + '</b> ( ' + damage1 + ', ' + damage2 + ' )';
+            const cool = 10000 / (12 * (100 - character.cooldown_reduction) + 50);
+            return "<b class='damage'>" + (damage1 + damage2) + '</b> ( ' + damage1 + ', ' + damage2 + " )<b> __sd/s: </b><b class='damage'>" + round((damage1 + damage2) * cool) / 100 + '</b>';
         }
         return '-';
     }

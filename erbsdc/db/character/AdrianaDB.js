@@ -36,7 +36,7 @@ const Adriana = {
     ,DPS: (character, enemy) => {
         if (character.weapon) {
             const ba = baseAttackDamage(character, enemy, 0, 1, character.critical_strike_chance, 1);
-            const damage = Math.round(ba * character.attack_speed * 100) / 100;
+            const damage = round(ba * character.attack_speed * 100) / 100;
             const life = calcHeal(ba * (character.life_steal / 100), character.attack_speed, enemy);
             return "<b class='damage'>" + damage + "</b><b> __h/s: </b><b class='heal'>" + life + '</b>';
         }
@@ -51,7 +51,8 @@ const Adriana = {
         if (character.weapon) {
             const q = character.Q_LEVEL.selectedIndex;
             const damage = calcTrueDamage(character, enemy, 12 + q * 3 + character.attack_power * (0.1 + q * 0.05));
-            return "<b class='damage'>" + damage + ' ~ ' + damage * 9 + '</b> ( ' + damage + ' x 9 )';
+            const cool = 10000 / ((7 - q * 0.5) * (100 - character.cooldown_reduction) + 200);
+            return "<b class='damage'>" + damage + ' ~ ' + damage * 9 + '</b> ( ' + damage + " x 9 )<b> __sd/s: </b><b class='damage'>" + round(damage * 9 * cool) / 100 + '</b>';
         }
         return '-';
     }
@@ -75,8 +76,10 @@ const Adriana = {
     ,E_Option: ''
     ,R_Skill: (character, enemy) => {
         if (character.weapon) {
+            const r = character.R_LEVEL.selectedIndex;
             const damage = calcSkillDamage(character, enemy, 70 + character.R_LEVEL.selectedIndex * 60, 0.4, 1);
-            return "<b class='damage'>" + damage + ' ~ ' + damage * 3 + '</b> ( ' + damage + ' x 3 )';
+            const cool = 10000 / ((40 - r * 7) * (100 - character.cooldown_reduction));
+            return "<b class='damage'>" + damage + ' ~ ' + damage * 3 + '</b> ( ' + damage + " x 3 )<b> __sd/s: </b><b class='damage'>" + round(damage * cool) / 100 + '</b>';
         }
         return '-';
     }

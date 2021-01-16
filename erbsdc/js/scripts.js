@@ -18,6 +18,32 @@ function baseAttackDamage(character, enemy, base, coe, cri, onhit) {
         (1 + (enemy.weapon ? enemy.character.correction[enemy.weapon.Type][1][enemy.MODE.selectedIndex] / 100 : 0)) | 0;
 }
 
+function calcEquip(character, name, n) {
+    let coe = 1.007 + character.CRAFT_MASTERY.selectedIndex * 0.007
+    if (n) {
+        for (let i = 0; i < n; i++) {
+            coe *= 10;
+        }
+    }
+    let result = (!character.weapon ? 0 : round6(character.weapon[name] * coe)) + 
+        (!character.chest ? 0 : round6(character.chest[name] * coe)) + 
+        (!character.head ? 0 : round6(character.head[name] * coe)) + 
+        (!character.arm ? 0 : round6(character.arm[name] * coe)) + 
+        (!character.leg ? 0 : round6(character.leg[name] * coe)) + 
+        (!character.accessory ? 0 : round6(character.accessory[name] * coe));
+    if (n) {
+        for (let i = 0; i < n; i++) {
+            result /= 10;
+        }
+    }
+    return result;
+}
+
+
+function calcHeal(heal, ps, enemy) {
+    return round(heal * (enemy.heal_reduction ? 0.6 : 1) * ps * 100) / 100;
+}
+
 function calcSkillDamage(character, enemy, base, coe, onhit) {	
     return (((base + character.attack_power * coe) / (1 + (!enemy.defense ? 0 : enemy.defense / 100)) + 
         (character.skill_amplification - (!enemy.skill_damage_reduction ? 0 : enemy.skill_damage_reduction)) * onhit) * 
@@ -32,13 +58,15 @@ function calcTrueDamage(character, enemy, damage) {
         (1 + (enemy.weapon ? enemy.character.correction[enemy.weapon.Type][1][enemy.MODE.selectedIndex] / 100 : 0)) | 0;
 }
 
-function calcHeal(heal, ps, enemy) {
-    return Math.round(heal * (enemy.heal_reduction ? 0.6 : 1) * ps * 100) / 100;
+function fixLimitNum(target, max) {
+    const value = target.value;
+    if (value === '' || value < 0) {
+        target.value = 0;
+    } else if (value > max) {
+        target.value = max;
+    }
+    updateDisplay();
 }
-
-function calcAttackSpeed(character, bonusAs) {
-    return character.attack_speed + (character.base_attack_speed * bonusAs | 0) / 100;
-} 
 
 function hartUp(s, x) {
     const skill = [
@@ -77,14 +105,48 @@ function hartUp(s, x) {
     updateDisplay();
 }
 
-function fixLimitNum(target, max) {
-    const value = target.value;
-    if (value === '' || value < 0) {
-        target.value = 0;
-    } else if (value > max) {
-        target.value = max;
+function round(n, d) {
+    if (d) {
+        for (let i = 0; i < d; i++) {
+            n *= 10;
+        }
+        if (n % 1 >= 0.5) {
+            n = (n | 0) + 1;
+        } else {
+            n = n | 0;
+        }
+        let v = 1;
+        for (let i = 0; i < d; i++) {
+            v *= 10;
+        }
+        return n / v;
     }
-    updateDisplay();
+    if (n % 1 >= 0.5) {
+        return (n | 0) + 1;
+    }
+    return n | 0;
+}
+
+function round6(n, d) {
+    if (d) {
+        for (let i = 0; i < d; i++) {
+            n *= 10;
+        }
+        if (n % 1 >= 0.6) {
+            n = (n | 0) + 1;
+        } else {
+            n = n | 0;
+        }
+        let v = 1;
+        for (let i = 0; i < d; i++) {
+            v *= 10;
+        }
+        return n / v;
+    }
+    if (n % 1 >= 0.6) {
+        return (n | 0) + 1;
+    }
+    return n | 0;
 }
 
 function updateDisplay() {

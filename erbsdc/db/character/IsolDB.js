@@ -57,8 +57,8 @@ const Isol = {
                 as = character.weapon.Ammo / ((character.weapon.Ammo - 1) / character.attack_speed + 2);
                 shot = baseAttackDamage(character, enemy, 0, 1, character.critical_strike_chance, 1);
             }
-            const damage1 = Math.round(shot * as * 100) / 100;
-            const damage2 = Math.round(shot * character.attack_speed * 100) / 100;
+            const damage1 = round(shot * as * 100) / 100;
+            const damage2 = round(shot * character.attack_speed * 100) / 100;
             const life1 = calcHeal(shot * (character.life_steal / 100), as, enemy);
             const life2 = calcHeal(shot * (character.life_steal / 100), character.attack_speed, enemy);
             return "<b class='damage'>" + damage1 + '</b> - ' + damage2 + "<b> __h/s: </b><b class='heal'>" + life1 + '</b> - ' + life2;
@@ -75,17 +75,19 @@ const Isol = {
             const q = character.Q_LEVEL.selectedIndex;
             const stack = parseInt(character.DIV.querySelector('.isol_q').value);
             const min = calcSkillDamage(character, enemy, 50 + q * 25, 0.5, 1);
-            const max = calcSkillDamage(character, enemy, 50 + q * 25 + 
-                (8 + q * 4) * stack, 0.5 + stack * 0.3, 1);
-            return min + " ~ <b class='damage'>" +  + max + '</b>';
+            const max = calcSkillDamage(character, enemy, 50 + q * 25 + (8 + q * 4) * stack, 0.5 + stack * 0.3, 1);
+            const cool = 10000 / ((18 - q * 2) * (100 - character.cooldown_reduction) + 27);
+            return min + " ~ <b class='damage'>" +  + max + "</b><b> __sd/s: </b><b class='damage'>" + round(max * cool) / 100 + '</b>';
         }
         return '-';
     }
     ,Q_Option: "<span> </span><input type='number' class='stack isol_q' value='0' onchange='fixLimitNum(this, 10)'><b>Stack</b>"
     ,W_Skill: (character, enemy) => {
         if (character.weapon) {
-            const damage = calcSkillDamage(character, enemy, 18 + character.W_LEVEL.selectedIndex * 9, 0.5, 1);
-            return "<b class='damage'>" + damage * 4 + '</b> ( ' + damage + ' x 4 )';
+            const w = character.W_LEVEL.selectedIndex;
+            const damage = calcSkillDamage(character, enemy, 18 + w * 9, 0.5, 1);
+            const cool = 10000 / ((16 - w * 1.5) * (100 - character.cooldown_reduction) + 200);
+            return "<b class='damage'>" + damage * 4 + '</b> ( ' + damage + " x 4 )<b> __sd/s: </b><b class='damage'>" + round((damage * 4) * cool) / 100 + '</b>';
         }
         return '-';
     }
@@ -96,7 +98,10 @@ const Isol = {
     ,E_Option: ''
     ,R_Skill: (character, enemy) => {
         if (character.weapon) {
-            return "<b class='damage'>" + ((100 + character.R_LEVEL.selectedIndex * 50 + character.attack_power * 0.3) * (1.04 + character.TRAP_MASTERY.selectedIndex * 0.04) | 0) + '</b>';
+            const r = character.R_LEVEL.selectedIndex;
+            const damage = (100 + r * 50 + character.attack_power * 0.3) * (1.04 + character.TRAP_MASTERY.selectedIndex * 0.04) | 0;
+            const cool = 10000 / ((30 - r * 5) * (100 - character.cooldown_reduction) + 54);
+            return "<b class='damage'>" + damage + "</b><b> __d/s: </b><b class='damage'>" + round(damage * cool) / 100 + '</b>';
         }
         return '-';
     }
@@ -112,8 +117,8 @@ const Isol = {
                 const as1 = 10 / (9.5 / as2 + 2);
                 const shot = baseAttackDamage(character, enemy, 0, 0.32, character.critical_strike_chance, 1) * 2 + 
                     baseAttackDamage(character, enemy, 0, 0.48, character.critical_strike_chance, 1);
-                const damage1 = Math.round(shot * as1 * 100) / 100;
-                const damage2 = Math.round(shot * as2 * 100) / 100;
+                const damage1 = round(shot * as1 * 100) / 100;
+                const damage2 = round(shot * as2 * 100) / 100;
                 const life1 = calcHeal(shot * (character.life_steal / 100), as1, enemy);
                 const life2 = calcHeal(shot * (character.life_steal / 100), as2, enemy);
                 return "<b> _d/s: </b><b class='damage'>" + damage1 + '</b> - ' + damage2 + "<b> __h/s: </b><b class='heal'>" + life1 + '</b> - ' + life2;

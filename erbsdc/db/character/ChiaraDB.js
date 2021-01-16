@@ -36,7 +36,7 @@ const Chiara = {
     ,DPS: (character, enemy) => {
         if (character.weapon) {
             const ba = baseAttackDamage(character, enemy, 0, 1, character.critical_strike_chance, 1);
-            const damage = Math.round(ba * character.attack_speed * 100) / 100;
+            const damage = round(ba * character.attack_speed * 100) / 100;
             const life = calcHeal(ba * (character.life_steal / 100), character.attack_speed, enemy);
             return "<b class='damage'>" + damage + "</b><b> __h/s: </b><b class='heal'>" + life + '</b>';
         }
@@ -49,7 +49,10 @@ const Chiara = {
     }
     ,Q_Skill: (character, enemy) => {
         if (character.weapon) {
-            return "<b class='damage'>" + calcSkillDamage(character, enemy, 60 + character.Q_LEVEL.selectedIndex * 40, 0.6, 1) + '</b>';
+            const q = character.Q_LEVEL.selectedIndex;
+            const damage = calcSkillDamage(character, enemy, 60 + q * 40, 0.6, 1);
+            const cool = 10000 / ((10 - q * 0.5) * (100 - character.cooldown_reduction));
+            return "<b class='damage'>" + damage + "</b><b> __sd/s: </b><b class='damage'>" + round(damage * cool) / 100 + '</b>';
         }
         return '-';
     }
@@ -59,7 +62,8 @@ const Chiara = {
             const w = character.W_LEVEL.selectedIndex;
             const damage = calcSkillDamage(character, enemy, 80 + w * 40, 0.75, 1);
             const shield = 90 + w * 35 + character.attack_power * 0.6 | 0;
-            return "<b class='damage'>" + damage + "</b><b> __s: </b><b class='shield'>" + shield;
+            const cool = 10000 / ((16 - w * 1) * (100 - character.cooldown_reduction));
+            return "<b class='damage'>" + damage + "</b><b> __s: </b><b class='shield'>" + shield + "</b><b> __s/s: </b><b class='shield'>" + round(shield * cool) / 100 + '</b>';
         }
         return '-';
     }
@@ -69,7 +73,8 @@ const Chiara = {
             const e = character.E_LEVEL.selectedIndex;
             const damage1 = calcSkillDamage(character, enemy, 40 + e * 20, 0.3, 1);
             const damage2 = calcSkillDamage(character, enemy, 70 + e * 40, 0.7, 1);
-            return "<b class='damage'>" + (damage1 + damage2) + '</b> ( ' + damage1 + ', ' + damage2 + ' )';
+            const cool = 10000 / ((17 - e * 1.5) * (100 - character.cooldown_reduction));
+            return "<b class='damage'>" + (damage1 + damage2) + '</b> ( ' + damage1 + ', ' + damage2 + " )<b> __sd/s: </b><b class='damage'>" + round((damage1 + damage2) * cool) / 100 + '</b>';
         }
         return '-';
     }
@@ -85,10 +90,13 @@ const Chiara = {
     }
     ,R_Option: "<b> _use</b><input type='checkbox' class='chiara_r' onchange='updateDisplay()'>"
     ,D_Skill: (character, enemy) => {
-        if (character.weapon && character.WEAPON_MASTERY.selectedIndex > 5) {
+        const wm = character.WEAPON_MASTERY.selectedIndex;
+        if (character.weapon && wm > 5) {
             const type = character.weapon.Type;
             if (type === 'Rapier') {
-                return "<b class='damage'>" + calcSkillDamage(character, enemy, 0, (2 + character.critical_strike_damage / 100), 1) + '</b>';
+                const damage = calcSkillDamage(character, enemy, 0, (2 + character.critical_strike_damage / 100), 1);
+                const cool = 10000 / ((wm < 13 ? 20 : 12) * (100 - character.cooldown_reduction));
+                return "<b class='damage'>" + damage + "</b><b> __sd/s: </b><b class='damage'>" + round(damage * cool) / 100 + '</b>';
             }
         }
         return '-';

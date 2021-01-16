@@ -44,9 +44,9 @@ const Nadine = {
             let damage;
             if (character.DIV.querySelector('.nadine_r').checked) {
                 const bonus = calcSkillDamage(character, enemy, 50 + character.R_LEVEL.selectedIndex * 50 + parseInt(character.DIV.querySelector('.nadine_t').value), 0.5, 1) / 3;
-                damage = Math.round((ba + bonus) * character.attack_speed * 100) / 100;
+                damage = round((ba + bonus) * character.attack_speed * 100) / 100;
             } else {
-                damage = Math.round(ba * character.attack_speed * 100) / 100;
+                damage = round(ba * character.attack_speed * 100) / 100;
             }
             return "<b class='damage'>" + damage + "</b><b> __h/s: </b><b class='heal'>" + life + '</b>';
         }
@@ -63,7 +63,8 @@ const Nadine = {
             const stack = parseInt(character.DIV.querySelector('.nadine_t').value);
             const min = calcSkillDamage(character, enemy, 70 + q * 45 + stack, 0.6, 1);
             const max = calcSkillDamage(character, enemy, 140 + q * 90 + stack, 1.2, 1);
-            return "<b class='damage'>" + min + ' ~ ' + max + '</b>';
+            const cool = 10000 / (7 * (100 - character.cooldown_reduction) + 200);
+            return "<b class='damage'>" + min + ' ~ ' + max + "</b><b> __sd/s: </b><b class='damage'>" + round(max * cool) / 100 + '</b>';
         }
         return '-';
     }

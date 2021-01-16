@@ -519,8 +519,6 @@ class Character {
 
     calcStat() {
         if (this.character) {
-            const craftBonus = 0.007;
-            
             this.heal_reduction = 
                 this.weapon && (
                     this.weapon.Name === 'Harpe' || 
@@ -542,21 +540,15 @@ class Character {
             const axe_d_s = this.DIV.querySelector('.axe_d_s');
             const axe_d_u = this.DIV.querySelector('.axe_d_u');
             var hart_w_u = this.DIV.querySelector('.hart_w_u');
-            const attack_power_percent = 1 + (jackie_t_w ? (jackie_t_w.checked ? jackie_tw[this.T_LEVEL.selectedIndex] : 0) + 
+            const attack_power_percent = 1 + 
+                (jackie_t_w ? (jackie_t_w.checked ? jackie_tw[this.T_LEVEL.selectedIndex] : 0) + 
                 (jackie_t_s.checked ? jackie_ts[this.T_LEVEL.selectedIndex] : 0) : 0) + 
                 (axe_d_s ? axe_d_s.value * (axe_d_u.checked ? 0.05 + this.DIV.querySelector('.axe_d_hp').value * 0.001 : 0.02) : 0) + 
                 (hart_w_u && hart_w_u.checked ? 0.12 + this.W_LEVEL.selectedIndex * 0.07 : 0);
             this.attack_power = 
-                (this.character.Attack_Power + 
-                this.character.Attack_Power_Growth * this.LEVEL.selectedIndex + 
-                ((!this.weapon ? 0 : this.weapon.Attack_Power) + 
-                (!this.chest ? 0 : this.chest.Attack_Power) + 
-                (!this.head ? 0 : this.head.Attack_Power) + 
-                (!this.arm ? 0 : this.arm.Attack_Power) + 
-                (!this.leg ? 0 : this.leg.Attack_Power) + 
-                (!this.accessory ? 0 : this.accessory.Attack_Power)) * 
-                (1 + craftBonus + this.CRAFT_MASTERY.selectedIndex * craftBonus)) * attack_power_percent;
-            this.ATTACK_POWER.innerText = this.attack_power | 0;
+                (this.character.Attack_Power + this.character.Attack_Power_Growth * this.LEVEL.selectedIndex + 
+                    calcEquip(this, 'Attack_Power', 2)) * attack_power_percent | 0;
+            this.ATTACK_POWER.innerText = this.attack_power;
 
             this.base_attack_speed = this.character.Atk_Speed + (!this.weapon ? 0 : this.weapon.Atk_Speed);
 
@@ -565,159 +557,83 @@ class Character {
             const nadine_r = this.enemy.DIV.querySelector('.nadine_r');
             const lida_w = this.DIV.querySelector('.lida_w');
             const silvia_t = this.DIV.querySelector('.silvia_t');
-            const attack_speed_bonus = (jackie_r && jackie_r.checked ? 20 + this.R_LEVEL.selectedIndex * 5 : 0) + 
+            const attack_speed_bonus = 
+                (jackie_r && jackie_r.checked ? 20 + this.R_LEVEL.selectedIndex * 5 : 0) + 
                 (nadine_e ? (10 + this.E_LEVEL.selectedIndex * 5) * (nadine_e.checked ? 2 : 1) : 0) + 
                 (lida_w && lida_w.checked ? 10 + this.T_LEVEL.selectedIndex * 15 : 0) + 
                 (silvia_t ? silvia_t.value * (1 + this.T_LEVEL.selectedIndex * 1) : 0);
             const attack_speed_minus = 1 - (nadine_r && nadine_r.checked ? 0.35 : 0);
             this.attack_speed = 
-                ((this.base_attack_speed) * 
-                (100 + attack_speed_bonus + 
-                (!this.weapon ? 0 : this.weapon_mastery_attack_speed + 
-                this.WEAPON_MASTERY.selectedIndex * this.weapon_mastery_attack_speed) + 
-                ((!this.weapon ? 0 : this.weapon.Attack_Speed) + 
-                (!this.chest ? 0 : this.chest.Attack_Speed) + 
-                (!this.head ? 0 : this.head.Attack_Speed) + 
-                (!this.arm ? 0 : this.arm.Attack_Speed) + 
-                (!this.leg ? 0 : this.leg.Attack_Speed) + 
-                (!this.accessory ? 0 : this.accessory.Attack_Speed)) * 
-                (1 + craftBonus + this.CRAFT_MASTERY.selectedIndex * craftBonus))) / 100 * attack_speed_minus;			
-            this.ATTACK_SPEED.innerText = Math.round(this.attack_speed * 100) / 100;
+                round(this.base_attack_speed * 
+                    (100 + attack_speed_bonus + 
+                    (!this.weapon ? 0 : (1 + this.WEAPON_MASTERY.selectedIndex) * this.weapon_mastery_attack_speed) + 
+                    calcEquip(this, 'Attack_Speed')) * attack_speed_minus) / 100;			
+            this.ATTACK_SPEED.innerText = this.attack_speed;
 
             const shoichi_t = this.DIV.querySelector('.shoichi_t');
             const cri_bonus = (shoichi_t ? shoichi_t.value * (3 + this.T_LEVEL.selectedIndex * 3) : 0);
             this.critical_strike_chance = 
-                ((!this.weapon ? 0 : this.weapon.Critical_Strike_Chance) + 
-                (!this.chest ? 0 : this.chest.Critical_Strike_Chance) + 
-                (!this.head ? 0 : this.head.Critical_Strike_Chance) + 
-                (!this.arm ? 0 : this.arm.Critical_Strike_Chance) + 
-                (!this.leg ? 0 : this.leg.Critical_Strike_Chance) + 
-                (!this.accessory ? 0 : this.accessory.Critical_Strike_Chance)) * 
-                (1 + craftBonus + this.CRAFT_MASTERY.selectedIndex * craftBonus) + cri_bonus;
-            if (this.critical_strike_chance > 100) {
-                this.critical_strike_chance = 100;
-            }
-            this.CRITICAL_STRIKE_CHANCE.innerText = Math.round(this.critical_strike_chance) + '%';
+                calcEquip(this, 'Critical_Strike_Chance') + cri_bonus;
+                if (this.critical_strike_chance > 100) {
+                    this.critical_strike_chance = 100;
+                }
+            this.CRITICAL_STRIKE_CHANCE.innerText = this.critical_strike_chance + '%';
 
             this.critical_strike_damage = 
-                ((!this.weapon ? 0 : this.weapon.Critical_Strike_Damage) + 
-                (!this.chest ? 0 : this.chest.Critical_Strike_Damage) + 
-                (!this.head ? 0 : this.head.Critical_Strike_Damage) + 
-                (!this.arm ? 0 : this.arm.Critical_Strike_Damage) + 
-                (!this.leg ? 0 : this.leg.Critical_Strike_Damage) + 
-                (!this.accessory ? 0 : this.accessory.Critical_Strike_Damage)) * 
-                (1 + craftBonus + this.CRAFT_MASTERY.selectedIndex * craftBonus);
-            this.CRITICAL_STRIKE_DAMAGE.innerText = Math.round(this.critical_strike_damage) + '%';
+                calcEquip(this, 'Critical_Strike_Damage');
+            this.CRITICAL_STRIKE_DAMAGE.innerText = this.critical_strike_damage + '%';
 
             this.life_steal = 
-                ((!this.weapon ? 0 : this.weapon.Life_Steal) + 
-                (!this.chest ? 0 : this.chest.Life_Steal) + 
-                (!this.head ? 0 : this.head.Life_Steal) + 
-                (!this.arm ? 0 : this.arm.Life_Steal) + 
-                (!this.leg ? 0 : this.leg.Life_Steal) + 
-                (!this.accessory ? 0 : this.accessory.Life_Steal)) * 
-                (1 + craftBonus + this.CRAFT_MASTERY.selectedIndex * craftBonus);
-            this.LIFE_STEAL.innerText = Math.round(this.life_steal) + '%';
+                calcEquip(this, 'Life_Steal');
+            this.LIFE_STEAL.innerText = this.life_steal + '%';
 
-            this.extra_normal_attack_damage = 
-                ((!this.weapon ? 0 : this.weapon.Extra_Normal_Attack_Damage) + 
-                (!this.chest ? 0 : this.chest.Extra_Normal_Attack_Damage) + 
-                (!this.head ? 0 : this.head.Extra_Normal_Attack_Damage) + 
-                (!this.arm ? 0 : this.arm.Extra_Normal_Attack_Damage) + 
-                (!this.leg ? 0 : this.leg.Extra_Normal_Attack_Damage) + 
-                (!this.accessory ? 0 : this.accessory.Extra_Normal_Attack_Damage)) * 
-                (1 + craftBonus + this.CRAFT_MASTERY.selectedIndex * craftBonus);
+            this.extra_normal_attack_damage = calcEquip(this, 'Extra_Normal_Attack_Damage');
             this.extra_normal_attack_damage_percent = 
-                this.weapon == null ? 0 : this.weapon_mastery_extra_normal_attack_damage_percent + 
-                this.WEAPON_MASTERY.selectedIndex * this.weapon_mastery_extra_normal_attack_damage_percent;
+                this.weapon == null ? 0 : round((1 + this.WEAPON_MASTERY.selectedIndex) * this.weapon_mastery_extra_normal_attack_damage_percent);
             this.EXTRA_NORMAL_ATTACK_DAMAGE.innerText = 
-                (this.extra_normal_attack_damage | 0) + '| ' + Math.round(this.extra_normal_attack_damage_percent) + '%';
+                this.extra_normal_attack_damage + '| ' + this.extra_normal_attack_damage_percent + '%';
                 
             const hart_e = this.DIV.querySelector('.hart_e');
             const hart_ee = this.DIV.querySelector('.hart_ee');
             const hart_e_s = this.DIV.querySelector('.hart_e_s');
             const sissela_t = this.DIV.querySelector('.sissela_t');
-            const skill_amplification_bonus = (sissela_t ? (2 + this.T_LEVEL.selectedIndex * 3) * 
-                (sissela_t.value < 10 ? 0 : (sissela_t.value >= 90 ? 5 : sissela_t.value / 20 + 0.5)) * 
-                (this.DIV.querySelector('.sissela_r').checked ? 2 : 1) : 0) + 
+            const skill_amplification_bonus = 
+                (sissela_t ? (2 + this.T_LEVEL.selectedIndex * 3) * 
+                    (sissela_t.value < 10 ? 0 : (sissela_t.value >= 90 ? 5 : sissela_t.value / 20 + 0.5)) * 
+                    (this.DIV.querySelector('.sissela_r').checked ? 2 : 1) : 0);
+            const skill_amplification_percent_bonus = (hart_e ? hart_e_s.value * (hart_ee.checked ? 25 : hart_e.checked ? 15 : 0) : 0) + 
                 (silvia_t && silvia_t.value == 15 ? 15 : 0);
-            const skill_amplification_percent_bonus = (hart_e ? hart_e_s.value * (hart_ee.checked ? 25 : hart_e.checked ? 15 : 0) : 0);
             this.skill_amplification = 
-                ((!this.weapon ? 0 : this.weapon.Skill_Amplification) + 
-                (!this.chest ? 0 : this.chest.Skill_Amplification) + 
-                (!this.head ? 0 : this.head.Skill_Amplification) + 
-                (!this.arm ? 0 : this.arm.Skill_Amplification) + 
-                (!this.leg ? 0 : this.leg.Skill_Amplification) + 
-                (!this.accessory ? 0 : this.accessory.Skill_Amplification)) * 
-                (1 + craftBonus + this.CRAFT_MASTERY.selectedIndex * craftBonus) + 
-                skill_amplification_bonus;
+                round(calcEquip(this, 'Skill_Amplification', 2) + skill_amplification_bonus, 1);
             this.skill_amplification_percent = 
-                (!this.weapon ? 0 : this.weapon_mastery_skill_amplification_percent + 
-                this.WEAPON_MASTERY.selectedIndex * this.weapon_mastery_skill_amplification_percent) + 
-                ((!this.weapon ? 0 : this.weapon.Skill_Amplification_Percent) + 
-                (!this.chest ? 0 : this.chest.Skill_Amplification_Percent) + 
-                (!this.head ? 0 : this.head.Skill_Amplification_Percent) + 
-                (!this.arm ? 0 : this.arm.Skill_Amplification_Percent) + 
-                (!this.leg ? 0 : this.leg.Skill_Amplification_Percent) + 
-                (!this.accessory ? 0 : this.accessory.Skill_Amplification_Percent)) * 
-                (1 + craftBonus + this.CRAFT_MASTERY.selectedIndex * craftBonus) + 
-                skill_amplification_percent_bonus;
+                round((!this.weapon ? 0 : (1 + this.WEAPON_MASTERY.selectedIndex) * this.weapon_mastery_skill_amplification_percent) + 
+                    calcEquip(this, 'Skill_Amplification_Percent') + 
+                    skill_amplification_percent_bonus);
             this.SKILL_AMPLIFICATION.innerText = 
-                Math.round(this.skill_amplification * 10) / 10 + '| ' + Math.round(this.skill_amplification_percent) + '%';
+                this.skill_amplification + '| ' + this.skill_amplification_percent + '%';
 
-            this.cooldown_reduction = 
-                ((!this.weapon ? 0 : this.weapon.Cooldown_Reduction) + 
-                (!this.chest ? 0 : this.chest.Cooldown_Reduction) + 
-                (!this.head ? 0 : this.head.Cooldown_Reduction) + 
-                (!this.arm ? 0 : this.arm.Cooldown_Reduction) + 
-                (!this.leg ? 0 : this.leg.Cooldown_Reduction) + 
-                (!this.accessory ? 0 : this.accessory.Cooldown_Reduction)) * 
-                (1 + craftBonus + this.CRAFT_MASTERY.selectedIndex * craftBonus);
+            this.cooldown_reduction = calcEquip(this, 'Cooldown_Reduction');
             if (this.cooldown_reduction > 40) {
                 this.cooldown_reduction = 40;
             }
-            this.COOLDOWN_REDUCTION.innerText = Math.round(this.cooldown_reduction) + '%';
+            this.COOLDOWN_REDUCTION.innerText = this.cooldown_reduction + '%';
 
             this.sp_regen = 
-                this.character.Stamina_Regen + 
-                this.character.Stamina_Regen_Growth * this.LEVEL.selectedIndex + 
-                ((!this.weapon ? 0 : this.weapon.SP_Regen) + 
-                (!this.chest ? 0 : this.chest.SP_Regen) + 
-                (!this.head ? 0 : this.head.SP_Regen) + 
-                (!this.arm ? 0 : this.arm.SP_Regen) + 
-                (!this.leg ? 0 : this.leg.SP_Regen) + 
-                (!this.accessory ? 0 : this.accessory.SP_Regen)) * 
-                (1 + craftBonus + this.CRAFT_MASTERY.selectedIndex * craftBonus);
+                round(this.character.Stamina_Regen + this.character.Stamina_Regen_Growth * this.LEVEL.selectedIndex + 
+                    calcEquip(this, 'SP_Regen', 2), 1);
+            
             this.sp_regen_percent = 
-                ((!this.weapon ? 0 : this.weapon.SP_Regen_Percent) + 
-                (!this.chest ? 0 : this.chest.SP_Regen_Percent) + 
-                (!this.head ? 0 : this.head.SP_Regen_Percent) + 
-                (!this.arm ? 0 : this.arm.SP_Regen_Percent) + 
-                (!this.leg ? 0 : this.leg.SP_Regen_Percent) + 
-                (!this.accessory ? 0 : this.accessory.SP_Regen_Percent)) * 
-                (1 + craftBonus + this.CRAFT_MASTERY.selectedIndex * craftBonus);
+                calcEquip(this, 'SP_Regen_Percent');
             this.SP_REGEN.innerText = 
-                Math.round(this.sp_regen * 10) / 10 + '| ' + Math.round(this.sp_regen_percent) + '%';
+                this.sp_regen + '| ' + this.sp_regen_percent + '%';
 
             this.skill_damage_reduction = 
-                ((!this.weapon ? 0 : this.weapon.Skill_Damage_Reduction) + 
-                (!this.chest ? 0 : this.chest.Skill_Damage_Reduction) + 
-                (!this.head ? 0 : this.head.Skill_Damage_Reduction) + 
-                (!this.arm ? 0 : this.arm.Skill_Damage_Reduction) + 
-                (!this.leg ? 0 : this.leg.Skill_Damage_Reduction) + 
-                (!this.accessory ? 0 : this.accessory.Skill_Damage_Reduction)) * 
-                (1 + craftBonus + this.CRAFT_MASTERY.selectedIndex * craftBonus);
+                calcEquip(this, 'Skill_Damage_Reduction');
             this.skill_damage_reduction_percent = 
-                1 + this.DEFENSE_MASTERY.selectedIndex * 1 + 
-                ((!this.weapon ? 0 : this.weapon.Skill_Damage_Reduction_Percent) + 
-                (!this.chest ? 0 : this.chest.Skill_Damage_Reduction_Percent) + 
-                (!this.head ? 0 : this.head.Skill_Damage_Reduction_Percent) + 
-                (!this.arm ? 0 : this.arm.Skill_Damage_Reduction_Percent) + 
-                (!this.leg ? 0 : this.leg.Skill_Damage_Reduction_Percent) + 
-                (!this.accessory ? 0 : this.accessory.Skill_Damage_Reduction_Percent)) * 
-                (1 + craftBonus + this.CRAFT_MASTERY.selectedIndex * craftBonus);
+                round((1 + this.DEFENSE_MASTERY.selectedIndex) * 1 + 
+                    calcEquip(this, 'Skill_Damage_Reduction_Percent'));
             this.SKILL_DAMAGE_REDUCTION.innerText = 
-                (this.skill_damage_reduction | 0) + '| ' + Math.round(this.skill_damage_reduction_percent) + '%';
+                this.skill_damage_reduction + '| ' + this.skill_damage_reduction_percent + '%';
 
             const magnus_t = this.DIV.querySelector('.magnus_t');
             const hammer_d = this.enemy.DIV.querySelector('.hammer_d');
@@ -732,9 +648,11 @@ class Character {
             const xiukai_r = this.enemy.DIV.querySelector('.xiukai_r');
             var chiara_t = this.enemy.DIV.querySelector('.chiara_t');
             const silvia_r = this.DIV.querySelector('.silvia_r');
-            const defense_percent = 1 + (magnus_t ? magnus_t.value * (0.002 + this.T_LEVEL.selectedIndex * 0.0015) : 0) + 
+            const defense_percent = 1 + 
+                (magnus_t ? magnus_t.value * (0.002 + this.T_LEVEL.selectedIndex * 0.0015) : 0) + 
                 (hyunwoo_w && hyunwoo_w.checked ? 0.1 : 0) + (yuki_w && yuki_w.checked ? 0.5 : 0);
-            const defense_minus = 1 - (hammer_d && hammer_d.checked && this.enemy.WEAPON_MASTERY.selectedIndex > 5? this.enemy.WEAPON_MASTERY.selectedIndex < 13 ? 0.25 : 0.4 : 0) - 
+            const defense_minus = 1 - 
+                (hammer_d && hammer_d.checked && this.enemy.WEAPON_MASTERY.selectedIndex > 5? this.enemy.WEAPON_MASTERY.selectedIndex < 13 ? 0.25 : 0.4 : 0) - 
                 (zahir_q ? 0.1 * zahir_q.value : 0) -
                 (hyunwoo_e && hyunwoo_e.checked ? 0.07 + this.enemy.E_LEVEL.selectedIndex * 0.02 : 0) - 
                 (hart_w_u && hart_w_u.checked ? hart_ww.checked ? 0.3 : hart_w.checked ? 0.15 : 0 : 0) - 
@@ -744,139 +662,81 @@ class Character {
             const defense_bonus = (hyunwoo_w && hyunwoo_w.checked ? 4 + this.W_LEVEL.selectedIndex * 14 : 0) + 
                 (silvia_r && silvia_r.checked ? 2 + this.R_LEVEL.selectedIndex * 14 : 0)
             this.defense = 
-                ((this.character.Defense + this.character.Defense_Growth * this.LEVEL.selectedIndex + 
-                ((!this.weapon ? 0 : this.weapon.Defense) + 
-                (!this.chest ? 0 : this.chest.Defense) + 
-                (!this.head ? 0 : this.head.Defense) + 
-                (!this.arm ? 0 : this.arm.Defense) + 
-                (!this.leg ? 0 : this.leg.Defense) + 
-                (!this.accessory ? 0 : this.accessory.Defense)) * 
-                (1 + craftBonus + this.CRAFT_MASTERY.selectedIndex * craftBonus)) * 
-                defense_percent + defense_bonus) * defense_minus | 0;
+                (this.character.Defense + this.character.Defense_Growth * this.LEVEL.selectedIndex + 
+                    calcEquip(this, 'Defense', 2) + defense_bonus) * 
+                defense_percent * defense_minus | 0;
             this.DEFENSE.innerText = this.defense;
 
             const xiukai_t = this.DIV.querySelector('.xiukai_t');
             const chiara_r = this.DIV.querySelector('.chiara_r');
-            const hp_bonus = (xiukai_t ? xiukai_t.value * 8 : 0) + 
+            const hp_bonus = 
+                (xiukai_t ? xiukai_t.value * 8 : 0) + 
                 (chiara_r && chiara_r.checked ? 100 + this.R_LEVEL.selectedIndex * 100 : 0);
             this.max_hp = 
                 (this.character.Health + this.character.Health_Growth * this.LEVEL.selectedIndex + hp_bonus + 
-                ((!this.weapon ? 0 : this.weapon.Max_HP) + 
-                (!this.chest ? 0 : this.chest.Max_HP) + 
-                (!this.head ? 0 : this.head.Max_HP) + 
-                (!this.arm ? 0 : this.arm.Max_HP) + 
-                (!this.leg ? 0 : this.leg.Max_HP) + 
-                (!this.accessory ? 0 : this.accessory.Max_HP)) * 
-                (1 + craftBonus + this.CRAFT_MASTERY.selectedIndex * craftBonus)) * 
-                (1.01 + this.HEALTH_MASTERY.selectedIndex * 0.01);
-            this.MAX_HP.innerText = this.max_hp | 0;
+                    calcEquip(this, 'Max_HP', 2)) * (1 + (1 + this.HEALTH_MASTERY.selectedIndex) * 0.01) | 0;
+            this.MAX_HP.innerText = this.max_hp;
 
             this.max_sp = 
                 (this.character.Stamina + this.character.Stamina_Growth * this.LEVEL.selectedIndex + 
-                ((!this.weapon ? 0 : this.weapon.Max_SP) + 
-                (!this.chest ? 0 : this.chest.Max_SP) + 
-                (!this.head ? 0 : this.head.Max_SP) + 
-                (!this.arm ? 0 : this.arm.Max_SP) + 
-                (!this.leg ? 0 : this.leg.Max_SP) + 
-                (!this.accessory ? 0 : this.accessory.Max_SP)) * 
-                (1 + craftBonus + this.CRAFT_MASTERY.selectedIndex * craftBonus)) * 
-                (1.017 + this.MEDITATION_MASTERY.selectedIndex * 0.017);
-            this.MAX_SP.innerText = this.max_sp | 0;
+                    calcEquip(this, 'Max_SP', 2)) * (1 + (1 + this.MEDITATION_MASTERY.selectedIndex) * 0.017) | 0;
+            this.MAX_SP.innerText = this.max_sp;
 
             this.hp_regen = 
-                this.character.Health_Regen + this.character.Health_Regen_Growth * this.LEVEL.selectedIndex + 
-                ((!this.weapon ? 0 : this.weapon.HP_Regen) + 
-                (!this.chest ? 0 : this.chest.HP_Regen) + 
-                (!this.head ? 0 : this.head.HP_Regen) + 
-                (!this.arm ? 0 : this.arm.HP_Regen) + 
-                (!this.leg ? 0 : this.leg.HP_Regen) + 
-                (!this.accessory ? 0 : this.accessory.HP_Regen)) * 
-                (1 + craftBonus + this.CRAFT_MASTERY.selectedIndex * craftBonus);
+                round(this.character.Health_Regen + this.character.Health_Regen_Growth * this.LEVEL.selectedIndex + 
+                    calcEquip(this, 'HP_Regen', 2), 1);
+
             this.hp_regen_percent = 
-                ((!this.weapon ? 0 : this.weapon.HP_Regen_Percent) + 
-                (!this.chest ? 0 : this.chest.HP_Regen_Percent) + 
-                (!this.head ? 0 : this.head.HP_Regen_Percent) + 
-                (!this.arm ? 0 : this.arm.HP_Regen_Percent) + 
-                (!this.leg ? 0 : this.leg.HP_Regen_Percent) + 
-                (!this.accessory ? 0 : this.accessory.HP_Regen_Percent)) * 
-                (1 + craftBonus + this.CRAFT_MASTERY.selectedIndex * craftBonus);
+                calcEquip(this, 'HP_Regen_Percent');
             this.HP_REGEN.innerText = 
-                Math.round(this.hp_regen * 10) / 10 + '| ' + Math.round(this.hp_regen_percent) + '%';
+                this.hp_regen + '| ' + this.hp_regen_percent + '%';
 
             this.normal_attack_damage_reduction = 
-                ((!this.weapon ? 0 : this.weapon.Normal_Attack_Damage_Reduction) + 
-                (!this.chest ? 0 : this.chest.Normal_Attack_Damage_Reduction) + 
-                (!this.head ? 0 : this.head.Normal_Attack_Damage_Reduction) + 
-                (!this.arm ? 0 : this.arm.Normal_Attack_Damage_Reduction) + 
-                (!this.leg ? 0 : this.leg.Normal_Attack_Damage_Reduction) + 
-                (!this.accessory ? 0 : this.accessory.Normal_Attack_Damage_Reduction)) * 
-                (1 + craftBonus + this.CRAFT_MASTERY.selectedIndex * craftBonus);
+                calcEquip(this, 'Normal_Attack_Damage_Reduction');
             this.normal_attack_damage_reduction_percent = 
-                1.2 + this.DEFENSE_MASTERY.selectedIndex * 1.2;
+                round((1 + this.DEFENSE_MASTERY.selectedIndex) * 1.2);
             this.NORMAL_ATTACK_DAMAGE_REDUCTION.innerText = 
-                (this.normal_attack_damage_reduction | 0) + '| ' + Math.round(this.normal_attack_damage_reduction_percent) + '%';
+                this.normal_attack_damage_reduction + '| ' + this.normal_attack_damage_reduction_percent + '%';
 
             const jackie_w = this.DIV.querySelector('.jackie_w');
             chiara_t = this.DIV.querySelector('.chiara_t');
             const move_percent = 1 + 
-                    (jackie_w && jackie_w.checked ? 0.06 + this.W_LEVEL.selectedIndex * 0.03 : 0) + 
-                    (chiara_t && chiara_t.value == 4 ? 0.04 + this.T_LEVEL.selectedIndex * 0.02 : 0) + 
-                    (silvia_r && silvia_r.checked ? 0.7 : 0);
-            const move_bonus = (silvia_r && silvia_r.checked ? 0.2 + this.R_LEVEL.selectedIndex * 0.05 : 0);
-            const move_minus = 1 - (nadine_r && nadine_r.checked ? 0.35 : 0);
+                (jackie_w && jackie_w.checked ? 0.06 + this.W_LEVEL.selectedIndex * 0.03 : 0) + 
+                (chiara_t && chiara_t.value == 4 ? 0.04 + this.T_LEVEL.selectedIndex * 0.02 : 0) + 
+                (silvia_r && silvia_r.checked ? 0.7 : 0);
+            const move_bonus = 
+                (silvia_r && silvia_r.checked ? 0.2 + this.R_LEVEL.selectedIndex * 0.05 : 0);
+            const move_minus = 1 - 
+                (nadine_r && nadine_r.checked ? 0.35 : 0);
             this.movement_speed = 
-                ((this.character.Move_Speed + move_bonus + 
-                0.01 + this.MOVE_MASTERY.selectedIndex * 0.01 + 
-                ((!this.weapon ? 0 : this.weapon.Move_Speed) + 
-                (!this.chest ? 0 : this.chest.Move_Speed) + 
-                (!this.head ? 0 : this.head.Move_Speed) + 
-                (!this.arm ? 0 : this.arm.Move_Speed) + 
-                (!this.leg ? 0 : this.leg.Move_Speed) + 
-                (!this.accessory ? 0 : this.accessory.Move_Speed)) * 
-                (1 + craftBonus + this.CRAFT_MASTERY.selectedIndex * craftBonus)) * move_percent * move_minus);
-            if (this.movement_speed > 7) {
-                this.movement_speed = 7;
-            }
-            this.MOVEMENT_SPEED.innerText = Math.round(this.movement_speed * 100) / 100;
+                round((this.character.Move_Speed + move_bonus + 
+                    (1 + this.MOVE_MASTERY.selectedIndex) * 0.01 + 
+                    calcEquip(this, 'Move_Speed', 2)) * move_percent * move_minus, 2);
+                if (this.movement_speed > 7) {
+                    this.movement_speed = 7;
+                }
+            this.MOVEMENT_SPEED.innerText = this.movement_speed;
 
             this.out_of_combat_movement_speed = 
-                ((0.02 + this.MOVE_MASTERY.selectedIndex * 0.02 + 
-                ((!this.weapon ? 0 : this.weapon.Out_of_Combat_Movement_Speed) + 
-                (!this.chest ? 0 : this.chest.Out_of_Combat_Movement_Speed) + 
-                (!this.head ? 0 : this.head.Out_of_Combat_Movement_Speed) + 
-                (!this.arm ? 0 : this.arm.Out_of_Combat_Movement_Speed) + 
-                (!this.leg ? 0 : this.leg.Out_of_Combat_Movement_Speed) + 
-                (!this.accessory ? 0 : this.accessory.Out_of_Combat_Movement_Speed)) * 
-                (1 + craftBonus + this.CRAFT_MASTERY.selectedIndex * craftBonus)) * move_percent * move_minus);
-            if (this.movement_speed + this.out_of_combat_movement_speed > 7) {
-                this.out_of_combat_movement_speed = 7 - this.movement_speed;
-            }
-            this.OUT_OF_COMBAT_MOVEMENT_SPEED.innerText = Math.round((this.movement_speed + this.out_of_combat_movement_speed) * 100) / 100;
+                round(((1 + this.MOVE_MASTERY.selectedIndex) * 0.02 + 
+                    calcEquip(this, 'Out_of_Combat_Movement_Speed', 2)) * move_percent * move_minus, 2);
+                if (this.movement_speed + this.out_of_combat_movement_speed > 7) {
+                    this.out_of_combat_movement_speed = 7 - this.movement_speed;
+                }
+            this.OUT_OF_COMBAT_MOVEMENT_SPEED.innerText = round(this.movement_speed + this.out_of_combat_movement_speed, 2);
 
             this.vision_range = 
-                this.character.Sight_Range + 0.1 + 
-                this.SEARCH_MASTERY.selectedIndex * 0.1 + 
-                ((!this.weapon ? 0 : this.weapon.Vision_Range) + 
-                (!this.chest ? 0 : this.chest.Vision_Range) + 
-                (!this.head ? 0 : this.head.Vision_Range) + 
-                (!this.arm ? 0 : this.arm.Vision_Range) + 
-                (!this.leg ? 0 : this.leg.Vision_Range) + 
-                (!this.accessory ? 0 : this.accessory.Vision_Range)) * 
-                (1 + craftBonus + this.CRAFT_MASTERY.selectedIndex * craftBonus);
-            this.VISION_RANGE.innerText = Math.round(this.vision_range * 10) / 10;
+                round(this.character.Sight_Range + 0.1 + 
+                    this.SEARCH_MASTERY.selectedIndex * 0.1 + 
+                    calcEquip(this, 'Vision_Range', 2), 2);
+            this.VISION_RANGE.innerText = this.vision_range;
 
-            const attack_range_bonus = (chiara_r && chiara_r.checked ? 3.65 : 0);
+            const attack_range_bonus = 
+                (chiara_r && chiara_r.checked ? 3.65 : 0);
             this.attack_range = 
-                this.character.Attack_Range + (this.weapon == null ? 0 : this.weapon.Base_Range) + 
-                attack_range_bonus + 
-                ((!this.weapon ? 0 : this.weapon.Attack_Range) + 
-                (!this.chest ? 0 : this.chest.Attack_Range) + 
-                (!this.head ? 0 : this.head.Attack_Range) + 
-                (!this.arm ? 0 : this.arm.Attack_Range) + 
-                (!this.leg ? 0 : this.leg.Attack_Range) + 
-                (!this.accessory ? 0 : this.accessory.Attack_Range)) * 
-                (1 + craftBonus + this.CRAFT_MASTERY.selectedIndex * craftBonus);
-            this.ATTACK_RANGE.innerText = Math.round(this.attack_range * 100) / 100;
+                round(this.character.Attack_Range + (this.weapon == null ? 0 : this.weapon.Base_Range) + 
+                    attack_range_bonus + calcEquip(this, 'Attack_Range', 2), 2);
+            this.ATTACK_RANGE.innerText = this.attack_range;
         } else {
             this.heal_reduction = '';
 

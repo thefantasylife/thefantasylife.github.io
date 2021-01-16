@@ -71,7 +71,7 @@ const Jackie = {
                 ba += ba;
                 life += life;
             }
-            const damage = Math.round(ba * character.attack_speed * 100) / 100;
+            const damage = round(ba * character.attack_speed * 100) / 100;
             return "<b class='damage'>" + damage + "</b><b> __h/s: </b><b class='heal'>" + life + '</b>';
         }
         return '-';
@@ -86,16 +86,17 @@ const Jackie = {
             const q = character.Q_LEVEL.selectedIndex;
             const w = character.W_LEVEL.selectedIndex;
             const damage3 = calcTrueDamage(character, enemy, 16 + q * 6);
+            const cool = 10000 / ((10 - q * 0.5) * (100 - character.cooldown_reduction) + 17);
             let damage1, damage2;
             if (character.DIV.querySelector('.jackie_w').checked) {
                 const heal = calcHeal(12 + w * 7 + character.attack_power * 0.1, 2, enemy);
                 damage1 = calcSkillDamage(character, enemy, 20 + q * 20, 0.45 + 0.1 + w * 0.025, 1);
                 damage2 = calcSkillDamage(character, enemy, 30 + q * 20, 0.65 + 0.1 + w * 0.025, 1);
-                return "<b class='damage'>" + (damage1 + damage2 + damage3 * 5) + '</b> ( ' + damage1 + ', ' + damage2 + ', [ ' + damage3 + " x 5 ] ) <b> __h: </b><b class='heal'>" + heal + '</b>';
+                return "<b class='damage'>" + (damage1 + damage2 + damage3 * 5) + '</b> ( ' + damage1 + ', ' + damage2 + ', [ ' + damage3 + " x 5 ] ) <b> __h: </b><b class='heal'>" + heal + "</b><b> __sd/s: </b><b class='damage'>" +round((damage1 + damage2 + damage3 * 5) * cool) / 100 + '</b>';
             } else {
                 damage1 = calcSkillDamage(character, enemy, 20 + q * 20, 0.45, 1);
                 damage2 = calcSkillDamage(character, enemy, 30 + q * 20, 0.65, 1);
-                return "<b class='damage'>" + (damage1 + damage2 + damage3 * 5) + '</b> ( ' + damage1 + ', ' + damage2 + ', [ ' + damage3 + ' x 5 ] )';
+                return "<b class='damage'>" + (damage1 + damage2 + damage3 * 5) + '</b> ( ' + damage1 + ', ' + damage2 + ', [ ' + damage3 + " x 5 ] )<b> __sd/s: </b><b class='damage'>" + round((damage1 + damage2 + damage3 * 5) * cool) / 100 + '</b>';
             }
         }
         return '-';
@@ -109,12 +110,15 @@ const Jackie = {
         if (character.weapon) {
             const w = character.W_LEVEL.selectedIndex;
             const e = character.E_LEVEL.selectedIndex;
+            const cool = 10000 / ((19 - e * 2) * (100 - character.cooldown_reduction));
+            let damage;
             if (character.DIV.querySelector('.jackie_w').checked) {
-                const damage = calcSkillDamage(character, enemy, 10 + e * 60, 0.3 + e * 0.1 + 0.1 + w * 0.025, 1);
+                damage = calcSkillDamage(character, enemy, 10 + e * 60, 0.3 + e * 0.1 + 0.1 + w * 0.025, 1);
                 const heal = calcHeal(12 + w * 7 + character.attack_power * 0.1, 1, enemy);
-                return "<b class='damage'>" + damage + "</b><b> __h: </b><b class='heal'>" + heal + '</b>';
+                return "<b class='damage'>" + damage + "</b><b> __h: </b><b class='heal'>" + heal + "</b><b> __sd/s: </b><b class='damage'>" + round(damage * cool) / 100 + '</b>';
             }
-            return "<b class='damage'>" + calcSkillDamage(character, enemy, 10 + e * 60, 0.3 + e * 0.1, 1) + '</b>';
+            damage = calcSkillDamage(character, enemy, 10 + e * 60, 0.3 + e * 0.1, 1);
+            return "<b class='damage'>" + damage + "</b><b> __sd/s: </b><b class='damage'>" + round(damage * cool) / 100 + '</b>';
         }
         return '-';
     }

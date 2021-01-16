@@ -59,9 +59,9 @@ const Yuki = {
             }
             const life = calcHeal(ba * (character.life_steal / 100), character.attack_speed, enemy);
             if (character.DIV.querySelector('.yuki_t').checked) {
-                damage= Math.round((ba + bonus) * character.attack_speed * 100) / 100;
+                damage= round((ba + bonus) * character.attack_speed * 100) / 100;
             } else {
-                damage= Math.round(ba * character.attack_speed * 100) / 100;
+                damage= round(ba * character.attack_speed * 100) / 100;
             }
             return "<b class='damage'>" + damage + "</b><b> __h/s: </b><b class='heal'>" + life + '</b>';
         }
@@ -74,33 +74,43 @@ const Yuki = {
     }
     ,Q_Skill: (character, enemy) => {
         if (character.weapon) {
-            const base = 20 + character.Q_LEVEL.selectedIndex * 25;
+            const q = character.Q_LEVEL.selectedIndex;
+            const base = 20 + q * 25;
             const coe = character.weapon.Type === 'DualSwords' ? 2 : 1;
             const damage = baseAttackDamage(character, enemy, base, coe, character.critical_strike_chance, 1);
             const min = baseAttackDamage(character, enemy, base, coe, 0, 1);
             const max = baseAttackDamage(character, enemy, base, coe, 100, 1);
             const life = calcHeal(damage * (character.life_steal / 100), 1, enemy);
+            const cool = 10000 / ((9 - q * 1) * (100 - character.cooldown_reduction) + 23);
             if (character.DIV.querySelector('.yuki_t').checked) {
                 const bonus = calcTrueDamage(character, enemy, 15 + 15 * character.T_LEVEL.selectedIndex);
-                return "<b class='damage'>" + (damage + bonus) + '</b> ( ' +  min + ', ' + bonus + ' - ' + max + ', ' + bonus + " )<b> __h: </b><b class='heal'>" + life + '</b>';
+                return "<b class='damage'>" + (damage + bonus) + '</b> ( ' +  min + ', ' + bonus + ' - ' + max + ', ' + bonus + " )<b> __h: </b><b class='heal'>" + life + "</b><b> __sd/s: </b><b class='damage'>" + round((damage + bonus) * cool) / 100 + '</b>';
             }
-            return "<b class='damage'>" + damage + '</b> ( ' +  min + ' - ' + max + " )<b> __h: </b><b class='heal'>" + life + '</b>';
+            return "<b class='damage'>" + damage + '</b> ( ' +  min + ' - ' + max + " )<b> __h: </b><b class='heal'>" + life + "</b><b> __sd/s: </b><b class='damage'>" + round(damage * cool) / 100 + '</b>';
         }
         return '-';
     }
     ,Q_Option: ''
     ,W_Skill: (character, enemy) => {
-        return '';
+        const damage = calcSkillDamage(character, enemy, 70 + character.E_LEVEL.selectedIndex * 50, 0.4, 1);
+        const cool = 10000 / ((18 - character.W_LEVEL.selectedIndex * 2) * (100 - character.cooldown_reduction) + 23);
+        if (character.DIV.querySelector('.yuki_t').checked) {
+            const bonus = calcTrueDamage(character, enemy, 15 + 15 * character.T_LEVEL.selectedIndex);
+            return "<b> _sd/s: </b><b class='damage'>" + round((damage + bonus) * cool) / 100 + '</b>';
+        }
+        return "<b> _sd/s: </b><b class='damage'>" + round(damage * cool) / 100 + '</b>';
     }
     ,W_Option: "<b> _use</b><input type='checkbox' class='yuki_w' onchange='updateDisplay()'>"
     ,E_Skill: (character, enemy) => {
         if (character.weapon) {
+            const e = character.E_LEVEL.selectedIndex;
+            const damage = calcSkillDamage(character, enemy, 70 + e * 50, 0.4, 1);
+            const cool = 10000 / ((15 - e * 1) * (100 - character.cooldown_reduction) + 23);
             if (character.DIV.querySelector('.yuki_t').checked) {
-                const damage = calcSkillDamage(character, enemy, 70 + character.E_LEVEL.selectedIndex * 50, 0.4, 1);
                 const bonus = calcTrueDamage(character, enemy, 15 + 15 * character.T_LEVEL.selectedIndex);
-                return "<b class='damage'>" + (damage + bonus) + '</b> ( ' + damage + ', ' + bonus + ' )';
+                return "<b class='damage'>" + (damage + bonus) + '</b> ( ' + damage + ', ' + bonus + " )<b> __sd/s: </b><b class='damage'>" + round((damage + bonus) * cool) / 100 + '</b>';
             }
-            return "<b class='damage'>" + calcSkillDamage(character, enemy, 70 + character.E_LEVEL.selectedIndex * 50, 0.4, 1) + '</b>';
+            return "<b class='damage'>" + damage + "</b><b> __sd/s: </b><b class='damage'>" + round(damage * cool) / 100 + '</b>';
         }
         return '-';
     }

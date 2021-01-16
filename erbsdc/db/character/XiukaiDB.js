@@ -40,7 +40,7 @@ const Xiukai = {
     ,DPS: (character, enemy) => {
         if (character.weapon) {
             const ba = baseAttackDamage(character, enemy, 0, 1, character.critical_strike_chance, 1);
-            const damage = Math.round(ba * character.attack_speed * 100) / 100;
+            const damage = round(ba * character.attack_speed * 100) / 100;
             const life = calcHeal(ba * (character.life_steal / 100), character.attack_speed, enemy);
             return "<b class='damage'>" + damage + "</b><b> __h/s: </b><b class='heal'>" + life + '</b>';
         }
@@ -56,8 +56,8 @@ const Xiukai = {
             const q = character.Q_LEVEL.selectedIndex;
             const damage = calcSkillDamage(character, enemy, 80 + q * 40, 0.5, 1);
             const cost = 30 + q * 15;
-
-            return "<b class='damage'>" + damage + "</b><b> __cost: </b><b class='heal'>-" + cost + '</b>';
+            const cool = 10000 / ((7 - q * 0.5) * (100 - character.cooldown_reduction) + 26);
+            return "<b class='damage'>" + damage + "</b><b> __cost: </b><b class='heal'>-" + cost + "</b><b> __sd/s: </b><b class='damage'>" + round(damage * cool) / 100 + '</b>';
 
         }
         return '-';
@@ -69,7 +69,8 @@ const Xiukai = {
             const min = calcSkillDamage(character, enemy, 60 + w * 40, 0.5, 1);
             const max = calcSkillDamage(character, enemy, 60 + w * 40 + character.max_hp * (0.03 + w * 0.005), 0.5, 1);
             const cost = 30 + w * 15;
-            return min + " - <b class='damage'>" + max + "</b><b> __cost: </b><b class='heal'>-" + cost + '</b>';
+            const cool = 10000 / ((16 - w * 2) * (100 - character.cooldown_reduction) + 34);
+            return min + " - <b class='damage'>" + max + "</b><b> __cost: </b><b class='heal'>-" + cost + "</b><b> __sd/s: </b><b class='damage'>" + round(max * cool) / 100 + '</b>';
         }
         return '-';
     }
@@ -80,7 +81,8 @@ const Xiukai = {
             const min = calcSkillDamage(character, enemy, 80 + e * 30 + character.max_hp * 0.035 - (0.3 * e | 0) * 10, 0.5, 1);
             const max = calcSkillDamage(character, enemy, 80 + e * 30 + character.max_hp * 0.07 - (0.3 * e | 0) * 10, 0.5, 1);
             const cost = 30 + e * 15;
-            return min + " - <b class='damage'>" + max + "</b><b> __cost: </b><b class='heal'>-" + cost + '</b>';
+            const cool = 10000 / ((16 - e * 2) * (100 - character.cooldown_reduction));
+            return min + " - <b class='damage'>" + max + "</b><b> __cost: </b><b class='heal'>-" + cost + "</b><b> __sd/s: </b><b class='damage'>" + round(max * cool) / 100 + '</b>';
         }
         return '-';
     }

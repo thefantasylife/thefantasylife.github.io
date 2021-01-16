@@ -63,21 +63,34 @@ const Shoichi = {
     }
     ,Q_Skill: (character, enemy) => {
         if (character.weapon) {
-            return "<b class='damage'>" + calcSkillDamage(character, enemy, 10 + character.Q_LEVEL.selectedIndex * 50, 0.45, 1) + '</b>';
+            const q = character.Q_LEVEL.selectedIndex;
+            const damage = calcSkillDamage(character, enemy, 10 + q * 50, 0.45, 1);
+            const w = calcSkillDamage(character, enemy, 10 + character.W_LEVEL.selectedIndex * 30, 0.3, 1);
+            const t = calcSkillDamage(character, enemy, 25 + character.T_LEVEL.selectedIndex * 35, 0.3, 1);
+            const cool = 10000 / (6 * (100 - character.cooldown_reduction));
+            return "<b class='damage'>" + damage + "</b><b> __sd/s: </b><b class='damage'>" + round((damage + (t + w) / 2) * cool) / 100 + '</b>';
         }
         return '-';
     }
     ,Q_Option: ''
     ,W_Skill: (character, enemy) => {
         if (character.weapon) {
-            return "<b class='damage'>" + calcSkillDamage(character, enemy, 10 + character.W_LEVEL.selectedIndex * 30, 0.3, 1) + '</b>';
+            const w = character.W_LEVEL.selectedIndex;
+            const damage = calcSkillDamage(character, enemy, 10 + w * 30, 0.3, 1);
+            const cool = 10000 / ((17 - w * 2) * (100 - character.cooldown_reduction));
+            return "<b class='damage'>" + damage + "</b><b> __sd/s: </b><b class='damage'>" + round(damage * cool) / 100 + '</b>';
         }
         return '-';
     }
     ,W_Option: ''
     ,E_Skill: (character, enemy) => {
         if (character.weapon) {
-            return "<b class='damage'>" + calcSkillDamage(character, enemy, 20 + character.E_LEVEL.selectedIndex * 40, 0.3, 1) + '</b>';
+            const e = character.E_LEVEL.selectedIndex;
+            const damage = calcSkillDamage(character, enemy, 20 + e * 40, 0.3, 1);
+            const w = calcSkillDamage(character, enemy, 10 + character.W_LEVEL.selectedIndex * 30, 0.3, 1);
+            const t = calcSkillDamage(character, enemy, 25 + character.T_LEVEL.selectedIndex * 35, 0.3, 1);
+            const cool = 10000 / ((18 - e * 2) * (100 - character.cooldown_reduction));
+            return "<b class='damage'>" + damage + "</b><b> __sd/s: </b><b class='damage'>" + round((damage + t + w) * cool) / 100 + '</b>';
         }
         return '-';
     }

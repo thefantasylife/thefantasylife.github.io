@@ -40,7 +40,7 @@ const Hyunwoo = {
     ,DPS: (character, enemy) => {
         if (character.weapon) {
             const ba = baseAttackDamage(character, enemy, 0, 1, character.critical_strike_chance, 1);
-            const damage = Math.round(ba * character.attack_speed * 100) / 100;
+            const damage = round(ba * character.attack_speed * 100) / 100;
             const life = calcHeal(ba * (character.life_steal / 100), character.attack_speed, enemy);
             return "<b class='damage'>" + damage + "</b><b> __h/s: </b><b class='heal'>" + life + '</b>';
         }
@@ -53,7 +53,10 @@ const Hyunwoo = {
     }
     ,Q_Skill: (character, enemy) => {
         if (character.weapon) {
-            return "<b class='damage'>" + calcSkillDamage(character, enemy, 100 + character.Q_LEVEL.selectedIndex * 50, 0.4, 1) + '</b>';
+            const q = character.Q_LEVEL.selectedIndex;
+            const damage = calcSkillDamage(character, enemy, 100 + q * 50, 0.4, 1)
+            const cool = 10000 / ((10 - q * 1) * (100 - character.cooldown_reduction));
+            return "<b class='damage'>" + damage + "</b><b> __sd/s: </b><b class='damage'>" + round(damage * cool) / 100 + '</b>';
         }
         return '-';
     }
@@ -68,7 +71,8 @@ const Hyunwoo = {
             const min = calcSkillDamage(character, enemy, character.defense, 0, 1);
             const max = calcSkillDamage(character, enemy, (enemy.max_hp ? enemy.max_hp * (0.05 + e * 0.03) : 0) + character.defense, 0, 1);
             const bonus = calcSkillDamage(character, enemy, 60 + e * 35, 0, 1);
-            return "<b class='damage'>" + (max + bonus) + '</b> ( ' + min + ' ~ ' + max + ', ' + bonus + ' )';
+            const cool = 10000 / ((13 - e * 0.5) * (100 - character.cooldown_reduction));
+            return "<b class='damage'>" + (max + bonus) + '</b> ( ' + min + ' ~ ' + max + ', ' + bonus + " )<b> __sd/s: </b><b class='damage'>" + round((min + max + bonus) / 2 * cool) / 100 + '</b>';
         }
         return '-';
     }

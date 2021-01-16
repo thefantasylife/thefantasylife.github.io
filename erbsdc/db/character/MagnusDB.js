@@ -40,7 +40,7 @@ const Magnus = {
     ,DPS: (character, enemy) => {
         if (character.weapon) {
             const ba = baseAttackDamage(character, enemy, 0, 1, character.critical_strike_chance, 1);
-            const damage = Math.round(ba * character.attack_speed * 100) / 100;
+            const damage = round(ba * character.attack_speed * 100) / 100;
             const life = calcHeal(ba * (character.life_steal / 100), character.attack_speed, enemy);
             return "<b class='damage'>" + damage + "</b><b> __h/s: </b><b class='heal'>" + life + '</b>';
         }
@@ -53,7 +53,10 @@ const Magnus = {
     }
     ,Q_Skill: (character, enemy) => {
         if (character.weapon) {
-            return "<b class='damage'>" + calcSkillDamage(character, enemy, 40 + character.Q_LEVEL.selectedIndex * 60, 0.6, 1) + '</b>';
+            const q = character.Q_LEVEL.selectedIndex;
+            const damage = calcSkillDamage(character, enemy, 40 + q * 60, 0.6, 1);
+            const cool = 10000 / ((18 - q * 2) * (100 - character.cooldown_reduction) + 80);
+            return "<b class='damage'>" + damage + "</b><b> __sd/s: </b><b class='damage'>" + round(damage * cool) / 100 + '</b>';
         }
         return '-';
     }
@@ -62,14 +65,18 @@ const Magnus = {
         if (character.weapon) {
             const w = character.W_LEVEL.selectedIndex;
             const damage = calcSkillDamage(character, enemy, (1.5 + w * 0.5 | 0) * 10 + character.defense * 0.3, 0.3, 1);
-            return "<b class='damage'>" + damage * (6 + w * 0.5 | 0) + '</b> ( ' + damage + ' x ' + (6 + w * 0.5 | 0) + ' )';
+            const cool = 10000 / (10 * (100 - character.cooldown_reduction) + 400);
+            return "<b class='damage'>" + damage * (6 + w * 0.5 | 0) + '</b> ( ' + damage + ' x ' + (6 + w * 0.5 | 0) + " )<b> __sd/s: </b><b class='damage'>" + round((damage * (6 + w * 0.5 | 0)) * cool) / 100 + '</b>';
         }
         return '-';
     }
     ,W_Option: ''
     ,E_Skill: (character, enemy) => {
         if (character.weapon) {
-            return "<b class='damage'>" + calcSkillDamage(character, enemy, 60 + character.E_LEVEL.selectedIndex * 55, 0.4, 1) + '</b>';
+            const e = character.E_LEVEL.selectedIndex;
+            const damage = calcSkillDamage(character, enemy, 60 + e * 55, 0.4, 1);
+            const cool = 10000 / ((12 - e * 1) * (100 - character.cooldown_reduction) + 20);
+            return "<b class='damage'>" + damage + "</b><b> __sd/s: </b><b class='damage'>" + round(damage * cool) / 100 + '</b>';
         }
         return '-';
     }

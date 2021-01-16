@@ -49,14 +49,14 @@ const Hart = {
             if (character.DIV.querySelector('.hart_t').checked) {
                 const ba2 = (baseAttackDamage(character, enemy, 0, 0.15, character.critical_strike_chance, 1) * character.attack_speed * 100 | 0) / 100;
                 if (character.DIV.querySelector('.hart_tt').checked) {
-                    damage = Math.round((ba1 + ba2 + ba2) * character.attack_speed * 100) / 100;
+                    damage = round((ba1 + ba2 + ba2) * character.attack_speed * 100) / 100;
                     life = calcHeal((ba1 + ba2 + ba2) * (character.life_steal / 100), character.attack_speed, enemy);
                 } else {
-                    damage = Math.round((ba1 + ba2) * character.attack_speed * 100) / 100;
+                    damage = round((ba1 + ba2) * character.attack_speed * 100) / 100;
                     life = calcHeal((ba1 + ba2) * (character.life_steal / 100), character.attack_speed, enemy);
                 }
             } else {
-                damage = Math.round(ba1 * character.attack_speed * 100) / 100;
+                damage = round(ba1 * character.attack_speed * 100) / 100;
                 life = calcHeal(ba1 * (character.life_steal / 100), character.attack_speed, enemy);
             }
             return "<b class='damage'>" + damage + "</b><b> __h/s: </b><b class='heal'>" + life + '</b>';
@@ -73,7 +73,8 @@ const Hart = {
             const q = character.Q_LEVEL.selectedIndex;
             const min = calcSkillDamage(character, enemy, 80 + q * 20, 0.3, 1);
             const max = calcSkillDamage(character, enemy, 160 + q * 40, 0.6, 1);
-            return "<b class='damage'>" + min + ' ~ ' + max + '</b>';
+            const cool = 10000 / (4 * (100 - character.cooldown_reduction));
+            return "<b class='damage'>" + min + ' ~ ' + max + "</b><b> __sd/s: </b><b class='damage'>" + round(min * cool) / 100 + '</b>';
         }
         return '-';
     }
@@ -95,7 +96,8 @@ const Hart = {
             character.skill_amplification_percent += sap;
             const damage3 = calcSkillDamage(character, enemy, 20 + e * 10, 0.4, 1);
             character.skill_amplification_percent -= sap * (3 - stack);
-            return "<b class='damage'>" + (damage1 + damage2 + damage3) + '</b> ( ' + damage1 + ', ' + damage2 + ', ' + damage3 + ' )';
+            const cool = 10000 / ((17 - e * 2) * (100 - character.cooldown_reduction) + 50);
+            return "<b class='damage'>" + (damage1 + damage2 + damage3) + '</b> ( ' + damage1 + ', ' + damage2 + ', ' + damage3 + " )<b> __sd/s: </b><b class='damage'>" + round((damage1 + damage2 + damage3) * cool) / 100 + '</b>';
         }
         return '-';
     }
@@ -107,7 +109,7 @@ const Hart = {
             const regen = calcHeal(character.hp_regen * (character.hp_regen_percent + 100) / 100 + 
                 (character.food ? character.food.HP_Regen / 30 : 0), 2, enemy);
             const heal = calcHeal(30 + r * 10 + (character.max_hp * (0.02 + r * 0.01)), 1, enemy);
-            const total = Math.round((heal + regen) * 5 * 100) / 100
+            const total = round((heal + regen) * 5 * 100) / 100
             return "<b> _h: </b><b class='heal'>" + total + "</b> ( [ <b class='heal'>" + heal + '</b>, ' + regen + ' ] x 5s )';
         }
         return '-';

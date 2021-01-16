@@ -40,7 +40,7 @@ const Sissela = {
     ,DPS: (character, enemy) => {
         if (character.weapon) {
             const ba = baseAttackDamage(character, enemy, 0, 1, character.critical_strike_chance, 1);
-            const damage = Math.round(ba * character.attack_speed * 100) / 100;
+            const damage = round(ba * character.attack_speed * 100) / 100;
             const life = calcHeal(ba * (character.life_steal / 100), character.attack_speed, enemy);
             return "<b class='damage'>" + damage + "</b><b> __h/s: </b><b class='heal'>" + life + '</b>';
         }
@@ -52,7 +52,7 @@ const Sissela = {
         const lost = character.DIV.querySelector('.sissela_t').value;
         const passive = calcHeal(lost < 10 ? 0 : 
             (lost >= 90 ? 26 + t * 10 : 2 + t * 2 + (3 + t) * ((lost / 10 | 0) - 1)) * (character.DIV.querySelector('.sissela_r').checked ? 2 : 1), 1, enemy);
-        const total = Math.round((passive + (calcHeal(character.hp_regen * (character.hp_regen_percent + 100) / 100 + 
+        const total = round((passive + (calcHeal(character.hp_regen * (character.hp_regen_percent + 100) / 100 + 
             (character.food ? character.food.HP_Regen / 30 : 0), 2, enemy))) * 100) / 100;
         return "<b class='heal'>" + total + '</b>';
     }
@@ -62,7 +62,8 @@ const Sissela = {
             const damage1 = calcSkillDamage(character, enemy, 40 + q * 20, 0.3, 1);
             const damage2 = calcSkillDamage(character, enemy, 60 + q * 30, 0.5, 1);
             const cost = 50 + q * 10;
-            return "<b class='damage'>" + (damage1 + damage2) + '</b> ( ' + damage1 + ', ' + damage2 + " ) <b> __cost: </b><b class='heal'>-" + cost + '</b>';
+            const cool = 10000 / ((6.5 - q * 0.75) * (100 - character.cooldown_reduction));
+            return "<b class='damage'>" + (damage1 + damage2) + '</b> ( ' + damage1 + ', ' + damage2 + " ) <b> __cost: </b><b class='heal'>-" + cost + "</b><b> __sd/s: </b><b class='damage'>" + round((damage1 + damage2) * cool) / 100 + '</b>';
         }
         return '-';
     }
@@ -72,7 +73,8 @@ const Sissela = {
             const w = character.W_LEVEL.selectedIndex;
             const damage = calcSkillDamage(character, enemy, 30 + w * 60, 0.7, 1);
             const cost = 60 + w * 20;
-            return "<b class='damage'>" + damage + "</b><b> __cost: </b><b class='heal'>-" + cost + '</b>';
+            const cool = 10000 / ((21 - w * 2) * (100 - character.cooldown_reduction) + 150);
+            return "<b class='damage'>" + damage + "</b><b> __cost: </b><b class='heal'>-" + cost + "</b><b> __sd/s: </b><b class='damage'>" + round(damage * cool) / 100 + '</b>';
         }
         return '-';
     }
@@ -82,7 +84,8 @@ const Sissela = {
             const e = character.E_LEVEL.selectedIndex;
             const damage = calcSkillDamage(character, enemy, 40 + e * 50, 0.6, 1);
             const shield = 60 + e * 50 + character.attack_power * 0.5;
-            return "<b class='damage'>" + damage + "</b><b> __s: </b><b class='shield'>" + shield + '</b>';
+            const cool = 10000 / ((14 - e * 1) * (100 - character.cooldown_reduction));
+            return "<b class='damage'>" + damage + "</b><b> __s: </b><b class='shield'>" + shield + "</b><b> __sd/s: </b><b class='damage'>" + round(damage * cool) / 100 + '</b>';
         }
         return '-';
     }

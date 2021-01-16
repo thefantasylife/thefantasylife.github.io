@@ -39,8 +39,8 @@ const Silvia = {
             const as = 10 / (9.5 / character.attack_speed + 2);
             const shot = baseAttackDamage(character, enemy, 0, 0.32, character.critical_strike_chance, 1) * 2 + 
                 baseAttackDamage(character, enemy, 0, 0.48, character.critical_strike_chance, 1);
-            const damage1 = Math.round(shot * as * 100) / 100;
-            const damage2 = Math.round(shot * character.attack_speed * 100) / 100;
+            const damage1 = round(shot * as * 100) / 100;
+            const damage2 = round(shot * character.attack_speed * 100) / 100;
             const life1 = calcHeal(shot * (character.life_steal / 100), as, enemy);
             const life2 = calcHeal(shot * (character.life_steal / 100), character.attack_speed, enemy);
             return "<b class='damage'>" + damage1 + '</b> - ' + damage2 + "<b> __h/s: </b><b class='heal'>" + life1 + '</b> - ' + life2;
@@ -55,17 +55,21 @@ const Silvia = {
     ,Q_Skill: (character, enemy) => {
         if (character.weapon) {
             const q = character.Q_LEVEL.selectedIndex;
+            let damage, cool;
             if (character.DIV.querySelector('.silvia_r').checked) {
-                return "<b class='damage'>" + calcSkillDamage(character, enemy, 40 + q * 60, 0.6, 1) + '</b>';
+                damage = calcSkillDamage(character, enemy, 40 + q * 60, 0.6, 1);
+                cool = 10000 / ((2.5 - q * 0.25) * (100 - character.cooldown_reduction));
+                return "<b class='damage'>" + damage + "</b><b> __sd/s: </b><b class='damage'>" + round(damage * cool) / 100 + '</b>';
             }
-            const damage = calcSkillDamage(character, enemy, 30 + q * 35, 0.4, 1);
+            damage = calcSkillDamage(character, enemy, 30 + q * 35, 0.4, 1);
             let heal;
             if (character.MODE.selectedIndex == 0) {
                 heal = calcHeal((40 + q * 20 + character.attack_power * 0.3) * 1.1, 1, enemy);
             } else {
                 heal = calcHeal((40 + q * 20 + character.attack_power * 0.3) * 0.95, 1, enemy);
             }
-            return "<b class='damage'>" + damage + "</b><b> __h: </b><b class='heal'>" + heal + '</b>';
+            cool = 10000 / ((7.5 - q * 0.75) * (100 - character.cooldown_reduction));
+            return "<b class='damage'>" + damage + "</b><b> __h: </b><b class='heal'>" + heal + "</b><b> __sd/s: </b><b class='damage'>" + round(damage * cool) / 100 + '</b>';
         }
         return '-';
     }
@@ -73,10 +77,15 @@ const Silvia = {
     ,W_Skill: (character, enemy) => {
         if (character.weapon) {
             const w = character.W_LEVEL.selectedIndex;
+            let damage, cool;
             if (character.DIV.querySelector('.silvia_r').checked) {
-                return "<b class='damage'>" + calcSkillDamage(character, enemy, 90 + w * 40, 0.6, 1) + '</b>';
+                damage = calcSkillDamage(character, enemy, 90 + w * 40, 0.6, 1);
+                cool = 10000 / ((10 - w * 1) * (100 - character.cooldown_reduction));
+                return "<b class='damage'>" + damage + "</b><b> __sd/s: </b><b class='damage'>" + round(damage * cool) / 100 + '</b>';
             }
-            return "<b class='damage'>" + calcSkillDamage(character, enemy, 40 + w * 20, 0.3, 1) + '</b>';
+            damage = calcSkillDamage(character, enemy, 40 + w * 20, 0.3, 1);
+            cool = 10000 / (15 * (100 - character.cooldown_reduction));
+            return "<b class='damage'>" + damage + "</b><b> __sd/s: </b><b class='damage'>" + round(damage * cool) / 100 + '</b>';
         }
         return '-';
     }
@@ -84,16 +93,18 @@ const Silvia = {
     ,E_Skill: (character, enemy) => {
         if (character.weapon) {
             const e = character.E_LEVEL.selectedIndex;
-            let min, max;
+            let min, max, cool;
             if (character.DIV.querySelector('.silvia_r').checked) {
                 const move = character.movement_speed + character.out_of_combat_movement_speed;
                 min = calcSkillDamage(character, enemy, 40 + e * 25 + move / 17 * 2 * (6 + e * 4), 0.6, 1);
                 max = calcSkillDamage(character, enemy, 40 + e * 25 + move * (6 + e * 4), 0.6, 1);
-                return "<b class='damage'>" + min + ' ~ ' + max + '</b>';
+                cool = 10000 / ((12 - e * 1) * (100 - character.cooldown_reduction));
+                return "<b class='damage'>" + min + ' ~ ' + max + "</b><b> __sd/s: </b><b class='damage'>" + round((min + max) / 2 * cool) / 100 + '</b>';
             }
             min = calcSkillDamage(character, enemy, 80 + e * 20, 0.5, 1);
             max = calcSkillDamage(character, enemy, 154 + e * 33, 1.32, 1);
-            return "<b class='damage'>" + min + ' ~ ' + max + '</b>';
+            cool = 10000 / ((14 - e * 1) * (100 - character.cooldown_reduction));
+            return "<b class='damage'>" + min + ' ~ ' + max + "</b><b> __sd/s: </b><b class='damage'>" + round((min + max) / 2 * cool) / 100 + '</b>';
         }
         return '-';
     }

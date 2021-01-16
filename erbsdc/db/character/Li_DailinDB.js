@@ -40,7 +40,7 @@ const Li_Dailin = {
     ,DPS: (character, enemy) => {
         if (character.weapon) {
             const ba = baseAttackDamage(character, enemy, 0, 1, character.critical_strike_chance, 1);
-            const damage = Math.round(ba * character.attack_speed * 100) / 100;
+            const damage = round(ba * character.attack_speed * 100) / 100;
             const life = calcHeal(ba * (character.life_steal / 100), character.attack_speed, enemy);
             return "<b class='damage'>" + damage + "</b><b> __h/s: </b><b class='heal'>" + life + '</b>';
         }
@@ -56,7 +56,8 @@ const Li_Dailin = {
             const q = character.Q_LEVEL.selectedIndex;
             const min = calcSkillDamage(character, enemy, 20 + q * 20, 0.5, 1);
             const max = calcSkillDamage(character, enemy, 28 + q * 28, 0.7, 1);
-            return "<b class='damage'>" + max * 3 + '</b> ( ' + min + ', ' + min + ', ' + min + ' - ' + max + ', ' + max + ', ' + max + ' )';
+            const cool = 10000 / ((12 - q * 0.5) * (100 - character.cooldown_reduction) + 28);
+            return "<b class='damage'>" + max * 3 + '</b> ( ' + min + ', ' + min + ', ' + min + ' - ' + max + ', ' + max + ', ' + max + " )<b> __sd/s: </b><b class='damage'>" + round((max * 3) * cool) / 100 + '</b>';
         }
         return '-';
     }
@@ -65,7 +66,7 @@ const Li_Dailin = {
         if (character.weapon) {
             const damage1 = baseAttackDamage(character, enemy, 0, 1, character.critical_strike_chance, 1);
             const damage2 = baseAttackDamage(character, enemy, 0, 0.5 + character.T_LEVEL.selectedIndex * 0.25, character.critical_strike_chance, 1);
-            const dps = Math.round((damage1 + damage2) * character.attack_speed * 100) / 100;
+            const dps = round((damage1 + damage2) * character.attack_speed * 100) / 100;
             const life = calcHeal((damage1 + damage2) * (character.life_steal / 100), character.attack_speed, enemy);	
             return "<b> _d/s: </b><b class='damage'>" + dps + "</b><b> __h/s: </b><b class='heal'>" + life + '</b>';
         }
@@ -74,7 +75,10 @@ const Li_Dailin = {
     ,W_Option: "<b> __use</b><input type='checkbox' class='lida_w' onchange='updateDisplay()'>"
     ,E_Skill: (character, enemy) => {
         if (character.weapon) {
-            return "<b class='damage'>" + calcSkillDamage(character, enemy, 80 + character.E_LEVEL.selectedIndex * 55, 0.5, 1) + '</b>';
+            const e = character.E_LEVEL.selectedIndex;
+            const damage = calcSkillDamage(character, enemy, 80 + e * 55, 0.5, 1);
+            const cool = 10000 / ((13 - e * 1) * (100 - character.cooldown_reduction));
+            return "<b class='damage'>" + damage + "</b><b> __sd/s: </b><b class='damage'>" + round(damage * cool) / 100 + '</b>';
         }
         return '-';
     }
@@ -88,7 +92,7 @@ const Li_Dailin = {
                 const hp = enemy.max_hp;
                 const heal = calcHeal(enemy.hp_regen * (enemy.hp_regen_percent + 100) / 100 + 
                     (enemy.food ? enemy.food.HP_Regen / 30 : 0), 2, character);
-                let start = 0, mid, end = Math.ceil(hp * 0.77), coe;
+                let start = 0, mid, end = ceil(hp * 0.77), coe;
                 while (start < end) {
                     mid = (start + end + 1) / 2;
                     coe = 2 * (mid * 100.0 / hp > 77 ? 77 : mid * 100.0 / hp) / 77 + 1;
@@ -100,7 +104,7 @@ const Li_Dailin = {
                     }
                 }
                 start = 0;
-                end = Math.ceil(hp * 0.77);
+                end = ceil(hp * 0.77);
                 while (start < end) {
                     mid = (start + end + 1) / 2;
                     coe = 2 * (mid * 100.0 / hp > 77 ? 77 : mid * 100.0 / hp) / 77 + 1;

@@ -36,7 +36,7 @@ const Emma = {
     ,DPS: (character, enemy) => {
         if (character.weapon) {
             const ba = baseAttackDamage(character, enemy, 0, 1, character.critical_strike_chance, 1);
-            const damage = Math.round(ba * character.attack_speed * 100) / 100;
+            const damage = round(ba * character.attack_speed * 100) / 100;
             const life = calcHeal(ba * (character.life_steal / 100), character.attack_speed, enemy);
             return "<b class='damage'>" + damage + "</b><b> __h/s: </b><b class='heal'>" + life + '</b>';
         }
@@ -52,7 +52,8 @@ const Emma = {
             const q = character.Q_LEVEL.selectedIndex;
             const damage = calcSkillDamage(character, enemy, 40 + q * 40, 0.3, 1);
             const heal = calcHeal((60 + q * 10) * (0.08 + character.E_LEVEL.selectedIndex * 0.03), 1, enemy);
-            return "<b class='damage'>" + damage * 2 + '</b> ( ' + damage + " x 2 ) <b> __h: </b><b class='heal'>" + heal + '</b>';
+            const cool = 10000 / 5.5 / (100 - character.cooldown_reduction);
+            return "<b class='damage'>" + damage * 2 + '</b> ( ' + damage + " x 2 ) <b> __h: </b><b class='heal'>" + heal + "</b><b> __sd/s: </b><b class='damage'>" + round(damage * 2 * cool) / 100 + '</b>';
         }
         return '-';
     }
@@ -62,7 +63,8 @@ const Emma = {
             const w = character.W_LEVEL.selectedIndex;
             const damage = calcSkillDamage(character, enemy, 100 + w * 50, 0.75, 1);
             const heal = calcHeal((60 + w * 10) * (0.08 + character.E_LEVEL.selectedIndex * 0.03), 1, enemy);
-            return "<b class='damage'>" + damage + "</b><b> __h: </b><b class='heal'>" + heal + '</b>';
+            const cool = 10000 / (12 - w * 1) / (100 - character.cooldown_reduction);
+            return "<b class='damage'>" + damage + "</b><b> __h: </b><b class='heal'>" + heal + "</b><b> __sd/s: </b><b class='damage'>" + round(damage * cool) / 100 + '</b>';
         }
         return '-';
     }
@@ -82,17 +84,19 @@ const Emma = {
             const min = calcSkillDamage(character, enemy, 150 + r * 50, 0.45, 1);
             const max = calcSkillDamage(character, enemy, 200 + r * 50, 0.75, 1);
             const heal = calcHeal(8 + r * 3, 1, enemy);
-            return "<b class='damage'>" + min + "</b><b> / </b><b class='damage'>" + max + "</b><b> __h: </b><b class='heal'>" + heal + '</b>';
+            const cool = 10000 / (18 - r * 3) / (100 - character.cooldown_reduction);
+            return "<b class='damage'>" + min + "</b><b> / </b><b class='damage'>" + max + "</b><b> __h: </b><b class='heal'>" + heal + "</b><b> __sd/s: </b><b class='damage'>" + round(max * cool) / 100 + '</b>';
         }
         return '-';
     }
     ,R_Option: ''
     ,D_Skill: (character, enemy) => {
-        if (character.weapon && character.WEAPON_MASTERY.selectedIndex > 5) {
+        const wm = character.WEAPON_MASTERY.selectedIndex;
+        if (character.weapon && wm > 5) {
             const type = character.weapon.Type;
             if (type === 'Shuriken') {
-                const damage = calcSkillDamage(character, enemy, character.WEAPON_MASTERY.selectedIndex < 13 ? 110 : 180, 0.3, 1);
-                const add = calcSkillDamage(character, enemy, (character.WEAPON_MASTERY.selectedIndex < 13 ? 110 : 180) * 0.3, 0.3 * 0.3, 1);
+                const damage = calcSkillDamage(character, wm < 13 ? 110 : 180, 0.3, 1);
+                const add = calcSkillDamage(character, enemy, (wm < 13 ? 110 : 180) * 0.3, 0.3 * 0.3, 1);
                 return "<b class='damage'>" + damage + ' ~ ' + (damage + add * 11) + '</b> ( ' + damage + ', ' + add + ' x 11 )';
             }
         }
