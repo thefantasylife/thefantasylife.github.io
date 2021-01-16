@@ -92,7 +92,7 @@ const Li_Dailin = {
                 const hp = enemy.max_hp;
                 const heal = calcHeal(enemy.hp_regen * (enemy.hp_regen_percent + 100) / 100 + 
                     (enemy.food ? enemy.food.HP_Regen / 30 : 0), 2, character);
-                let start = 0, mid, end = ceil(hp * 0.77), coe;
+                let start = 0, mid, end = round(hp * 0.77) , coe;
                 while (start < end) {
                     mid = (start + end + 1) / 2;
                     coe = 2 * (mid * 100.0 / hp > 77 ? 77 : mid * 100.0 / hp) / 77 + 1;
@@ -104,7 +104,7 @@ const Li_Dailin = {
                     }
                 }
                 start = 0;
-                end = ceil(hp * 0.77);
+                end = round(hp * 0.77);
                 while (start < end) {
                     mid = (start + end + 1) / 2;
                     coe = 2 * (mid * 100.0 / hp > 77 ? 77 : mid * 100.0 / hp) / 77 + 1;
