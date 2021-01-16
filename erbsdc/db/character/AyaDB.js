@@ -89,7 +89,7 @@ const Aya = {
         if (character.weapon) {
             const w = character.W_LEVEL.selectedIndex;
             const damage = calcSkillDamage(character, enemy, 22 + w * 22, 0.3 + w * 0.05, 1);
-            const cool = 10000 / ((18 - w * 1.5) * (100 - character.cooldown_reduction) * 317);
+            const cool = 10000 / ((18 - w * 1.5) * (100 - character.cooldown_reduction) + 317);
             return "<b class='damage'>" + damage * 10 + '</b> ( ' + damage + " x 10 )<b> __sd/s: </b><b class='damage'>" + round(damage * 10 * cool) / 100 + '</b>';
         }
         return '-';
