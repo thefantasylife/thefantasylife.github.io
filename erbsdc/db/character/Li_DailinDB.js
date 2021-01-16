@@ -125,11 +125,12 @@ const Li_Dailin = {
     }
     ,R_Option: ''
     ,D_Skill: (character, enemy) => {
-        if (character.weapon && character.WEAPON_MASTERY.selectedIndex > 5) {
+        const wm = character.WEAPON_MASTERY.selectedIndex;
+        if (character.weapon && wm > 5) {
             const type = character.weapon.Type;
             if (type === 'Glove') {
-                const coe = character.WEAPON_MASTERY.selectedIndex < 13 ? 1 : 2;
-                const bonus = calcTrueDamage(character, enemy, character.WEAPON_MASTERY.selectedIndex < 13 ? 50 : 100);
+                const coe = wm < 13 ? 1 : 2;
+                const bonus = calcTrueDamage(character, enemy, wm < 13 ? 50 : 100);
                 const damage = baseAttackDamage(character, enemy, 0, 1 + coe, character.critical_strike_chance, 1) + bonus;
                 const min = baseAttackDamage(character, enemy, 0, 1 + coe, 0, 1) + bonus;
                 const max = baseAttackDamage(character, enemy, 0, 1 + coe, 100, 1) + bonus;
@@ -138,8 +139,8 @@ const Li_Dailin = {
                 return "<b class='damage'>" + damage + '</b> ( ' +  min + " - <b class='damage'>" + max + '</b> / ' + over + " )<b> __h: </b><b class='heal'>" + life + '</b>';
             }
             if (type === 'Nunchaku') {
-                const min = calcSkillDamage(character, enemy, character.WEAPON_MASTERY.selectedIndex < 13 ? 150 : 300, 0.5, 1);
-                const max = calcSkillDamage(character, enemy, character.WEAPON_MASTERY.selectedIndex < 13 ? 300 : 600, 1.5, 1);
+                const min = calcSkillDamage(character, enemy, wm < 13 ? 150 : 300, 0.5, 1);
+                const max = calcSkillDamage(character, enemy, wm < 13 ? 300 : 600, 1.5, 1);
                 return "<b class='damage'>" + min + ' ~ ' + max + '</b>';
             }
         }
@@ -194,6 +195,11 @@ const Li_Dailin = {
     ,COMBO: (character, enemy) => {
         if (character.weapon) {
             const type = character.weapon.Type;
+            const q = character.Q_LEVEL.selectedIndex;
+            const e = character.E_LEVEL.selectedIndex;
+            const r = character.R_LEVEL.selectedIndex;
+            const t = character.T_LEVEL.selectedIndex;
+            const wm = character.WEAPON_MASTERY.selectedIndex;
             let damage = 0, c;
             let bac = 0, liquid = false, qq = 0, wq = 0;
             const combo = character.COMBO_OPTION.value;
@@ -214,7 +220,6 @@ const Li_Dailin = {
                         damage += baseAttackDamage(character, enemy, 0, 1, 100, 1);
                     }
                 } else if (c === 'q' || c === 'Q') {
-                    const q = character.Q_LEVEL.selectedIndex;
                     if (qq > 0) {
                         qq--;
                         damage += calcSkillDamage(character, enemy, 20 + q * 20, 0.5, 1);
@@ -240,9 +245,8 @@ const Li_Dailin = {
                     if (bac >= 40) {
                         bac -= 40;
                     }
-                    damage += calcSkillDamage(character, enemy, 80 + character.E_LEVEL.selectedIndex * 55, 0.5, 1)
+                    damage += calcSkillDamage(character, enemy, 80 + e * 55, 0.5, 1)
                 } else if (c === 'r' || c === 'R') {
-                    const r = character.R_LEVEL.selectedIndex;
                     const coe = enemy.max_hp ? 2 * (damage * 100.0 / enemy.max_hp > 77 ? 77 : damage * 100.0 / enemy.max_hp) / 77 + 1 : 3;
                     if (bac >= 40) {
                         if (liquid) {
@@ -261,10 +265,10 @@ const Li_Dailin = {
                         }
                     }
                 } else if (c === 'd') {
-                    if (character.WEAPON_MASTERY.selectedIndex > 5) {
+                    if (wm > 5) {
                         if (type === 'Glove') {
-                            const coe = character.WEAPON_MASTERY.selectedIndex < 13 ? 1 : 2;
-                            const bonus = calcTrueDamage(character, enemy, character.WEAPON_MASTERY.selectedIndex < 13 ? 50 : 100);
+                            const coe = wm < 13 ? 1 : 2;
+                            const bonus = calcTrueDamage(character, enemy, wm < 13 ? 50 : 100);
                             if (liquid) {
                                 liquid = false;
                                 damage += baseAttackDamage(character, enemy, 0, (1 + coe) * (1 + bac * 0.002), 0, 1) + bonus;
@@ -272,14 +276,14 @@ const Li_Dailin = {
                                 damage += baseAttackDamage(character, enemy, 0, 1 + coe, 0, 1) + bonus;
                             }
                         } else if (type === 'Nunchaku') {
-                            damage += calcSkillDamage(character, enemy, character.WEAPON_MASTERY.selectedIndex < 13 ? 150 : 300, 0.5, 1);
+                            damage += calcSkillDamage(character, enemy, wm < 13 ? 150 : 300, 0.5, 1);
                         }
                     }
                 } else if (c === 'D') {
-                    if (character.WEAPON_MASTERY.selectedIndex > 5) {
+                    if (wm > 5) {
                         if (type === 'Glove') {
-                            const coe = character.WEAPON_MASTERY.selectedIndex < 13 ? 1 : 2;
-                            const bonus = calcTrueDamage(character, enemy, character.WEAPON_MASTERY.selectedIndex < 13 ? 50 : 100);
+                            const coe = wm < 13 ? 1 : 2;
+                            const bonus = calcTrueDamage(character, enemy, wm < 13 ? 50 : 100);
                             if (liquid) {
                                 liquid = false;
                                 damage += baseAttackDamage(character, enemy, 0, (1 + coe) * (1 + bac * 0.002), 100, 1) + bonus;
@@ -287,24 +291,26 @@ const Li_Dailin = {
                                 damage += baseAttackDamage(character, enemy, 0, 1 + coe, 100, 1) + bonus;
                             }
                         } else if (type === 'Nunchaku') {
-                            damage += calcSkillDamage(character, enemy, character.WEAPON_MASTERY.selectedIndex < 13 ? 300 : 600, 1.5, 1);
+                            damage += calcSkillDamage(character, enemy, wm < 13 ? 300 : 600, 1.5, 1);
                         }
                     }
                 } else if (c === 't') {
                     if (liquid) {
                         liquid = false;
                         damage += baseAttackDamage(character, enemy, 0, 1 * (1 + liquid * 0.002), 0, 1) + 
-                            baseAttackDamage(character, enemy, 0, (0.5 + character.T_LEVEL.selectedIndex * 0.25) * (1 + liquid * 0.002), 0, 1);
+                            baseAttackDamage(character, enemy, 0, (0.5 + t * 0.25) * (1 + liquid * 0.002), 0, 1);
                     } else {
-                        damage += baseAttackDamage(character, enemy, 0, 1, 0, 1);
+                        damage += baseAttackDamage(character, enemy, 0, 1, 0, 1) + 
+                            baseAttackDamage(character, enemy, 0, (0.5 + t * 0.25), 0, 1);
                     }
                 } else if (c === 'T') {
                     if (liquid) {
                         liquid = false;
                         damage += baseAttackDamage(character, enemy, 0, 1 * (1 + liquid * 0.002), 100, 1) + 
-                            baseAttackDamage(character, enemy, 0, (0.5 + character.T_LEVEL.selectedIndex * 0.25) * (1 + liquid * 0.002), 100, 1);
+                            baseAttackDamage(character, enemy, 0, (0.5 + t * 0.25) * (1 + liquid * 0.002), 100, 1);
                     } else {
-                        damage += baseAttackDamage(character, enemy, 0, 1, 100, 1);
+                        damage += baseAttackDamage(character, enemy, 0, 1, 100, 1) + 
+                            baseAttackDamage(character, enemy, 0, (0.5 + t * 0.25), 100, 1);
                     }
                 }
             }

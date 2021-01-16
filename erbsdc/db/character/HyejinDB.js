@@ -94,16 +94,17 @@ const Hyejin = {
     }
     ,R_Option: ''
     ,D_Skill: (character, enemy) => {
-        if (character.weapon && character.WEAPON_MASTERY.selectedIndex > 5) {
+        const wm = character.WEAPON_MASTERY.selectedIndex;
+        if (character.weapon && wm > 5) {
             const type = character.weapon.Type;
             if (type === 'Shuriken') {
-                const damage = calcSkillDamage(character, enemy, character.WEAPON_MASTERY.selectedIndex < 13 ? 110 : 180, 0.3, 1);
-                const add = calcSkillDamage(character, enemy, (character.WEAPON_MASTERY.selectedIndex < 13 ? 110 : 180) * 0.3, 0.3 * 0.3, 1);
+                const damage = calcSkillDamage(character, enemy, wm < 13 ? 110 : 180, 0.3, 1);
+                const add = calcSkillDamage(character, enemy, (wm < 13 ? 110 : 180) * 0.3, 0.3 * 0.3, 1);
                 return "<b class='damage'>" + damage + ' ~ ' + (damage + add * 11) + '</b> ( ' + damage + ', ' + add + ' x 11 )';
             }
             if (type === 'Bow') {
-                const min = calcSkillDamage(character, enemy, character.WEAPON_MASTERY.selectedIndex < 13 ? 150 : 250, 1, 1);
-                const max = calcSkillDamage(character, enemy, character.WEAPON_MASTERY.selectedIndex < 13 ? 300 : 500, 2, 1);
+                const min = calcSkillDamage(character, enemy, wm < 13 ? 150 : 250, 1, 1);
+                const max = calcSkillDamage(character, enemy, wm < 13 ? 300 : 500, 2, 1);
                 return "<b class='damage'>" + min + ' - ' + max + '</b>';
             }
         }
@@ -142,5 +143,62 @@ const Hyejin = {
             'R: "합산 데미지" ( "폭발 데미지", "구체 데미지" x "타수" )\n' + 
             'D: ' + skill + '\n' + 
             'T: "데미지 없음"\n';
+    }
+    ,COMBO: (character, enemy) => {
+        if (character.weapon) {
+            const type = character.weapon.Type;
+            const q = character.Q_LEVEL.selectedIndex;
+            const w = character.W_LEVEL.selectedIndex;
+            const e = character.E_LEVEL.selectedIndex;
+            const r = character.R_LEVEL.selectedIndex;
+            const wm = character.WEAPON_MASTERY.selectedIndex;
+            let damage = 0, c;
+            let ee = false;
+            const combo = character.COMBO_OPTION.value;
+            for (let i = 0; i < combo.length; i++) {
+                c = combo.charAt(i);
+                if (c === 'a') {
+                    damage += baseAttackDamage(character, enemy, 0, 1, 0, 1);
+                } else if (c === 'A') {
+                    damage += baseAttackDamage(character, enemy, 0, 1, 100, 1);
+                } else if (c === 'q' || c === 'Q') {
+                    damage += calcSkillDamage(character, enemy, 100 + q * 25, 0.4, 1);
+                } else if (c === 'w') {
+                    damage += calcSkillDamage(character, enemy, 15 + w * 5, 0.5, 1);
+                } else if (c === 'W') {
+                    damage += calcSkillDamage(character, enemy, 140 + w * 65, 0.5, 1);
+                } else if (c === 'e' || c === 'E') {
+                    if (ee) {
+                        ee = false;
+                        damage += calcSkillDamage(character, enemy, 50 + e * 25, 0.5, 1);
+                    } else {
+                        ee = true;
+                        damage += calcSkillDamage(character, enemy, 45 + e * 25, 0.3, 1);
+                    }
+                } else if (c === 'r') {
+                    damage += calcSkillDamage(character, enemy, 80 + r * 50, 0.5, 1);
+                } else if (c === 'R') {
+                    damage += calcSkillDamage(character, enemy, 150 + r * 125, 0.7, 1);
+                } else if (c === 'd') {
+                    if (wm > 5) {
+                        if (type === 'Shuriken') {
+                            damage += calcSkillDamage(character, enemy, (wm < 13 ? 110 : 180) * 0.3, 0.3 * 0.3, 1);
+                        } else if (type === 'Bow') {
+                            damage += calcSkillDamage(character, enemy, wm < 13 ? 150 : 250, 1, 1);
+                        }
+                    }
+                } else if (c === 'D') {
+                    if (wm > 5) {
+                        if (type === 'Shuriken') {
+                            damage += calcSkillDamage(character, enemy, wm < 13 ? 110 : 180, 0.3, 1);
+                        } else if (type === 'Bow') {
+                            damage += calcSkillDamage(character, enemy, wm < 13 ? 300 : 500, 2, 1);
+                        }
+                    }
+                }
+            }
+            return "<b class='damage'>" + damage + '</b><b> _ : ' + (enemy.max_hp ? (damage / enemy.max_hp * 10000 | 0) / 100 : '-') + '%</b>';
+        }
+        return '-';
     }
 };
