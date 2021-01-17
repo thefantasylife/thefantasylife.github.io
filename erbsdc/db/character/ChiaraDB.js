@@ -135,15 +135,22 @@ const Chiara = {
             'T: "패시브 스택"\n';
     }
     ,COMBO: (character, enemy) => {
-        if (character.weapon) {
-            const type = character.weapon.Type;
+        if (character.weapon) { const type = character.weapon.Type;
             const q = character.Q_LEVEL.selectedIndex;
             const w = character.W_LEVEL.selectedIndex;
             const e = character.E_LEVEL.selectedIndex;
             const r = character.R_LEVEL.selectedIndex;
+            const t = character.T_LEVEL.selectedIndex;
             const wm = character.WEAPON_MASTERY.selectedIndex;
             let damage = 0, c;
-            let ee = false;
+            let stack = 0;
+
+            let enemy_defense;
+            if (enemy.calc_defense) {
+                enemy_defense = enemy.defense;
+                enemy.defense = enemy.calc_defense | 0;
+            }
+
             const combo = character.COMBO_OPTION.value;
             for (let i = 0; i < combo.length; i++) {
                 c = combo.charAt(i);
@@ -152,25 +159,81 @@ const Chiara = {
                 } else if (c === 'A') {
                     damage += baseAttackDamage(character, enemy, 0, 1, 100, 1);
                 } else if (c === 'q' || c === 'Q') {
+                    if (stack < 4) {
+                        stack++;
+                        if (enemy.defense) {
+                            enemy.defense = enemy.calc_defense * (1 - stack * (0.02 + t * 0.02)) | 0;
+                        }
+                    }
                     damage += calcSkillDamage(character, enemy, 60 + q * 40, 0.6, 1);
                 } else if (c === 'w' || c === 'W') {
+                    if (stack < 4) {
+                        stack++;
+                        if (enemy.defense) {
+                            enemy.defense = enemy.calc_defense * (1 - stack * (0.02 + t * 0.02)) | 0;
+                        }
+                    }
                     damage += calcSkillDamage(character, enemy, 80 + w * 40, 0.75, 1);
                 } else if (c === 'e') {
+                    if (stack < 4) {
+                        stack++;
+                        if (enemy.defense) {
+                            enemy.defense = enemy.calc_defense * (1 - stack * (0.02 + t * 0.02)) | 0;
+                        }
+                    }
                     damage += calcSkillDamage(character, enemy, 40 + e * 20, 0.3, 1);
                 } else if (c === 'E') {
-                    damage += calcSkillDamage(character, enemy, 40 + e * 20, 0.3, 1) + calcSkillDamage(character, enemy, 70 + e * 40, 0.7, 1);
+                    if (stack < 4) {
+                        stack++;
+                        if (enemy.defense) {
+                            enemy.defense = enemy.calc_defense * (1 - stack * (0.02 + t * 0.02)) | 0;
+                        }
+                    }
+                    damage += calcSkillDamage(character, enemy, 40 + e * 20, 0.3, 1);
+                    if (stack < 4) {
+                        stack++;
+                        if (enemy.defense) {
+                            enemy.defense = enemy.calc_defense * (1 - stack * (0.02 + t * 0.02)) | 0;
+                        }
+                    }
+                    damage += calcSkillDamage(character, enemy, 70 + e * 40, 0.7, 1);
                 } else if (c === 'r') {
-                    damage += calcSkillDamage(character, enemy, 20 + r * 7, 0.15, 1) * 3;
+                    for (let j = 0; j < 3; j++) {
+                        if (stack < 4) {
+                            stack++;
+                            if (enemy.defense) {
+                                enemy.defense = enemy.calc_defense * (1 - stack * (0.02 + t * 0.02)) | 0;
+                            }
+                        }
+                        damage += calcSkillDamage(character, enemy, 20 + r * 7, 0.15, 1);
+                    }
                 } else if (c === 'R') {
+                    if (stack < 4) {
+                        stack++;
+                        if (enemy.defense) {
+                            enemy.defense = enemy.calc_defense * (1 - stack * (0.02 + t * 0.02)) | 0;
+                        }
+                    }
                     damage += 200 + r * 100 + character.attack_power * 1.2 | 0;
                 } else if (c === 'd' || c === 'D') {
                     if (wm > 5) {
                         if (type === 'Rapier') {
+                            if (stack < 4) {
+                                stack++;
+                                if (enemy.defense) {
+                                    enemy.defense = enemy.calc_defense * (1 - stack * (0.02 + t * 0.02)) | 0;
+                                }
+                            }
                             damage += calcSkillDamage(character, enemy, 0, (2 + character.critical_strike_damage / 100), 1);
                         }
                     }
                 }
             }
+
+            if (enemy_defense) {
+                enemy.defense = enemy_defense;
+            }
+
             return "<b class='damage'>" + damage + '</b><b> _ : ' + (enemy.max_hp ? (damage / enemy.max_hp * 10000 | 0) / 100 : '-') + '%</b>';
         }
         return '-';

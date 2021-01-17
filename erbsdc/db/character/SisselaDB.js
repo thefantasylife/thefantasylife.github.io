@@ -167,6 +167,12 @@ const Sissela = {
             const t = character.T_LEVEL.selectedIndex;
             const wm = character.WEAPON_MASTERY.selectedIndex;
             let damage = 0, c;
+
+            const sissela_t = character.DIV.querySelector('.sissela_t');
+            const skill_amplification = character.skill_amplification;
+            character.skill_amplification = round(character.calc_skill_amplification + 
+                (2 + t * 3) * (sissela_t.value < 10 ? 0 : (sissela_t.value >= 90 ? 5 : sissela_t.value / 20 + 0.5)), 1);
+
             const combo = character.COMBO_OPTION.value;
             for (let i = 0; i < combo.length; i++) {
                 c = combo.charAt(i);
@@ -185,6 +191,8 @@ const Sissela = {
                 } else if (c === 'r' || c === 'R') {
                     const bonus = character.DIV.querySelector('.sissela_t').value * 2;
                     damage += calcSkillDamage(character, enemy, 150 + r * 125 + bonus, 1, 1);
+                    character.skill_amplification = round(character.calc_skill_amplification + 
+                        (2 + t * 3) * (sissela_t.value < 10 ? 0 : (sissela_t.value >= 90 ? 5 : sissela_t.value / 20 + 0.5)) * 2, 1);
                 } else if (c === 'd') {
                     if (wm > 5) {
                         if (type === 'Shuriken') {
@@ -205,6 +213,9 @@ const Sissela = {
                         calcSkillDamage(character, enemy, 28 + character.LEVEL.selectedIndex * 10, 0.2, 1);
                 }
             }
+
+            character.skill_amplification = skill_amplification;
+
             return "<b class='damage'>" + damage + '</b><b> _ : ' + (enemy.max_hp ? (damage / enemy.max_hp * 10000 | 0) / 100 : '-') + '%</b>';
         }
         return '-';

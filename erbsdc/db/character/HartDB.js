@@ -47,7 +47,7 @@ const Hart = {
             const ba1 = baseAttackDamage(character, enemy, 0, 1, character.critical_strike_chance, 1);
             let damage, life;
             if (character.DIV.querySelector('.hart_t').checked) {
-                const ba2 = (baseAttackDamage(character, enemy, 0, 0.15, character.critical_strike_chance, 1) * character.attack_speed * 100 | 0) / 100;
+                const ba2 = baseAttackDamage(character, enemy, 0, 0.15, character.critical_strike_chance, 1);
                 if (character.DIV.querySelector('.hart_tt').checked) {
                     damage = round((ba1 + ba2 + ba2) * character.attack_speed * 100) / 100;
                     life = calcHeal((ba1 + ba2 + ba2) * (character.life_steal / 100), character.attack_speed, enemy);
@@ -86,17 +86,22 @@ const Hart = {
         "<b> _use</b><input type='checkbox' class='hart_w_u' onchange='updateDisplay()'>"
     ,E_Skill: (character, enemy) => {
         if (character.weapon) {
+
+            const skill_amplification_percent = character.skill_amplification_percent;
+            character.skill_amplification_percent = character.calc_skill_amplification_percent;
+
             const e = character.E_LEVEL.selectedIndex;
             const sap = character.DIV.querySelector('.hart_ee').checked ? 25 : character.DIV.querySelector('.hart_e').checked ? 15 : 0;
-            const stack = character.DIV.querySelector('.hart_e_s').value;
-            character.skill_amplification_percent -= sap * (stack - 1);
+            character.skill_amplification_percent += sap;
             const damage1 = calcSkillDamage(character, enemy, 20 + e * 10, 0.4, 1);
             character.skill_amplification_percent += sap;
             const damage2 = calcSkillDamage(character, enemy, 20 + e * 10, 0.4, 1);
             character.skill_amplification_percent += sap;
             const damage3 = calcSkillDamage(character, enemy, 20 + e * 10, 0.4, 1);
-            character.skill_amplification_percent -= sap * (3 - stack);
             const cool = 10000 / ((17 - e * 2) * (100 - character.cooldown_reduction) + 50);
+
+            character.skill_amplification_percent = skill_amplification_percent;
+
             return "<b class='damage'>" + (damage1 + damage2 + damage3) + '</b> ( ' + damage1 + ', ' + damage2 + ', ' + damage3 + " )<b> __sd/s: </b><b class='damage'>" + round((damage1 + damage2 + damage3) * cool) / 100 + '</b>';
         }
         return '-';
@@ -179,5 +184,81 @@ const Hart = {
             'R: _h: "총 회복량(체젠 및 음식 효과 포함)" ( ["초당 회복량", "초당 체젠"]) __up "스킬 강화"\n' + 
             'D: ' + skill + '\n' + 
             'T: _up "스킬 강화"\n';
+    }
+    ,COMBO: (character, enemy) => {
+        if (character.weapon) {
+            const type = character.weapon.Type;
+            const q = character.Q_LEVEL.selectedIndex;
+            const w = character.W_LEVEL.selectedIndex;
+            const e = character.E_LEVEL.selectedIndex;
+            const wm = character.WEAPON_MASTERY.selectedIndex;
+            let damage = 0, c;
+            const sap = character.DIV.querySelector('.hart_ee').checked ? 25 : character.DIV.querySelector('.hart_e').checked ? 15 : 0;
+            let stack = 0;
+
+            const hart_w = character.DIV.querySelector('.hart_w');
+            const hart_ww = character.DIV.querySelector('.hart_ww');
+            const attack_power = character.attack_power;
+            character.attack_power = character.calc_attack_power | 0;
+            const skill_amplification_percent = character.skill_amplification_percent;
+            character.skill_amplification_percent = round(character.calc_skill_amplification_percent);
+            let enemy_defense;
+            if (enemy.calc_defense) {
+                enemy_defense = enemy.defense;
+                enemy.defense = enemy.calc_defense | 0;
+            }
+
+            const combo = character.COMBO_OPTION.value;
+            for (let i = 0; i < combo.length; i++) {
+                c = combo.charAt(i);
+                if (c === 'a') {
+                    damage += baseAttackDamage(character, enemy, 0, 1, 0, 1);
+                    if (character.DIV.querySelector('.hart_t').checked) {
+                        damage += baseAttackDamage(character, enemy, 0, 0.15, 0, 1);
+                        if (character.DIV.querySelector('.hart_tt').checked) {
+                            damage += baseAttackDamage(character, enemy, 0, 0.15, 0, 1);
+                        }
+                    }
+                } else if (c === 'A') {
+                    damage += baseAttackDamage(character, enemy, 0, 1, 100, 1);
+                    if (character.DIV.querySelector('.hart_t').checked) {
+                        damage += baseAttackDamage(character, enemy, 0, 0.15, 100, 1);
+                        if (character.DIV.querySelector('.hart_tt').checked) {
+                            damage += baseAttackDamage(character, enemy, 0, 0.15, 100, 1);
+                        }
+                    }
+                } else if (c === 'q') {
+                    damage += calcSkillDamage(character, enemy, 80 + q * 20, 0.3, 1);
+                } else if (c === 'Q') {
+                    damage += calcSkillDamage(character, enemy, 160 + q * 40, 0.6, 1);
+                } else if (c === 'w' || c === 'W') {
+                    character.attack_power = character.calc_attack_power * (1 + 0.12 + w * 0.07) | 0;
+                    if (enemy.defense) {
+                        enemy.defense = enemy.calc_defense * (1 - (hart_ww.checked ? 0.3 : hart_w.checked ? 0.15 : 0)) | 0;
+                    }
+                } else if (c === 'e' || c === 'E') {
+                    if (stack < 3) {
+                        stack++;
+                        character.skill_amplification_percent = round(character.calc_skill_amplification_percent + stack * sap);
+                    }
+                    damage += calcSkillDamage(character, enemy, 20 + e * 10, 0.4, 1);
+                } else if (c === 'd' || c === 'D') {
+                    if (wm > 5) {
+                        if (type === 'Guitar') {
+                            damage += calcSkillDamage(character, enemy, 0, character.WEAPON_MASTERY.selectedIndex < 13 ? 1.5 : 2.5, 1)
+                        }
+                    }
+                }
+            }
+
+            character.attack_power = attack_power;
+            character.skill_amplification_percent = skill_amplification_percent;
+            if (enemy_defense) {
+                enemy.defense = enemy_defense;
+            }
+
+            return "<b class='damage'>" + damage + '</b><b> _ : ' + (enemy.max_hp ? (damage / enemy.max_hp * 10000 | 0) / 100 : '-') + '%</b>';
+        }
+        return '-';
     }
 };
