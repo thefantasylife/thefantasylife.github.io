@@ -81,8 +81,9 @@ const Chiara = {
     ,E_Option: ''
     ,R_Skill: (character, enemy) => {
         if (character.weapon) {
-            const damage1 = calcSkillDamage(character, enemy, 20 + character.R_LEVEL.selectedIndex * 7, 0.15, 1);
-            const damage2 = calcSkillDamage(character, enemy, 200 + character.R_LEVEL.selectedIndex * 100, 1.2, 1);
+            const r = character.R_LEVEL.selectedIndex;
+            const damage1 = calcSkillDamage(character, enemy, 20 + r * 7, 0.15, 1);
+            const damage2 = 200 + r * 100 + character.attack_power * 1.2 | 0;
             const heal = calcHeal(damage1 * 0.3, 1, enemy);
             return "<b class='damage'>" + (damage1 * 12 + damage2) + '</b> ( ' + damage1 + " x 12, <b class='damage'>" + damage2 + "</b> ) <b> __h/s: </b><b class='heal'>" + heal + '</b>';
         }
@@ -132,5 +133,46 @@ const Chiara = {
             'R: "합산 데미지" ( "초당 데미지" x "타수", "징벌 데미지" ) __h/s: "초당 흡혈량" _use "스킬 사용"\n' + 
             'D: ' + skill + '\n' + 
             'T: "패시브 스택"\n';
+    }
+    ,COMBO: (character, enemy) => {
+        if (character.weapon) {
+            const type = character.weapon.Type;
+            const q = character.Q_LEVEL.selectedIndex;
+            const w = character.W_LEVEL.selectedIndex;
+            const e = character.E_LEVEL.selectedIndex;
+            const r = character.R_LEVEL.selectedIndex;
+            const wm = character.WEAPON_MASTERY.selectedIndex;
+            let damage = 0, c;
+            let ee = false;
+            const combo = character.COMBO_OPTION.value;
+            for (let i = 0; i < combo.length; i++) {
+                c = combo.charAt(i);
+                if (c === 'a') {
+                    damage += baseAttackDamage(character, enemy, 0, 1, 0, 1);
+                } else if (c === 'A') {
+                    damage += baseAttackDamage(character, enemy, 0, 1, 100, 1);
+                } else if (c === 'q' || c === 'Q') {
+                    damage += calcSkillDamage(character, enemy, 60 + q * 40, 0.6, 1);
+                } else if (c === 'w' || c === 'W') {
+                    damage += calcSkillDamage(character, enemy, 80 + w * 40, 0.75, 1);
+                } else if (c === 'e') {
+                    damage += calcSkillDamage(character, enemy, 40 + e * 20, 0.3, 1);
+                } else if (c === 'E') {
+                    damage += calcSkillDamage(character, enemy, 40 + e * 20, 0.3, 1) + calcSkillDamage(character, enemy, 70 + e * 40, 0.7, 1);
+                } else if (c === 'r') {
+                    damage += calcSkillDamage(character, enemy, 20 + r * 7, 0.15, 1) * 3;
+                } else if (c === 'R') {
+                    damage += 200 + r * 100 + character.attack_power * 1.2 | 0;
+                } else if (c === 'd' || c === 'D') {
+                    if (wm > 5) {
+                        if (type === 'Rapier') {
+                            damage += calcSkillDamage(character, enemy, 0, (2 + character.critical_strike_damage / 100), 1);
+                        }
+                    }
+                }
+            }
+            return "<b class='damage'>" + damage + '</b><b> _ : ' + (enemy.max_hp ? (damage / enemy.max_hp * 10000 | 0) / 100 : '-') + '%</b>';
+        }
+        return '-';
     }
 };

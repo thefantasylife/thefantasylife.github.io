@@ -52,7 +52,7 @@ const Emma = {
             const q = character.Q_LEVEL.selectedIndex;
             const damage = calcSkillDamage(character, enemy, 40 + q * 40, 0.3, 1);
             const heal = calcHeal((60 + q * 10) * (0.08 + character.E_LEVEL.selectedIndex * 0.03), 1, enemy);
-            const cool = 10000 / 5.5 / (100 - character.cooldown_reduction);
+            const cool = 10000 / (5.5 * (100 - character.cooldown_reduction));
             return "<b class='damage'>" + damage * 2 + '</b> ( ' + damage + " x 2 ) <b> __h: </b><b class='heal'>" + heal + "</b><b> __sd/s: </b><b class='damage'>" + round(damage * 2 * cool) / 100 + '</b>';
         }
         return '-';
@@ -63,7 +63,7 @@ const Emma = {
             const w = character.W_LEVEL.selectedIndex;
             const damage = calcSkillDamage(character, enemy, 100 + w * 50, 0.75, 1);
             const heal = calcHeal((60 + w * 10) * (0.08 + character.E_LEVEL.selectedIndex * 0.03), 1, enemy);
-            const cool = 10000 / (12 - w * 1) / (100 - character.cooldown_reduction);
+            const cool = 10000 / ((12 - w * 1) * (100 - character.cooldown_reduction) - 300);
             return "<b class='damage'>" + damage + "</b><b> __h: </b><b class='heal'>" + heal + "</b><b> __sd/s: </b><b class='damage'>" + round(damage * cool) / 100 + '</b>';
         }
         return '-';
@@ -84,7 +84,7 @@ const Emma = {
             const min = calcSkillDamage(character, enemy, 150 + r * 50, 0.45, 1);
             const max = calcSkillDamage(character, enemy, 200 + r * 50, 0.75, 1);
             const heal = calcHeal(8 + r * 3, 1, enemy);
-            const cool = 10000 / (18 - r * 3) / (100 - character.cooldown_reduction);
+            const cool = 10000 / ((18 - r * 3) * (100 - character.cooldown_reduction));
             return "<b class='damage'>" + min + "</b><b> / </b><b class='damage'>" + max + "</b><b> __h: </b><b class='heal'>" + heal + "</b><b> __sd/s: </b><b class='damage'>" + round(max * cool) / 100 + '</b>';
         }
         return '-';
@@ -95,7 +95,7 @@ const Emma = {
         if (character.weapon && wm > 5) {
             const type = character.weapon.Type;
             if (type === 'Shuriken') {
-                const damage = calcSkillDamage(character, wm < 13 ? 110 : 180, 0.3, 1);
+                const damage = calcSkillDamage(character, enemy, wm < 13 ? 110 : 180, 0.3, 1);
                 const add = calcSkillDamage(character, enemy, (wm < 13 ? 110 : 180) * 0.3, 0.3 * 0.3, 1);
                 return "<b class='damage'>" + damage + ' ~ ' + (damage + add * 11) + '</b> ( ' + damage + ', ' + add + ' x 11 )';
             }
@@ -142,5 +142,55 @@ const Emma = {
             'R: "비둘기 데미지" / "모자 데미지" __h: "회복량"\n' + 
             'D: ' + skill + '\n' + 
             'T: "패시브 데미지" ( "평타 데미지", "추가 데미지" - "치명타 데미지", "추가 데미지" ) __s: "쉴드량"\n';
+    }
+    ,COMBO: (character, enemy) => {
+        if (character.weapon) {
+            const type = character.weapon.Type;
+            const q = character.Q_LEVEL.selectedIndex;
+            const w = character.W_LEVEL.selectedIndex;
+            const r = character.R_LEVEL.selectedIndex;
+            const t = character.T_LEVEL.selectedIndex;
+            const wm = character.WEAPON_MASTERY.selectedIndex;
+            let damage = 0, c;
+            const combo = character.COMBO_OPTION.value;
+            for (let i = 0; i < combo.length; i++) {
+                c = combo.charAt(i);
+                if (c === 'a') {
+                    damage += baseAttackDamage(character, enemy, 0, 1, 0, 1);
+                } else if (c === 'A') {
+                    damage += baseAttackDamage(character, enemy, 0, 1, 100, 1);
+                } else if (c === 'q') {
+                    damage += calcSkillDamage(character, enemy, 40 + q * 40, 0.3, 1);
+                } else if (c === 'Q') {
+                    damage += calcSkillDamage(character, enemy, 40 + q * 40, 0.3, 1) * 2;
+                } else if (c === 'w' || c === 'W') {
+                    damage += calcSkillDamage(character, enemy, 100 + w * 50, 0.75, 1);
+                } else if (c === 'r') {
+                    damage += calcSkillDamage(character, enemy, 150 + r * 50, 0.45, 1);
+                } else if (c === 'R') {
+                    damage += calcSkillDamage(character, enemy, 200 + r * 50, 0.75, 1);
+                } else if (c === 'd') {
+                    if (wm > 5) {
+                        if (type === 'Shuriken') {
+                            damage += calcSkillDamage(character, enemy, (wm < 13 ? 110 : 180) * 0.3, 0.3 * 0.3, 1);
+                        }
+                    }
+                } else if (c === 'D') {
+                    if (wm > 5) {
+                        if (type === 'Shuriken') {
+                            damage += calcSkillDamage(character, enemy, wm < 13 ? 110 : 180, 0.3, 1);
+                        }
+                    }
+                } else if (c === 't') {
+                    damage += baseAttackDamage(character, enemy, 0, 1, 0, 1) + 
+                        calcSkillDamage(character, enemy, character.max_sp * (0.02 + t * 0.01), 0, 1);
+                } else if (c === 'T') {
+                    damage += baseAttackDamage(character, enemy, 0, 1, 100, 1) + 
+                        calcSkillDamage(character, enemy, character.max_sp * (0.02 + t * 0.01), 0, 1);
+                }
+            }
+            return "<b class='damage'>" + damage + '</b><b> _ : ' + (enemy.max_hp ? (damage / enemy.max_hp * 10000 | 0) / 100 : '-') + '%</b>';
+        }
+        return '-';
     }
 }
