@@ -127,7 +127,8 @@ const Aya = {
                     "<b> __s/s: </b><b class='shield'>" + (shield * (1 + as1 * 6) / 0.3 | 0) / 100 + '</b> - ' + (shield * (1 + as2 * 6) / 0.3 | 0) / 100;
             }
             if (type === 'SniperRifle') {
-                return "<b class='damage'>" + calcSkillDamage(character, enemy, 0, wm < 13 ? 2.5 : 3, 1) + '</b>';
+                const damage = calcSkillDamage(character, enemy, 0, wm < 13 ? 2.5 : 3, 1);
+                return "<b class='damage'>" + damage + ' ~ ' + damage * 3 + '</b> ( ' + damage + ' x 3 )';
             }
         }
         return '-';
@@ -177,5 +178,41 @@ const Aya = {
             'R: "스킬 데미지"\n' + 
             'D: ' + skill + '\n' + 
             'T: _s: "쉴드량" __s/s: "초당 쉴드량"\n';
+    }
+    ,COMBO: (character, enemy) => {
+        if (character.weapon) {
+            const type = character.weapon.Type;
+            const q = character.Q_LEVEL.selectedIndex;
+            const w = character.W_LEVEL.selectedIndex;
+            const r = character.R_LEVEL.selectedIndex;
+            const wm = character.WEAPON_MASTERY.selectedIndex;
+            let damage = 0, c;
+            let ee = false;
+            const combo = character.COMBO_OPTION.value;
+            for (let i = 0; i < combo.length; i++) {
+                c = combo.charAt(i);
+                if (c === 'a') {
+                    damage += baseAttackDamage(character, enemy, 0, 1, 0, 1);
+                } else if (c === 'A') {
+                    damage += baseAttackDamage(character, enemy, 0, 1, 100, 1);
+                } else if (c === 'q' || c === 'Q') {
+                    damage +=calcSkillDamage(character, enemy, 0, 1, 1) + calcSkillDamage(character, enemy, 20 + q * 40, 0.5, 1);
+                } else if (c === 'w') {
+                    damage += calcSkillDamage(character, enemy, 22 + w * 22, 0.3 + w * 0.05, 1) * 5;
+                } else if (c === 'W') {
+                    damage += calcSkillDamage(character, enemy, 22 + w * 22, 0.3 + w * 0.05, 1) * 10;
+                } else if (c === 'r' || c === 'R') {
+                    damage += calcSkillDamage(character, enemy, 200 + character.R_LEVEL.selectedIndex * 150, 0.7, 1);
+                } else if (c === 'd' || c === 'D') {
+                    if (wm > 5) {
+                        if (type === 'SniperRifle') {
+                            damage += calcSkillDamage(character, enemy, 0, wm < 13 ? 2.5 : 3, 1);
+                        }
+                    }
+                }
+            }
+            return "<b class='damage'>" + damage + '</b><b> _ : ' + (enemy.max_hp ? (damage / enemy.max_hp * 10000 | 0) / 100 : '-') + '%</b>';
+        }
+        return '-';
     }
 };
