@@ -161,6 +161,7 @@ const Adriana = {
                             }
                             tt -= 0.56;
                         }
+                        f = true;
                     } else {
                         f = false;
                         tt = 0;
@@ -183,6 +184,7 @@ const Adriana = {
                             }
                             tt -= 0.56;
                         }
+                        f = true;
                     } else {
                         f = false;
                         tt = 0;
