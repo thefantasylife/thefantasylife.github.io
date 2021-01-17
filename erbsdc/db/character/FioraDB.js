@@ -184,4 +184,75 @@ const Fiora = {
             'D: ' + skill + '\n' + 
             'T: "데미지 없음"\n';
     }
+    ,COMBO: (character, enemy) => {
+        if (character.weapon) {
+            const type = character.weapon.Type;
+            const q = character.Q_LEVEL.selectedIndex;
+            const w = character.W_LEVEL.selectedIndex;
+            const e = character.E_LEVEL.selectedIndex;
+            const r = character.R_LEVEL.selectedIndex;
+            const t = character.T_LEVEL.selectedIndex;
+            const wm = character.WEAPON_MASTERY.selectedIndex;
+            let damage = 0, c;
+            let f = 0, rr = false;
+            const bonus = calcSkillDamage(character, enemy, 30 + r * 5, 0.06 + r * 0.12, 1)
+            const combo = character.COMBO_OPTION.value;
+            for (let i = 0; i < combo.length; i++) {
+                c = combo.charAt(i);
+                if (c === 'a') {
+                    f++;
+                    damage += baseAttackDamage(character, enemy, 0, 1, 0, 1);
+                    if (rr) {
+                        damage += bonus;
+                    }
+                } else if (c === 'A') {
+                    f++;
+                    damage += baseAttackDamage(character, enemy, 0, 1, 100, 1);
+                    if (rr) {
+                        damage += bonus;
+                    }
+                } else if (c === 'q' || c === 'Q') {
+                    if (f >= 3 && t === 2 || f >= 4 && t === 1 || f >= 5 && t === 0) {
+                        damage += calcSkillDamage(character, enemy, (60 + q * 60) * (1.2 +character.critical_strike_damage / 100), 0.25 * (1.2 + character.critical_strike_damage / 100), 1);
+                    } else {
+                        damage += calcSkillDamage(character, enemy, 60 + q * 60, 0.25, 1);
+                    }
+                } else if (c === 'w') {
+                    f += 2;
+                    damage += baseAttackDamage(character, enemy, 0, 0.6 + w * 0.1, 0, 1) + 
+                        baseAttackDamage(character, enemy, 0, 0.2 + w * 0.1, 0, 1);
+                    if (rr) {
+                        damage += bonus * 2;
+                    }
+                } else if (c === 'W') {
+                    f += 2;
+                    damage += baseAttackDamage(character, enemy, 0, 0.6 + w * 0.1, 100, 1) + 
+                        baseAttackDamage(character, enemy, 0, 0.2 + w * 0.1, 100, 1);
+                    if (rr) {
+                        damage += bonus * 2;
+                    }
+                } else if (c === 'e' || c === 'E') {
+                    if (f >= 3 && t === 2 || f >= 4 && t === 1 || f >= 5 && t === 0) {
+                        damage += calcSkillDamage(character, enemy, (90 + e * 40) * (1.2 +character.critical_strike_damage / 100), 0.4 * (1.2 + character.critical_strike_damage / 100), 1);
+                    } else {
+                        damage += calcSkillDamage(character, enemy, 90 + e * 40, 0.4, 1);
+                    }
+                } else if (c === 'r' || c === 'R') {
+                    rr = !rr;
+                } else if (c === 'd' || c === 'D') {
+                    if (wm > 5) {
+                        if (type === 'TwoHandedSword') {
+                            damage += calcSkillDamage(character, enemy, 0, wm < 13 ? 2 : 2.5, 1);
+                        } else if (type === 'Rapier') {
+                            damage += calcSkillDamage(character, enemy, 0, (2 + character.critical_strike_damage / 100), 1);
+                        } else if (type === 'Spear') {
+                            damage += calcSkillDamage(character, enemy, 0, wm < 13 ? 1 : 1.5, 1);
+                        }
+                    }
+                }
+            }
+            return "<b class='damage'>" + damage + '</b><b> _ : ' + (enemy.max_hp ? (damage / enemy.max_hp * 10000 | 0) / 100 : '-') + '%</b>';
+        }
+        return '-';
+    }
 };
