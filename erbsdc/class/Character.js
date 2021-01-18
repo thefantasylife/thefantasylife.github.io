@@ -17,8 +17,6 @@ class Character {
             
             if (this.character.COMBO) {
                 this.COMBO_DAMAGE.innerHTML = this.character.COMBO(this, this.enemy);
-            } else {
-                this.COMBO_DAMAGE.innerHTML = '';
             }
             
             this.CHAR.innerHTML = this.CHARACTER.value;
@@ -328,6 +326,10 @@ class Character {
                 this.R_OPTION.innerHTML = '';
                 this.D_OPTION.innerHTML = '';
                 this.T_OPTION.innerHTML = '';
+                
+                this.COMBO_DAMAGE.innerHTML = '';
+                this.COMBO_OPTION.value = '';
+                this.COMBO_OPTION.readOnly = true;
             } else {
                 this.I_CHARACTER.innerHTML = "<img class='character_image' src='./img/character/" + select + ".png'>";
                 this.character = eval(select);
@@ -352,6 +354,14 @@ class Character {
                 this.R_OPTION.innerHTML = this.character.R_Option;
                 this.D_OPTION.innerHTML = this.character.D_Option(this, this.enemy);
                 this.T_OPTION.innerHTML = this.character.T_Option;
+                
+                if (this.character.COMBO) {
+                    this.COMBO_OPTION.readOnly = false;
+                } else {
+                	this.COMBO_DAMAGE.innerHTML = '-';
+                    this.COMBO_OPTION.value = '';
+                    this.COMBO_OPTION.readOnly = true;
+                }
             }
             updateDisplay();
         });
@@ -661,7 +671,7 @@ class Character {
             var chiara_t = this.enemy.DIV.querySelector('.chiara_t');
             const silvia_r = this.DIV.querySelector('.silvia_r');
             const defense_percent = 1 + 
-                (magnus_t ? magnus_t.value * (0.002 + this.T_LEVEL.selectedIndex * 0.0015) : 0) + 
+                (magnus_t ? magnus_t.value * (0.002 + t * 0.0015) : 0) + 
                 (hyunwoo_w && hyunwoo_w.checked ? 0.1 : 0) + (yuki_w && yuki_w.checked ? 0.5 : 0);
             const defense_minus = 1 - 
                 (hammer_d && hammer_d.checked && this.enemy.WEAPON_MASTERY.selectedIndex > 5? this.enemy.WEAPON_MASTERY.selectedIndex < 13 ? 0.25 : 0.4 : 0) - 
@@ -671,12 +681,15 @@ class Character {
                 (isol_t && isol_t.checked ? 0.05 + this.enemy.T_LEVEL.selectedIndex * 0.1 : 0) - 
                 (xiukai_r && xiukai_r.checked ? 0.1 + this.enemy.R_LEVEL.selectedIndex * 0.05 : 0) - 
                 (chiara_t ? chiara_t.value * (0.02 + this.enemy.T_LEVEL.selectedIndex * 0.02) : 0);
-            const defense_bonus = (hyunwoo_w && hyunwoo_w.checked ? 4 + this.W_LEVEL.selectedIndex * 14 : 0) + 
+            const defense_bonus = (hyunwoo_w && hyunwoo_w.checked ? 4 + w * 14 : 0) + 
                 (silvia_r && silvia_r.checked ? 2 + this.R_LEVEL.selectedIndex * 14 : 0)
             this.defense = 
                 (this.character.Defense + this.character.Defense_Growth * this.LEVEL.selectedIndex + 
                     calcEquip(this, 'Defense', 2) + defense_bonus) * defense_percent * defense_minus | 0;
             this.DEFENSE.innerText = this.defense;
+            this.pure_defense = 
+                this.character.Defense + this.character.Defense_Growth * this.LEVEL.selectedIndex + 
+                    calcEquip(this, 'Defense', 2);
             this.calc_defense = 
                 (this.character.Defense + this.character.Defense_Growth * this.LEVEL.selectedIndex + 
                     calcEquip(this, 'Defense', 2) + defense_bonus) * defense_percent;

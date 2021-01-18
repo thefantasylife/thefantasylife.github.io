@@ -92,10 +92,19 @@ const Sissela = {
     ,E_Option: ''
     ,R_Skill: (character, enemy) => {
         if (character.weapon) {
+
+            const sissela_t = character.DIV.querySelector('.sissela_t');
+            const skill_amplification = character.skill_amplification;
+            character.skill_amplification = round(character.calc_skill_amplification + 
+                (2 + character.T_LEVEL.selectedIndex * 3) * (sissela_t.value < 10 ? 0 : (sissela_t.value >= 90 ? 5 : sissela_t.value / 20 + 0.5)), 1);
+
             const r = character.R_LEVEL.selectedIndex;
             const bonus = character.DIV.querySelector('.sissela_t').value * 2;
             const min = calcSkillDamage(character, enemy, (150 + r * 125 + bonus) * 0.5, 1 * 0.5, 1);
             const max = calcSkillDamage(character, enemy, 150 + r * 125 + bonus, 1, 1);
+
+            character.skill_amplification = skill_amplification;
+
             return "<b class='damage'>" + min + ' - ' + max + '</b>';
         }
         return '-';

@@ -201,25 +201,30 @@ const Li_Dailin = {
             const t = character.T_LEVEL.selectedIndex;
             const wm = character.WEAPON_MASTERY.selectedIndex;
             let damage = 0, c;
-            let bac = 0, liquid = false, qq = 0, wq = 0;
+            let bac = 0, liquid = 0, qq = 0, wq = 0;
             const combo = character.COMBO_OPTION.value;
             for (let i = 0; i < combo.length; i++) {
                 c = combo.charAt(i);
                 if (c === 'a') {
-                    if (liquid) {
-                        liquid = false;
+                    if (liquid > 1) {
+                        liquid = 1;
                         damage += baseAttackDamage(character, enemy, 0, 1 * (1 + bac * 0.002), 0, 1);
                     } else {
+                        liquid = 0;
                         damage += baseAttackDamage(character, enemy, 0, 1, 0, 1);
                     }
                 } else if (c === 'A') {
-                    if (liquid) {
-                        liquid = false;
+                    if (liquid > 1) {
+                        liquid = 1;
                         damage += baseAttackDamage(character, enemy, 0, 1 * (1 + bac * 0.002), 100, 1);
                     } else {
+                        liquid = 0;
                         damage += baseAttackDamage(character, enemy, 0, 1, 100, 1);
                     }
                 } else if (c === 'q' || c === 'Q') {
+                	if (liquid === 1) {
+                    	liquid = 0;
+                    }
                     if (qq > 0) {
                         qq--;
                         damage += calcSkillDamage(character, enemy, 20 + q * 20, 0.5, 1);
@@ -235,13 +240,16 @@ const Li_Dailin = {
                         damage += calcSkillDamage(character, enemy, 20 + q * 20, 0.5, 1);
                     }
                 } else if (c === 'w' || c === 'W') {
-                    liquid = true;
+                    liquid = 2;
                     if (bac < 55) {
                         bac += 45;
                     } else {
                         bac = 95;
                     }
                 } else if (c === 'e' || c === 'E') {
+                	if (liquid === 1) {
+                    	liquid = 0;
+                    }
                     if (bac >= 40) {
                         bac -= 40;
                     }
@@ -249,33 +257,35 @@ const Li_Dailin = {
                 } else if (c === 'r' || c === 'R') {
                     const coe = enemy.max_hp ? 2 * (damage * 100.0 / enemy.max_hp > 77 ? 77 : damage * 100.0 / enemy.max_hp) / 77 + 1 : 3;
                     if (bac >= 40) {
-                        if (liquid) {
-                            liquid = false;
+                        if (liquid > 1) {
                             damage += calcSkillDamage(character, enemy, (40 + r * 30) * coe * (1 + bac * 0.002), 0.2 * coe * (1 + bac * 0.002), 1) * 4;
                         } else {
                             damage += calcSkillDamage(character, enemy, (40 + r * 30) * coe, 0.2 * coe, 1) * 4;
                         }
                         bac -= 40;
                     } else {
-                        if (liquid) {
-                            liquid = false;
+                        if (liquid > 1) {
                             damage += calcSkillDamage(character, enemy, (40 + r * 30) * coe * (1 + bac * 0.002), 0.2 * coe * (1 + bac * 0.002), 1) * 2;
                         } else {
                             damage += calcSkillDamage(character, enemy, (40 + r * 30) * coe, 0.2 * coe, 1) * 2;
                         }
                     }
+                    liquid = 0;
                 } else if (c === 'd') {
                     if (wm > 5) {
                         if (type === 'Glove') {
                             const coe = wm < 13 ? 1 : 2;
                             const bonus = calcTrueDamage(character, enemy, wm < 13 ? 50 : 100);
                             if (liquid) {
-                                liquid = false;
                                 damage += baseAttackDamage(character, enemy, 0, (1 + coe) * (1 + bac * 0.002), 0, 1) + bonus;
                             } else {
                                 damage += baseAttackDamage(character, enemy, 0, 1 + coe, 0, 1) + bonus;
                             }
+                        	liquid = 0;
                         } else if (type === 'Nunchaku') {
+                            if (liquid === 1) {
+                            	liquid = 0;
+                            }
                             damage += calcSkillDamage(character, enemy, wm < 13 ? 150 : 300, 0.5, 1);
                         }
                     }
@@ -285,7 +295,7 @@ const Li_Dailin = {
                             const coe = wm < 13 ? 1 : 2;
                             const bonus = calcTrueDamage(character, enemy, wm < 13 ? 50 : 100);
                             if (liquid) {
-                                liquid = false;
+                                liquid = 0;
                                 damage += baseAttackDamage(character, enemy, 0, (1 + coe) * (1 + bac * 0.002), 100, 1) + bonus;
                             } else {
                                 damage += baseAttackDamage(character, enemy, 0, 1 + coe, 100, 1) + bonus;
