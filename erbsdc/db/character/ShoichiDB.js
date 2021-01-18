@@ -153,4 +153,44 @@ const Shoichi = {
             'D: ' + skill + '\n' + 
             'T: "스킬 데미지"_ "스택"\n';
     }
+    ,COMBO: (character, enemy) => {
+        if (character.weapon) {
+            const type = character.weapon.Type;
+            const q = character.Q_LEVEL.selectedIndex;
+            const w = character.W_LEVEL.selectedIndex;
+            const e = character.E_LEVEL.selectedIndex;
+            const r = character.R_LEVEL.selectedIndex;
+            const t = character.T_LEVEL.selectedIndex;
+            const wm = character.WEAPON_MASTERY.selectedIndex;
+            let damage = 0, c;
+            const combo = character.COMBO_OPTION.value;
+            for (let i = 0; i < combo.length; i++) {
+                c = combo.charAt(i);
+                if (c === 'a') {
+                    damage += baseAttackDamage(character, enemy, 0, 1, 0, 1);
+                } else if (c === 'A') {
+                    damage += baseAttackDamage(character, enemy, 0, 1, 100, 1);
+                } else if (c === 'q' || c === 'Q') {
+                    damage += calcSkillDamage(character, enemy, 10 + q * 50, 0.45, 1);
+                } else if (c === 'w' || c === 'W') {
+                    damage += calcSkillDamage(character, enemy, 10 + w * 30, 0.3, 1);
+                } else if (c === 'e' || c === 'E') {
+                    damage += calcSkillDamage(character, enemy, 20 + e * 40, 0.3, 1);
+                } else if (c === 'r' || c === 'R') {
+                    damage += calcSkillDamage(character, enemy, 50 + r * 100, 0.3, 1) + 
+                        calcSkillDamage(character, enemy, 25 + r * 35, 0.3, 1);
+                } else if (c === 'd' || c === 'D') {
+                    if (wm > 5) {
+                        if (type === 'Dagger') {
+                            damage += baseAttackDamage(character, enemy, 0, 1, 100, 1) + (enemy.max_hp ? (enemy.max_hp - damage) / 10 : 0) | 0;
+                        }
+                    }
+                } else if (c === 't' || c === 'T') {
+                    damage += calcSkillDamage(character, enemy, 25 + t * 35, 0.3, 1);
+                }
+            }
+            return "<b class='damage'>" + damage + '</b><b> _ : ' + (enemy.max_hp ? (damage / enemy.max_hp * 10000 | 0) / 100 : '-') + '%</b>';
+        }
+        return '-';
+    }
 };

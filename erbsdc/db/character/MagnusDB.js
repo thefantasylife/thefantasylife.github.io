@@ -135,4 +135,63 @@ const Magnus = {
             'D: ' + skill + '\n' + 
             'T: _"잃은 체력"\n';
     }
+    ,COMBO: (character, enemy) => {
+        if (character.weapon) {
+            const type = character.weapon.Type;
+            const q = character.Q_LEVEL.selectedIndex;
+            const w = character.W_LEVEL.selectedIndex;
+            const e = character.E_LEVEL.selectedIndex;
+            const r = character.R_LEVEL.selectedIndex;
+            const t = character.T_LEVEL.selectedIndex;
+            const wm = character.WEAPON_MASTERY.selectedIndex;
+            let damage = 0, c;
+            let dd = false;
+
+            let enemy_defense;
+            if (enemy.calc_defense) {
+                enemy_defense = enemy.defense;
+                enemy.defense = enemy.calc_defense | 0;
+            }
+
+            const combo = character.COMBO_OPTION.value;
+            for (let i = 0; i < combo.length; i++) {
+                c = combo.charAt(i);
+                if (c === 'a') {
+                    damage += baseAttackDamage(character, enemy, 0, 1, 0, 1);
+                } else if (c === 'A') {
+                    damage += baseAttackDamage(character, enemy, 0, 1, 100, 1);
+                } else if (c === 'q' || c === 'Q') {
+                    damage += calcSkillDamage(character, enemy, 40 + q * 60, 0.6, 1);
+                } else if (c === 'w' || c === 'W') {
+                    damage += calcSkillDamage(character, enemy, (1.5 + w * 0.5 | 0) * 10 + character.defense * 0.3, 0.3, 1) * 
+                        (6 + w * 0.5 | 0);
+                } else if (c === 'e' || c === 'E') {
+                    damage += calcSkillDamage(character, enemy, 60 + e * 55, 0.4, 1);
+                } else if (c === 'r' || c === 'R') {
+                    damage += calcSkillDamage(character, enemy, 200 + r * 200, 2, 1);
+                } else if (c === 'd' || c === 'D') {
+                    if (wm > 5) {
+                        if (type === 'Hammer') {
+                            if (!dd && enemy.defense) {
+                                enemy.defense = enemy.calc_defense * (1 - (wm < 13 ? 0.25 : 0.4)) | 0;
+                            }
+                            damage +=  calcSkillDamage(character, enemy, wm < 13 ? 150 + character.defense : 300 + character.defense * 2, 0, 1);
+                        }
+                        if (type === 'Bat') {
+                            damage += calcSkillDamage(character, enemy, 0, wm < 13 ? 2 : 3, 1);
+                        }
+                    }
+                } else if (c === 't' || c === 'T') {
+                    damage += calcSkillDamage(character, enemy, 25 + t * 35, 0.3, 1);
+                }
+            }
+
+            if (enemy_defense) {
+                enemy.defense = enemy_defense;
+            }
+
+            return "<b class='damage'>" + damage + '</b><b> _ : ' + (enemy.max_hp ? (damage / enemy.max_hp * 10000 | 0) / 100 : '-') + '%</b>';
+        }
+        return '-';
+    }
 };

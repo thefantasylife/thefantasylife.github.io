@@ -156,7 +156,6 @@ const Hyunwoo = {
 
             const defense = character.defense;
             character.defense = character.pure_defense | 0;
-            console.log(character.defense);
             let enemy_defense;
             if (enemy.calc_defense) {
                 enemy_defense = enemy.defense;
