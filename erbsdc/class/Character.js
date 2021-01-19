@@ -2,6 +2,7 @@ class Character {
     calcTrapDamage() {
         return this.trap ? "<b class='damage'>" + (this.trap.Trap_Damage * (1.04 + this.TRAP_MASTERY.selectedIndex * 0.04) | 0) + '</b>' : '-';
     }
+    
     updateDisplay() {
         if (this.character) {
             this.BASE_ATTACK_DAMAGE.innerHTML = this.character.Base_Attack(this, this.enemy);

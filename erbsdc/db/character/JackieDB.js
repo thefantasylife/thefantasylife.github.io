@@ -140,7 +140,8 @@ const Jackie = {
             if (type === 'Axe') {
                 return '';
             }
-            if (character.WEAPON_MASTERY.selectedIndex > 5) {
+            const wm = character.WEAPON_MASTERY.selectedIndex;
+            if (wm > 5) {
                 if (type === 'Dagger') {
                     let damage, heal;
                     if (character.DIV.querySelector('.jackie_w').checked) {
@@ -156,21 +157,21 @@ const Jackie = {
                 if (type === 'TwoHandedSword') {
                     if (character.DIV.querySelector('.jackie_w').checked) {
                         const w = character.W_LEVEL.selectedIndex;
-                        const damage = calcSkillDamage(character, enemy, 0, (character.WEAPON_MASTERY.selectedIndex < 13 ? 2 : 2.5) + 0.1 + character.W_LEVEL.selectedIndex * 0.025, 1);
+                        const damage = calcSkillDamage(character, enemy, 0, (wm < 13 ? 2 : 2.5) + 0.1 + w * 0.025, 1);
                         const heal = calcHeal(12 + w * 7 + character.attack_power * 0.1, 1, enemy);
                         return "<b class='damage'>" + damage + "</b><b> __h: </b><b class='heal'>" + heal + '</b>'
                     }
-                    return "<b class='damage'>" + calcSkillDamage(character, enemy, 0, character.WEAPON_MASTERY.selectedIndex < 13 ? 2 : 2.5, 1) + '</b>';
+                    return "<b class='damage'>" + calcSkillDamage(character, enemy, 0, wm < 13 ? 2 : 2.5, 1) + '</b>';
                 }
                 if (type === 'DualSwords') {
                     let damage;
                     if (character.DIV.querySelector('.jackie_w').checked) {
                         const w = character.W_LEVEL.selectedIndex;
                         const heal = calcHeal(12 + w * 7 + character.attack_power * 0.1, 12, enemy);
-                        damage = calcSkillDamage(character, enemy, 0, (character.WEAPON_MASTERY.selectedIndex < 13 ? 0.3 : 0.5) + 0.1 + w * 0.025, 1);
+                        damage = calcSkillDamage(character, enemy, 0, (wm < 13 ? 0.3 : 0.5) + 0.1 + w * 0.025, 1);
                         return "<b class='damage'>" + damage * 12 + '</b> ( ' + damage + " x 12 ) <b> __h: </b><b class='heal'>" + heal + '</b>';
                     } else {
-                        damage = calcSkillDamage(character, enemy, 0, character.WEAPON_MASTERY.selectedIndex < 13 ? 0.3 : 0.5, 1);
+                        damage = calcSkillDamage(character, enemy, 0, wm < 13 ? 0.3 : 0.5, 1);
                         return "<b class='damage'>" + damage * 12 + '</b> ( ' + damage + ' x 12 )';
                     }
                 }
@@ -237,5 +238,178 @@ const Jackie = {
                 'D: ' + skill + '\n' + 
                 'T: _weak "닭, 멧돼지, 늑대" _strong "곰, 생존자, 위클라인"\n';
         }
+    }
+    ,COMBO: (character, enemy) => {
+        if (character.weapon) {
+            const type = character.weapon.Type;
+            const q = character.Q_LEVEL.selectedIndex;
+            const w = character.W_LEVEL.selectedIndex;
+            const e = character.E_LEVEL.selectedIndex;
+            const r = character.R_LEVEL.selectedIndex;
+            const t = character.T_LEVEL.selectedIndex;
+            const wm = character.WEAPON_MASTERY.selectedIndex;
+            let damage = 0, c;
+            const jackie_tw = [0.03, 0.08, 0.15];
+            const jackie_ts = [0.05, 0.12, 0.25];
+            let ap = 1, ba, qq = false, ww = false, rr = 0, tt = false, ttt = false, dd = false, stack = 0;
+
+            const attack_power = character.attack_power;
+            character.attack_power = character.calc_attack_power | 0;
+
+            const combo = character.COMBO_OPTION.value;
+            for (let i = 0; i < combo.length; i++) {
+                c = combo.charAt(i);
+                if (c === 'a') {
+                    if ((qq || rr > 1) && ww) {
+                        ba = baseAttackDamage(character, enemy, 0, 1 + 0.1 + w * 0.025, 0, 1);
+                    } else {
+                        ba = baseAttackDamage(character, enemy, 0, 1, 0, 1);
+                    }
+                    if (character.weapon.Type === 'DualSwords') {
+                        damage += ba * 2;
+                    } else {
+                        damage += ba;
+                    }
+                    if (stack < 5 && type === 'Axe') {
+                        stack++;
+                        ap = 1 + 
+                        (tt ? jackie_tw[ t ] : 0) + 
+                        (ttt ? jackie_ts[ t ] : 0) + 
+                        stack * (dd ? 0.05 + character.DIV.querySelector('.axe_d_hp').value * 0.001 : 0.02);
+                        character.attack_power = character.calc_attack_power * ap | 0;
+                    }
+                    if (rr === 1) {
+                        rr = 2;
+                    }
+                } else if (c === 'A') {
+                    if ((qq || rr > 1) && ww) {
+                        ba = baseAttackDamage(character, enemy, 0, 1 + 0.1 + w * 0.025, 100, 1);
+                    } else {
+                        ba = baseAttackDamage(character, enemy, 0, 1, 100, 1);
+                    }
+                    if (character.weapon.Type === 'DualSwords') {
+                        damage += ba * 2;
+                    } else {
+                        damage += ba;
+                    }
+                    if (stack < 5 && type === 'Axe') {
+                        stack++;
+                        ap = 1 + 
+                        (tt ? jackie_tw[ t ] : 0) + 
+                        (ttt ? jackie_ts[ t ] : 0) + 
+                        stack * (dd ? 0.05 + character.DIV.querySelector('.axe_d_hp').value * 0.001 : 0.02);
+                        character.attack_power = character.calc_attack_power * ap | 0;
+                    }
+                    if (rr === 1) {
+                        rr = 2;
+                    }
+                } else if (c === 'q') {
+                    if ((qq || rr > 1) && ww) {
+                        damage += calcSkillDamage(character, enemy, 20 + q * 20, 0.45 + 0.1 + w * 0.025, 1) + 
+                            calcTrueDamage(character, enemy, 16 + q * 6) * 5
+                    } else {
+                        damage += calcSkillDamage(character, enemy, 20 + q * 20, 0.45, 1) + 
+                            calcTrueDamage(character, enemy, 16 + q * 6) * 5
+                    }
+                    qq = true;
+                } else if (c === 'Q') {
+                    if (ww) {
+                        if (qq || rr > 1) {
+                            damage += calcSkillDamage(character, enemy, 20 + q * 20, 0.45 + 0.1 + w * 0.025, 1) + 
+                                calcSkillDamage(character, enemy, 30 + q * 20, 0.65 + 0.1 + w * 0.025, 1) + 
+                                calcTrueDamage(character, enemy, 16 + q * 6) * 5
+                        } else {
+                            damage += calcSkillDamage(character, enemy, 20 + q * 20, 0.45, 1) + 
+                                calcSkillDamage(character, enemy, 30 + q * 20, 0.65 + 0.1 + w * 0.025, 1) + 
+                                calcTrueDamage(character, enemy, 16 + q * 6) * 5
+                        }
+                    } else {
+                        damage += calcSkillDamage(character, enemy, 20 + q * 20, 0.45, 1) + 
+                            calcSkillDamage(character, enemy, 30 + q * 20, 0.65, 1) + 
+                            calcTrueDamage(character, enemy, 16 + q * 6) * 5
+                    }
+                    qq = true;
+                } else if (c === 'w' || c === 'W') {
+                    if (!ww) {
+                        ww = true;
+                    } else {
+                        ww = false;
+                    }
+                } else if (c === 'e' || c === 'E') {
+                    if ((qq || rr > 1) && ww) {
+                        damage += calcSkillDamage(character, enemy, 10 + e * 60, 0.3 + e * 0.1 + 0.1 + w * 0.025, 1);
+                    } else {
+                        damage += calcSkillDamage(character, enemy, 10 + e * 60, 0.3 + e * 0.1, 1);
+                    }
+                } else if (c === 'r' || c === 'R') {
+                    if (!rr) {
+                        rr = 1;
+                    } else {
+                        rr= 0;
+                        damage += calcSkillDamage(character, enemy, 300 + r * 200, 1, 1);
+                    }
+                } else if (c === 't') {
+                    if (!tt) {
+                        tt = true;
+                    } else {
+                        tt = false;
+                    }
+                    ap = 1 + 
+                    (tt ? jackie_tw[ t ] : 0) + 
+                    (ttt ? jackie_ts[ t ] : 0) + 
+                    stack * (dd ? 0.05 + character.DIV.querySelector('.axe_d_hp').value * 0.001 : 0.02);
+                    character.attack_power = character.calc_attack_power * ap | 0;
+                } else if (c === 'T') {
+                    if (!ttt) {
+                        ttt = true;
+                    } else {
+                        ttt = false;
+                    }
+                    ap = 1 + 
+                    (tt ? jackie_tw[ t ] : 0) + 
+                    (ttt ? jackie_ts[ t ] : 0) + 
+                    stack * (dd ? 0.05 + character.DIV.querySelector('.axe_d_hp').value * 0.001 : 0.02);
+                    character.attack_power = character.calc_attack_power * ap | 0;
+                } else if (c === 'd' || c === 'D') {
+                    if (wm > 5) {
+                        if (type === 'Dagger') {
+                            if ((qq || rr > 1) && ww) {
+                                damage += baseAttackDamage(character, enemy, 0, 1 + 0.1 + w * 0.025, 100, 1) + (enemy.max_hp ? (enemy.max_hp - damage) / 10 : 0) | 0;
+                            } else {
+                                damage += baseAttackDamage(character, enemy, 0, 1, 100, 1) + (enemy.max_hp ? (enemy.max_hp - damage) / 10 : 0) | 0;
+                            }
+                        } else if (type === 'TwoHandedSword') {
+                            if ((qq || rr > 1) && ww) {
+                                damage += calcSkillDamage(character, enemy, 0, (wm < 13 ? 2 : 2.5) + 0.1 + w * 0.025, 1);
+                            } else {
+                                damage += calcSkillDamage(character, enemy, 0, wm < 13 ? 2 : 2.5, 1);
+                            }
+                        } else if (type === 'DualSwords') {
+                            if ((qq || rr > 1) && ww) {
+                                damage += calcSkillDamage(character, enemy, 0, (wm < 13 ? 0.3 : 0.5) + 0.1 + w * 0.025, 1) * 6;
+                            } else {
+                                damage += calcSkillDamage(character, enemy, 0, wm < 13 ? 0.3 : 0.5, 1) * 6;
+                            }
+                        } else if (type === 'Axe') {
+                            if (!dd) {
+                                dd = true;
+                            } else {
+                                dd = false;
+                            }
+                            ap = 1 + 
+                            (tt ? jackie_tw[ t ] : 0) + 
+                            (ttt ? jackie_ts[ t ] : 0) + 
+                            stack * (dd ? 0.05 + character.DIV.querySelector('.axe_d_hp').value * 0.001 : 0.02);
+                            character.attack_power = character.calc_attack_power * ap | 0;
+                        }
+                    }
+                }
+            }
+
+            character.attack_power = attack_power;
+
+            return "<b class='damage'>" + damage + '</b><b> _ : ' + (enemy.max_hp ? (damage / enemy.max_hp * 10000 | 0) / 100 : '-') + '%</b>';
+        }
+        return '-';
     }
 };

@@ -107,13 +107,14 @@ const Isol = {
     }
     ,R_Option: ''
     ,D_Skill: (character, enemy) => {
-        if (character.weapon && character.WEAPON_MASTERY.selectedIndex > 5) {
+        const wm = character.WEAPON_MASTERY.selectedIndex;
+        if (character.weapon && wm > 5) {
             const type = character.weapon.Type;
             if (type === 'Pistol') {
                 return '-';
             }
             if (type === 'AssaultRifle') {
-                const as2 = calcAttackSpeed(character, character.WEAPON_MASTERY.selectedIndex < 13 ? 40 : 60);
+                const as2 = calcAttackSpeed(character, wm < 13 ? 40 : 60);
                 const as1 = 10 / (9.5 / as2 + 2);
                 const shot = baseAttackDamage(character, enemy, 0, 0.32, character.critical_strike_chance, 1) * 2 + 
                     baseAttackDamage(character, enemy, 0, 0.48, character.critical_strike_chance, 1);

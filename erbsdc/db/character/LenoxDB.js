@@ -52,7 +52,7 @@ const Lenox = {
             const q = character.Q_LEVEL.selectedIndex;
             const min = calcSkillDamage(character, enemy, 30 + q * 30, 0.3, 1);
             const max = calcSkillDamage(character, enemy, 30 + q * 30 + character.max_hp * (0.05 + q * 0.005), 0.3, 1);
-            const cool = 10000 / (4 * (100 - character.cooldown_reduction));
+            const cool = 10000 / (2 * (100 - character.cooldown_reduction));
             return "<b class='damage'>" + min + ' - ' + max  + "</b><b> __sd/s: </b><b class='damage'>" + round(max * cool) / 100 + '</b>';
         }
         return '-';
@@ -133,5 +133,50 @@ const Lenox = {
             'R: "합산 데미지" - "출혈 데미지" ( "스킬 데미지" x 2,  "틱당 데미지" x "타수" )\n' + 
             'D: ' + skill + '\n' + 
             'T: _s: "쉴드량"\n';
+    }
+    ,COMBO: (character, enemy) => {
+        if (character.weapon) {
+            const type = character.weapon.Type;
+            const q = character.Q_LEVEL.selectedIndex;
+            const w = character.W_LEVEL.selectedIndex;
+            const e = character.E_LEVEL.selectedIndex;
+            const r = character.R_LEVEL.selectedIndex;
+            const wm = character.WEAPON_MASTERY.selectedIndex;
+            let damage = 0, c;
+            const combo = character.COMBO_OPTION.value;
+            for (let i = 0; i < combo.length; i++) {
+                c = combo.charAt(i);
+                if (c === 'a') {
+                    damage += baseAttackDamage(character, enemy, 0, 1, 0, 1);
+                } else if (c === 'A') {
+                    damage += baseAttackDamage(character, enemy, 0, 1, 100, 1);
+                } else if (c === 'q') {
+                    damage += calcSkillDamage(character, enemy, 30 + q * 30, 0.3, 1);
+                } else if (c === 'Q') {
+                    damage += calcSkillDamage(character, enemy, 30 + q * 30 + character.max_hp * (0.05 + q * 0.005), 0.3, 1);
+                } else if (c === 'w') {
+                    damage += calcSkillDamage(character, enemy, 40 + w * 35, 0.6, 1);
+                } else if (c === 'W') {
+                    damage += calcSkillDamage(character, enemy, 30 + w * 10, 0.3, 1) + 
+                        calcSkillDamage(character, enemy, 40 + w * 35, 0.6, 1);
+                } else if (c === 'e' || c === 'E') {
+                    damage += calcSkillDamage(character, enemy, 20 + e * 60, 0.3, 1);
+                } else if (c === 'r') {
+                    damage += calcSkillDamage(character, enemy, 50 + r * 50, 0.8, 1) + 
+                        calcTrueDamage(character, enemy, 10 + r * 5) * (enemy.movement_speed ? enemy.movement_speed * (3 + r) | 0 : 0);
+                } else if (c === 'R') {
+                    damage += (calcSkillDamage(character, enemy, 50 + r * 50, 0.8, 1) + 
+                        calcTrueDamage(character, enemy, 10 + r * 5) * (enemy.movement_speed ? enemy.movement_speed * (3 + r) | 0 : 0)) * 2;
+                } else if (c === 'd' || c === 'D') {
+                    if (wm > 5) {
+                        if (type === 'Whip') {
+                            damage += calcSkillDamage(character, enemy, character.WEAPON_MASTERY.selectedIndex < 13 ? 100 + character.defense : 150, 0.3, 1);
+                        }
+                    }
+                }
+            }
+            return "<b class='damage'>" + damage + '</b><b> _ : ' + (enemy.max_hp ? (damage / enemy.max_hp * 10000 | 0) / 100 : '-') + '%</b>';
+        }
+        return '-';
     }
 };
