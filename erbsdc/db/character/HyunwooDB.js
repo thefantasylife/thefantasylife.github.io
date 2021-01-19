@@ -178,6 +178,7 @@ const Hyunwoo = {
                     }
                 } else if (c === 'e') {
                     if (!ee && enemy.defense) {
+                        ee = true;
                         enemy.defense = enemy.calc_defense * (1 - (0.07 + e * 0.02)) | 0;
                     }
                     damage += calcSkillDamage(character, enemy, (enemy.max_hp ? (enemy.max_hp - damage) * (0.05 + e * 0.03) : 0) + character.defense, 0, 1);
@@ -187,6 +188,7 @@ const Hyunwoo = {
                     }
                 } else if (c === 'E') {
                     if (!ee && enemy.defense) {
+                        ee = true;
                         enemy.defense = enemy.calc_defense * (1 - (0.07 + e * 0.02)) | 0;
                     }
                     damage += calcSkillDamage(character, enemy, (enemy.max_hp ? (enemy.max_hp - damage) * (0.05 + e * 0.03) : 0) + character.defense, 0, 1) + 

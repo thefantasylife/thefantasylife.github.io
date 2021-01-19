@@ -160,4 +160,83 @@ const Isol = {
             'D: ' + skill + '\n' + 
             'T: _use "트랩 사용"\n';
     }
+    ,COMBO: (character, enemy) => {
+        if (character.weapon) {
+            const type = character.weapon.Type;
+            const q = character.Q_LEVEL.selectedIndex;
+            const w = character.W_LEVEL.selectedIndex;
+            const r = character.R_LEVEL.selectedIndex;
+            const t = character.T_LEVEL.selectedIndex;
+            let damage = 0, c;
+            let qq = 0, pp = false;
+
+            let enemy_defense;
+            if (enemy.calc_defense) {
+                enemy_defense = enemy.defense;
+                enemy.defense = enemy.calc_defense | 0;
+            }
+
+            const combo = character.COMBO_OPTION.value;
+            for (let i = 0; i < combo.length; i++) {
+                c = combo.charAt(i);
+                if (c === 'a') {
+                    if (type === 'AssaultRifle') {
+                        if (qq) {
+                            qq += 3;
+                        }
+                        damage += baseAttackDamage(character, enemy, 0, 0.32, 0, 1) * 2;
+                        damage += baseAttackDamage(character, enemy, 0, 0.48, 0, 1);
+                    } else {
+                        if (qq) {
+                            qq++;
+                        }
+                        damage += baseAttackDamage(character, enemy, 0, 1, 0, 1);
+                    }
+                } else if (c === 'A') {
+                    if (type === 'AssaultRifle') {
+                        if (qq) {
+                            qq += 3;
+                        }
+                        damage += baseAttackDamage(character, enemy, 0, 0.32, 100, 1) * 2;
+                        damage += baseAttackDamage(character, enemy, 0, 0.48, 100, 1);
+                    } else {
+                        if (qq) {
+                            qq++;
+                        }
+                        damage += baseAttackDamage(character, enemy, 0, 1, 100, 1);
+                    }
+                } else if (c === 'q' || c === 'Q') {
+                    if (qq) {
+                        qq--;
+                        damage += calcSkillDamage(character, enemy, 50 + q * 25 + (8 + q * 4) * qq, 0.5 + qq * 0.3, 1);
+                        qq = 0;
+                    } else {
+                        qq = 1;
+                    }
+                } else if (c === 'w' || c === 'W') {
+                    if (qq) {
+                        qq += 4;
+                    }
+                    damage += calcSkillDamage(character, enemy, 18 + w * 9, 0.5, 1) * 4;
+                } else if (c === 'r' || c === 'R') {
+                    damage += (100 + r * 50 + character.attack_power * 0.3) * (1.04 + character.TRAP_MASTERY.selectedIndex * 0.04) | 0;
+                } else if (c === 'p' || c === 'P') {
+                    if (character.trap) {
+                        if (!pp && enemy.defense) {
+                            pp = true;
+                            enemy.defense = enemy.calc_defense * (1 - (0.05 + t * 0.1)) | 0;
+                        }
+                        damage += character.trap.Trap_Damage * (1.04 + character.TRAP_MASTERY.selectedIndex * 0.04) | 0;
+                    }
+                }
+            }
+
+            if (enemy_defense) {
+                enemy.defense = enemy_defense;
+            }
+
+            return "<b class='damage'>" + damage + '</b><b> _ : ' + (enemy.max_hp ? (damage / enemy.max_hp * 10000 | 0) / 100 : '-') + '%</b>';
+        }
+        return '-';
+    }
 };

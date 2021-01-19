@@ -18,6 +18,10 @@ function baseAttackDamage(character, enemy, base, coe, cri, onhit) {
         (1 + (enemy.weapon ? enemy.character.correction[enemy.weapon.Type][1][enemy.MODE.selectedIndex] / 100 : 0)) | 0;
 }
 
+function calcAttackSpeed(character, bonusAs) {
+    return character.attack_speed + (character.base_attack_speed * bonusAs | 0) / 100;
+} 
+
 function calcEquip(character, name, n) {
     let coe = 1.007 + character.CRAFT_MASTERY.selectedIndex * 0.007
     if (n) {

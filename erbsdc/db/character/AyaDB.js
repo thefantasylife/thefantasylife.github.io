@@ -187,14 +187,23 @@ const Aya = {
             const r = character.R_LEVEL.selectedIndex;
             const wm = character.WEAPON_MASTERY.selectedIndex;
             let damage = 0, c;
-            let ee = false;
             const combo = character.COMBO_OPTION.value;
             for (let i = 0; i < combo.length; i++) {
                 c = combo.charAt(i);
                 if (c === 'a') {
-                    damage += baseAttackDamage(character, enemy, 0, 1, 0, 1);
+                    if (type === 'AssaultRifle') {
+                        damage += baseAttackDamage(character, enemy, 0, 0.32, 0, 1) * 2;
+                        damage += baseAttackDamage(character, enemy, 0, 0.48, 0, 1);
+                    } else {
+                        damage += baseAttackDamage(character, enemy, 0, 1, 0, 1);
+                    }
                 } else if (c === 'A') {
-                    damage += baseAttackDamage(character, enemy, 0, 1, 100, 1);
+                    if (type === 'AssaultRifle') {
+                        damage += baseAttackDamage(character, enemy, 0, 0.32, 100, 1) * 2;
+                        damage += baseAttackDamage(character, enemy, 0, 0.48, 100, 1);
+                    } else {
+                        damage += baseAttackDamage(character, enemy, 0, 1, 100, 1);
+                    }
                 } else if (c === 'q' || c === 'Q') {
                     damage +=calcSkillDamage(character, enemy, 0, 1, 1) + calcSkillDamage(character, enemy, 20 + q * 40, 0.5, 1);
                 } else if (c === 'w') {

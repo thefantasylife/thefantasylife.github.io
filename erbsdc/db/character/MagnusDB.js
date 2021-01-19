@@ -173,6 +173,7 @@ const Magnus = {
                     if (wm > 5) {
                         if (type === 'Hammer') {
                             if (!dd && enemy.defense) {
+                                dd = true;
                                 enemy.defense = enemy.calc_defense * (1 - (wm < 13 ? 0.25 : 0.4)) | 0;
                             }
                             damage +=  calcSkillDamage(character, enemy, wm < 13 ? 150 + character.defense : 300 + character.defense * 2, 0, 1);
