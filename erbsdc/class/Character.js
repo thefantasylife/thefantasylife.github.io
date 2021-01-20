@@ -550,7 +550,7 @@ class Character {
                     this.head.Rarity === 'Rare' ? 7 : 
                     this.head.Rarity === 'Epic' ? 10 : 
                     this.head.Rarity === 'Legendary' ? 10 : 0 : 0) + 
-                (this.arm && this.arm.Name === 'Sword_Stopper' ? 10 : 0);
+                round6((this.arm && this.arm.Name === 'Sword_Stopper' ? 10 : 0) * (1.007 + character.CRAFT_MASTERY.selectedIndex * 0.007));
             this.CRITICAL_STRIKE_DAMAGE_REDUCTION.innerText = this.critical_strike_damage_reduction + '%';
 
             const jackie_tw = [0.03, 0.08, 0.15];
