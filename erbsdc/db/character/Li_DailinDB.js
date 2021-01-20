@@ -260,9 +260,7 @@ const Li_Dailin = {
                     if (lost < 0) {
                         lost = 0;
                     }
-                    console.log(lost);
                     const coe = enemy.max_hp ? 2 * (lost * 100.0 / enemy.max_hp > 77 ? 77 : lost * 100.0 / enemy.max_hp) / 77 + 1 : 3;
-                    console.log(coe);
                     if (bac >= 40) {
                         if (liquid > 1) {
                             damage += calcSkillDamage(character, enemy, (40 + r * 30) * coe * (1 + bac * 0.002), 0.2 * coe * (1 + bac * 0.002), 1) * 4;
