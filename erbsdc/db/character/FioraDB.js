@@ -246,7 +246,11 @@ const Fiora = {
                         } else if (type === 'Rapier') {
                             damage += calcSkillDamage(character, enemy, 0, (2 + character.critical_strike_damage / 100), 1);
                         } else if (type === 'Spear') {
-                            damage += calcSkillDamage(character, enemy, 0, wm < 13 ? 1 : 1.5, 1);
+                            if (c === 'd') {
+                                damage += calcSkillDamage(character, enemy, 0, wm < 13 ? 1 : 1.5, 1);
+                            } else {
+                                damage += calcSkillDamage(character, enemy, 0, wm < 13 ? 1 : 1.5, 1) * 2;
+                            }
                         }
                     }
                 }

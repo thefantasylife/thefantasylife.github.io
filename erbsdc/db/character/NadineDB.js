@@ -91,15 +91,16 @@ const Nadine = {
     }
     ,R_Option: "<b> _use</b><input type='checkbox' class='nadine_r' onchange='updateDisplay()'>"
     ,D_Skill: (character, enemy) => {
-        if (character.weapon && character.WEAPON_MASTERY.selectedIndex > 5) {
+        const wm = character.WEAPON_MASTERY.selectedIndex;
+        if (character.weapon && wm > 5) {
             const type = character.weapon.Type;
             if (type === 'Bow') {
-                const min = calcSkillDamage(character, enemy, character.WEAPON_MASTERY.selectedIndex < 13 ? 150 : 250, 1, 1);
-                const max = calcSkillDamage(character, enemy, character.WEAPON_MASTERY.selectedIndex < 13 ? 300 : 500, 2, 1);
+                const min = calcSkillDamage(character, enemy, wm < 13 ? 150 : 250, 1, 1);
+                const max = calcSkillDamage(character, enemy, wm < 13 ? 300 : 500, 2, 1);
                 return "<b class='damage'>" + min + ' - ' + max + '</b>';
             }
             if (type === 'Crossbow') {
-                const damage = calcSkillDamage(character, enemy, 0, character.WEAPON_MASTERY.selectedIndex < 13 ? 0.6 : 1, 1);
+                const damage = calcSkillDamage(character, enemy, 0, wm < 13 ? 0.6 : 1, 1);
                 return "<b class='damage'>" + damage * 2 + '</b> ( ' + damage + ', ' + damage + ' )';
             }
         }
@@ -138,5 +139,70 @@ const Nadine = {
             'R: "스킬 데미지" _use "스킬 사용"\n' + 
             'D: ' + skill + '\n' + 
             'T: "스택"\n';
+    }
+    ,COMBO: (character, enemy) => {
+        if (character.weapon) {
+            const type = character.weapon.Type;
+            const q = character.Q_LEVEL.selectedIndex;
+            const w = character.W_LEVEL.selectedIndex;
+            const r = character.R_LEVEL.selectedIndex;
+            const wm = character.WEAPON_MASTERY.selectedIndex;
+            let damage = 0, c;
+            const stack = parseInt(character.DIV.querySelector('.nadine_t').value);
+            let rr = 0;
+            const combo = character.COMBO_OPTION.value;
+            for (let i = 0; i < combo.length; i++) {
+                c = combo.charAt(i);
+                if (c === 'a') {
+                    damage += baseAttackDamage(character, enemy, 0, 1, 0, 1);
+                    if (rr === 3) {
+                        rr = 1;
+                        damage += calcSkillDamage(character, enemy, 50 + r * 50 + stack, 0.5, 1);
+                    } else if (rr) {
+                        rr++;
+                    }
+                } else if (c === 'A') {
+                    damage += baseAttackDamage(character, enemy, 0, 1, 100, 1);
+                    if (rr === 3) {
+                        rr = 1;
+                        damage += calcSkillDamage(character, enemy, 50 + r * 50 + stack, 0.5, 1);
+                    } else if (rr) {
+                        rr++;
+                    }
+                } else if (c === 'q') {
+                    damage += calcSkillDamage(character, enemy, 70 + q * 45 + stack, 0.6, 1)
+                } else if (c === 'Q') {
+                    damage += calcSkillDamage(character, enemy, 140 + q * 90 + stack, 1.2, 1);
+                } else if (c === 'w') {
+                    damage += calcSkillDamage(character, enemy, 100 + w * 40, 0.6, 1);
+                } else if (c === 'W') {
+                    damage += calcSkillDamage(character, enemy, 100 + w * 70, 0.6, 1);
+                } else if (c === 'r' || c === 'R') {
+                    if (rr) {
+                        rr = 0;
+                    } else {
+                        rr = 3;
+                    }
+                } else if (c === 'd') {
+                    if (wm > 5) {
+                        if (type === 'Bow') {
+                            damage += calcSkillDamage(character, enemy, wm < 13 ? 150 : 250, 1, 1);
+                        } else if (type === 'Crossbow') {
+                            damage += calcSkillDamage(character, enemy, 0, wm < 13 ? 0.6 : 1, 1);
+                        }
+                    }
+                } else if (c === 'D') {
+                    if (wm > 5) {
+                        if (type === 'Bow') {
+                            damage += calcSkillDamage(character, enemy, wm < 13 ? 300 : 500, 2, 1);
+                        } else if (type === 'Crossbow') {
+                            damage += calcSkillDamage(character, enemy, 0, wm < 13 ? 0.6 : 1, 1) * 2;
+                        }
+                    }
+                }
+            }
+            return "<b class='damage'>" + damage + '</b><b> _ : ' + (enemy.max_hp ? (damage / enemy.max_hp * 10000 | 0) / 100 : '-') + '%</b>';
+        }
+        return '-';
     }
 };

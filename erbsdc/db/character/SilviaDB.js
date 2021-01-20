@@ -176,4 +176,69 @@ const Silvia = {
             'D: ' + skill + '\n' + 
             'T: "스택"\n';
     }
+    ,COMBO: (character, enemy) => {
+        if (character.weapon) {
+            const type = character.weapon.Type;
+            const q = character.Q_LEVEL.selectedIndex;
+            const w = character.W_LEVEL.selectedIndex;
+            const e = character.E_LEVEL.selectedIndex;
+            const r = character.R_LEVEL.selectedIndex;
+            const wm = character.WEAPON_MASTERY.selectedIndex;
+            let damage = 0, c;
+            let rr = 1;
+            const combo = character.COMBO_OPTION.value;
+            for (let i = 0; i < combo.length; i++) {
+                c = combo.charAt(i);
+                if (c === 'a') {
+                    if (rr === 2) {
+                        rr--;
+                        damage += baseAttackDamage(character, enemy, 0, 1.25 + r * 0.25, 0, 1);
+                    } else if (rr) {
+                        damage += baseAttackDamage(character, enemy, 0, 1, 0, 1);
+                    }
+                } else if (c === 'A') {
+                    if (rr === 2) {
+                        rr--;
+                        damage += baseAttackDamage(character, enemy, 0, 1.25 + r * 0.25, 100, 1);
+                    } else if (rr) {
+                        damage += baseAttackDamage(character, enemy, 0, 1, 100, 1);
+                    }
+                } else if (c === 'q' || c === 'Q') {
+                    if (rr) {
+                        damage += calcSkillDamage(character, enemy, 30 + q * 35, 0.4, 1);
+                    } else {
+                        damage += calcSkillDamage(character, enemy, 40 + q * 60, 0.6, 1);
+                    }
+                } else if (c === 'w' || c === 'W') {
+                    if (rr) {
+                        damage += calcSkillDamage(character, enemy, 40 + w * 20, 0.3, 1);
+                    } else {
+                        damage += calcSkillDamage(character, enemy, 90 + w * 40, 0.6, 1);
+                    }
+                } else if (c === 'e') {
+                    if (rr) {
+                        damage += calcSkillDamage(character, enemy, 80 + e * 20, 0.5, 1);
+                    } else {
+                        const move = character.movement_speed + character.out_of_combat_movement_speed;
+                        damage += calcSkillDamage(character, enemy, 40 + e * 25 + move / 17 * 2 * (6 + e * 4), 0.6, 1);
+                    }
+                } else if (c === 'E') {
+                    if (rr) {
+                        damage += calcSkillDamage(character, enemy, 154 + e * 33, 1.32, 1);
+                    } else {
+                        const move = character.movement_speed + character.out_of_combat_movement_speed;
+                        damage += calcSkillDamage(character, enemy, 40 + e * 25 + move * (6 + e * 4), 0.6, 1);
+                    }
+                } else if (c === 'r' || c === 'R') {
+                    if (rr) {
+                        rr = 0;
+                    } else {
+                        rr = 2;
+                    }
+                }
+            }
+            return "<b class='damage'>" + damage + '</b><b> _ : ' + (enemy.max_hp ? (damage / enemy.max_hp * 10000 | 0) / 100 : '-') + '%</b>';
+        }
+        return '-';
+    }
 };

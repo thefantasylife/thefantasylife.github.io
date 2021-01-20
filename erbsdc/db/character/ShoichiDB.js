@@ -108,7 +108,8 @@ const Shoichi = {
     }
     ,R_Option: ''
     ,D_Skill: (character, enemy) => {
-        if (character.weapon && character.WEAPON_MASTERY.selectedIndex > 5) {
+        const wm = character.WEAPON_MASTERY.selectedIndex;
+        if (character.weapon && wm > 5) {
             const type = character.weapon.Type;
             if (type === 'Dagger') {
                 const damage = baseAttackDamage(character, enemy, 0, 1, 100, 1);

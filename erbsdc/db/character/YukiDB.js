@@ -122,7 +122,7 @@ const Yuki = {
             const damage2 = calcTrueDamage(character, enemy, enemy.max_hp ? enemy.max_hp * (0.15 + r * 0.05) : 0);
             if (character.DIV.querySelector('.yuki_t').checked) {
                 const bonus = calcTrueDamage(character, enemy, 15 + 15 * character.T_LEVEL.selectedIndex);
-                return "<b class='damage'>" + (damage1 + bonus + damage2 + bonus) + '</b> ( ' + damage1 + ', ' + bonus + ', ' + damage2 + ', ' + bonus + ' )';
+                return "<b class='damage'>" + (damage1 + bonus + damage2) + '</b> ( ' + damage1 + ', ' + bonus + ', ' + damage2 + ' )';
             }
             return "<b class='damage'>" + (damage1 + damage2) + '</b> ( ' + damage1 + ', ' + damage2 + ' )';
         }
@@ -130,13 +130,14 @@ const Yuki = {
     }
     ,R_Option: ''
     ,D_Skill: (character, enemy) => {
-        if (character.weapon && character.WEAPON_MASTERY.selectedIndex > 5) {
+        const wm = character.WEAPON_MASTERY.selectedIndex;
+        if (character.weapon && wm > 5) {
             const type = character.weapon.Type;
             if (type === 'TwoHandedSword') {
-                return "<b class='damage'>" + calcSkillDamage(character, enemy, 0, character.WEAPON_MASTERY.selectedIndex < 13 ? 2 : 2.5, 1) + '</b>';
+                return "<b class='damage'>" + calcSkillDamage(character, enemy, 0, wm < 13 ? 2 : 2.5, 1) + '</b>';
             }
             if (type === 'DualSwords') {
-                const damage = calcSkillDamage(character, enemy, 0, character.WEAPON_MASTERY.selectedIndex < 13 ? 0.3 : 0.5, 1);
+                const damage = calcSkillDamage(character, enemy, 0, wm < 13 ? 0.3 : 0.5, 1);
                 return "<b class='damage'>" + damage * 12 + '</b> ( ' + damage + ' x 12 )';
             }
         }
@@ -179,5 +180,87 @@ const Yuki = {
             'R: "합산 데미지" ( "1타 데미지", "2타 데미지" )\n' + 
             'D: ' + skill + '\n' + 
             'T: "추가 데미지" ( "스킬 데미지" x "장전 수" )\n';
+    }
+    ,COMBO: (character, enemy) => {
+        if (character.weapon) {
+            const type = character.weapon.Type;
+            const q = character.Q_LEVEL.selectedIndex;
+            const e = character.E_LEVEL.selectedIndex;
+            const r = character.R_LEVEL.selectedIndex;
+            const t = character.T_LEVEL.selectedIndex;
+            const wm = character.WEAPON_MASTERY.selectedIndex;
+            let damage = 0, c;
+            const base = 20 + q * 25;
+            const coe = character.weapon.Type === 'DualSwords' ? 2 : 1;
+            let tt = 4;
+            const combo = character.COMBO_OPTION.value;
+            for (let i = 0; i < combo.length; i++) {
+                c = combo.charAt(i);
+                if (c === 'a') {
+                    damage += baseAttackDamage(character, enemy, 0, 1, 0, 1);
+                    if (tt) {
+                        tt--;
+                        damage += calcTrueDamage(character, enemy, 15 + 15 * t);
+                    }
+                    if (character.weapon.Type === 'DualSwords') {
+                        damage += baseAttackDamage(character, enemy, 0, 1, 0, 1);
+                        if (tt) {
+                            tt--;
+                            damage += calcTrueDamage(character, enemy, 15 + 15 * t);
+                        }
+                    }
+                } else if (c === 'A') {
+                    damage += baseAttackDamage(character, enemy, 0, 1, 100, 1);
+                    if (tt) {
+                        tt--;
+                        damage += calcTrueDamage(character, enemy, 15 + 15 * t);
+                    }
+                    if (character.weapon.Type === 'DualSwords') {
+                        damage += baseAttackDamage(character, enemy, 0, 1, 100, 1);
+                        if (tt) {
+                            tt--;
+                            damage += calcTrueDamage(character, enemy, 15 + 15 * t);
+                        }
+                    }
+                } else if (c === 'q') {
+                    damage += baseAttackDamage(character, enemy, base, coe, 0, 1);
+                    if (tt) {
+                        tt--;
+                        damage += calcTrueDamage(character, enemy, 15 + 15 * t);
+                    }
+                } else if (c === 'Q') {
+                    damage += baseAttackDamage(character, enemy, base, coe, 100, 1);
+                    if (tt) {
+                        tt--;
+                        damage += calcTrueDamage(character, enemy, 15 + 15 * t);
+                    }
+                } else if (c === 'w' || c === 'W') {
+                    tt = 4;
+                } else if (c === 'e' || c === 'E') {
+                    damage += calcSkillDamage(character, enemy, 70 + e * 50, 0.4, 1);
+                    if (tt) {
+                        tt--;
+                        damage += calcTrueDamage(character, enemy, 15 + 15 * t);
+                    }
+                } else if (c === 'r' || c === 'R') {
+                    damage += calcSkillDamage(character, enemy, 250 + r * 125, 1.5, 1) + 
+                        calcTrueDamage(character, enemy, enemy.max_hp ? enemy.max_hp * (0.15 + r * 0.05) : 0);
+                    if (tt) {
+                        tt--;
+                        damage += calcTrueDamage(character, enemy, 15 + 15 * t);
+                    }
+                } else if (c === 'd' || c === 'D') {
+                    if (wm > 5) {
+                        if (type === 'TwoHandedSword') {
+                            damage += calcSkillDamage(character, enemy, 0, wm < 13 ? 2 : 2.5, 1);
+                        } else if (type === 'DualSwords') {
+                            damage += calcSkillDamage(character, enemy, 0, wm < 13 ? 0.3 : 0.5, 1) * 6;
+                        }
+                    }
+                }
+            }
+            return "<b class='damage'>" + damage + '</b><b> _ : ' + (enemy.max_hp ? (damage / enemy.max_hp * 10000 | 0) / 100 : '-') + '%</b>';
+        }
+        return '-';
     }
 };

@@ -99,7 +99,8 @@ const Xiukai = {
     }
     ,R_Option: "<b> _use</b><input type='checkbox' class='xiukai_r' onchange='updateDisplay()'>"
     ,D_Skill: (character, enemy) => {
-        if (character.weapon && character.WEAPON_MASTERY.selectedIndex > 5) {
+        const wm = character.WEAPON_MASTERY.selectedIndex;
+        if (character.weapon && wm > 5) {
             const type = character.weapon.Type;
             if (type === 'Dagger') {
                 const damage = baseAttackDamage(character, enemy, 0, 1, 100, 1);
@@ -107,7 +108,7 @@ const Xiukai = {
                 return "<b class='damage'>" + damage + ' ~ ' + (damage + (enemy.max_hp ? enemy.max_hp / 10 : 0) | 0) + "</b><b> __h: </b><b class='heal'>" + heal + '</b>';
             }
             if (type === 'Spear') {
-                const damage = calcSkillDamage(character, enemy, 0, character.WEAPON_MASTERY.selectedIndex < 13 ? 1 : 1.5, 1);
+                const damage = calcSkillDamage(character, enemy, 0, wm < 13 ? 1 : 1.5, 1);
                 return "<b class='damage'>" + damage * 2 + '</b> ( ' + damage + ', ' + damage + ' )';
             }
         }
@@ -146,5 +147,83 @@ const Xiukai = {
             'R: "합산 데미지" ( "틱당 데미지" x "타수" ) __cost: "체력소모" _use "스킬 사용"\n' + 
             'D: ' + skill + '\n' + 
             'T: "스택"\n';
+    }
+    ,COMBO: (character, enemy) => {
+        if (character.weapon) {
+            const type = character.weapon.Type;
+            const q = character.Q_LEVEL.selectedIndex;
+            const w = character.W_LEVEL.selectedIndex;
+            const e = character.E_LEVEL.selectedIndex;
+            const r = character.R_LEVEL.selectedIndex;
+            const wm = character.WEAPON_MASTERY.selectedIndex;
+            let damage = 0, c;
+            const stack = parseInt(character.DIV.querySelector('.xiukai_t').value);
+            let cc = false, rr = false;
+
+            let enemy_defense;
+            if (enemy.calc_defense) {
+                enemy_defense = enemy.defense;
+                enemy.defense = enemy.calc_defense | 0;
+            }
+
+            const combo = character.COMBO_OPTION.value;
+            for (let i = 0; i < combo.length; i++) {
+                c = combo.charAt(i);
+                if (c === 'a') {
+                    damage += baseAttackDamage(character, enemy, 0, 1, 0, 1);
+                } else if (c === 'A') {
+                    damage += baseAttackDamage(character, enemy, 0, 1, 100, 1);
+                } else if (c === 'q' || c === 'Q') {
+                    damage += calcSkillDamage(character, enemy, 80 + q * 40, 0.5, 1);
+                    cc = true;
+                } else if (c === 'w' || c === 'W') {
+                    if (cc) {
+                        damage += calcSkillDamage(character, enemy, 60 + w * 40 + character.max_hp * (0.03 + w * 0.005), 0.5, 1);
+                    } else {
+                        damage += calcSkillDamage(character, enemy, 60 + w * 40, 0.5, 1);
+                    }
+                    cc = true;
+                } else if (c === 'e' || c === 'E') {
+                    if (cc) {
+                        damage += calcSkillDamage(character, enemy, 80 + e * 30 + character.max_hp * 0.07 - (0.3 * e | 0) * 10, 0.5, 1);
+                    } else {
+                        damage += calcSkillDamage(character, enemy, 80 + e * 30 + character.max_hp * 0.035 - (0.3 * e | 0) * 10, 0.5, 1);
+                    }
+                    cc = true;
+                } else if (c === 'r') {
+                    if (cc & !rr) {
+                        rr = true;
+                        enemy.defense = enemy.calc_defense * (1 - (0.1 + r * 0.05)) | 0;
+                    }
+                    damage += calcSkillDamage(character, enemy, 20 + r * 45 + stack, 0.5, 1) * 3;
+                } else if (c === 'R') {
+                    if (cc & !rr) {
+                        rr = true;
+                        enemy.defense = enemy.calc_defense * (1 - (0.1 + r * 0.05)) | 0;
+                    }
+                    damage += calcSkillDamage(character, enemy, 20 + r * 45 + stack, 0.5, 1) * 6;
+                } else if (c === 'd' || c === 'D') {
+                    if (wm > 5) {
+                        if (type === 'Dagger') {
+                            damage += baseAttackDamage(character, enemy, 0, 1, 100, 1) + (enemy.max_hp ? (enemy.max_hp - damage) / 10 : 0) | 0;
+                        } else if (type === 'Spear') {
+                            if (c === 'd') {
+                                damage += calcSkillDamage(character, enemy, 0, wm < 13 ? 1 : 1.5, 1);
+                            } else {
+                                damage += calcSkillDamage(character, enemy, 0, wm < 13 ? 1 : 1.5, 1) * 2;
+                            }
+                            cc = true;
+                        }
+                    }
+                }
+            }
+
+            if (enemy_defense) {
+                enemy.defense = enemy_defense;
+            }
+
+            return "<b class='damage'>" + damage + '</b><b> _ : ' + (enemy.max_hp ? (damage / enemy.max_hp * 10000 | 0) / 100 : '-') + '%</b>';
+        }
+        return '-';
     }
 };
