@@ -1,0 +1,196 @@
+const Shoichi = {
+     Attack_Power: 30
+    ,Attack_Power_Growth: 2.9
+    ,Health: 550
+    ,Health_Growth: 78
+    ,Health_Regen: 0.8
+    ,Health_Regen_Growth: 0.04
+    ,Stamina: 370
+    ,Stamina_Growth: 13
+    ,Stamina_Regen: 1.6
+    ,Stamina_Regen_Growth: 0.04
+    ,Defense: 27
+    ,Defense_Growth: 2.2
+    ,Atk_Speed: 0.12
+    ,Crit_Rate: 0
+    ,Move_Speed: 3.1
+    ,Sight_Range: 8
+    ,Attack_Range: 0.43
+    ,weapons: [Dagger]
+    ,correction: {
+        Dagger: [
+            [0, -5, -6],
+            [0, 0, 0]
+        ]
+    }
+    ,Base_Attack: (character, enemy) => {
+        if (character.weapon) {
+            let damage, min, max;
+            if (character.DIV.querySelector('.shoichi_t').value == 5) {
+                const t = character.T_LEVEL.selectedIndex;
+                damage = baseAttackDamage(character, enemy, 0, 1 + 0.1 + 0.05 * t, character.critical_strike_chance, 1);
+                min = baseAttackDamage(character, enemy, 0, 1 + 0.1 + 0.05 * t, 0, 1);
+                max = baseAttackDamage(character, enemy, 0, 1 + 0.1 + 0.05 * t, 100, 1);
+            } else {
+                damage = baseAttackDamage(character, enemy, 0, 1, character.critical_strike_chance, 1);
+                min = baseAttackDamage(character, enemy, 0, 1, 0, 1);
+                max = baseAttackDamage(character, enemy, 0, 1, 100, 1);
+            }
+            return "<b class='damage'>" + damage + '</b> ( ' +  min + ' - ' + max + ' )';
+        }
+        return '-';
+    }
+    ,Base_Attack_Option: ''
+    ,DPS: (character, enemy) => {
+        if (character.weapon) {
+            let ba;
+            if (character.DIV.querySelector('.shoichi_t').value == 5) {
+                const t = character.T_LEVEL.selectedIndex;
+                ba = baseAttackDamage(character, enemy, 0, 1 + 0.1 + 0.05 * t, character.critical_strike_chance, 1);
+            } else {
+                ba = baseAttackDamage(character, enemy, 0, 1, character.critical_strike_chance, 1);
+            }
+            const damage = (ba * character.attack_speed * 100 | 0) / 100;
+            const life = calcHeal(ba * (character.life_steal / 100), character.attack_speed, enemy);
+            return "<b class='damage'>" + damage + "</b><b> __h/s: </b><b class='heal'>" + life + '</b>';
+        }
+        return '-';
+    }
+    ,DPS_Option: ''
+    ,HPS: (character, enemy) => {
+        return "<b class='heal'>" + calcHeal(character.hp_regen * (character.hp_regen_percent + 100) / 100 + 
+            (character.food ? character.food.HP_Regen / 30 : 0), 2, enemy) + '</b>';
+    }
+    ,Q_Skill: (character, enemy) => {
+        if (character.weapon) {
+            const q = character.Q_LEVEL.selectedIndex;
+            const damage = calcSkillDamage(character, enemy, 10 + q * 50, 0.45, 1);
+            const w = calcSkillDamage(character, enemy, 10 + character.W_LEVEL.selectedIndex * 30, 0.3, 1);
+            const t = calcSkillDamage(character, enemy, 25 + character.T_LEVEL.selectedIndex * 35, 0.3, 1);
+            const cool = 10000 / (6 * (100 - character.cooldown_reduction));
+            return "<b class='damage'>" + damage + "</b><b> __sd/s: </b><b class='damage'>" + round((damage + (t + w) / 2) * cool) / 100 + '</b>';
+        }
+        return '-';
+    }
+    ,Q_Option: ''
+    ,W_Skill: (character, enemy) => {
+        if (character.weapon) {
+            const w = character.W_LEVEL.selectedIndex;
+            const damage = calcSkillDamage(character, enemy, 10 + w * 30, 0.3, 1);
+            const cool = 10000 / ((17 - w * 2) * (100 - character.cooldown_reduction));
+            return "<b class='damage'>" + damage + "</b><b> __sd/s: </b><b class='damage'>" + round(damage * cool) / 100 + '</b>';
+        }
+        return '-';
+    }
+    ,W_Option: ''
+    ,E_Skill: (character, enemy) => {
+        if (character.weapon) {
+            const e = character.E_LEVEL.selectedIndex;
+            const damage = calcSkillDamage(character, enemy, 20 + e * 40, 0.3, 1);
+            const w = calcSkillDamage(character, enemy, 10 + character.W_LEVEL.selectedIndex * 30, 0.3, 1);
+            const t = calcSkillDamage(character, enemy, 25 + character.T_LEVEL.selectedIndex * 35, 0.3, 1);
+            const cool = 10000 / ((18 - e * 2) * (100 - character.cooldown_reduction));
+            return "<b class='damage'>" + damage + "</b><b> __sd/s: </b><b class='damage'>" + round((damage + t + w) * cool) / 100 + '</b>';
+        }
+        return '-';
+    }
+    ,E_Option: ''
+    ,R_Skill: (character, enemy) => {
+        if (character.weapon) {
+            const r = character.R_LEVEL.selectedIndex;
+            const damage1 = calcSkillDamage(character, enemy, 50 + r * 100, 0.3, 1);
+            const damage2 = calcSkillDamage(character, enemy, 25 + r * 35, 0.3, 1);
+            const t = calcSkillDamage(character, enemy, 25 + character.T_LEVEL.selectedIndex * 35, 0.3, 1);
+            const w = calcSkillDamage(character, enemy, 10 + character.W_LEVEL.selectedIndex * 30, 0.3, 1);
+            return "<b class='damage'>" + (damage1 + damage2 + t * 4 + w) + '</b> ( ' + damage1 + ', ' + damage2 + ', ' + t + ' x 4, ' + w + ' )';
+        }
+        return '-';
+    }
+    ,R_Option: ''
+    ,D_Skill: (character, enemy) => {
+        if (character.weapon && character.WEAPON_MASTERY.selectedIndex > 5) {
+            const type = character.weapon.Type;
+            if (type === 'Dagger') {
+                const damage = baseAttackDamage(character, enemy, 0, 1, 100, 1);
+                const heal = calcHeal((damage + (enemy.max_hp ? enemy.max_hp / 10 : 0) | 0) * (character.life_steal / 100), 1, enemy);
+                return "<b class='damage'>" + damage + ' ~ ' + (damage + (enemy.max_hp ? enemy.max_hp / 10 : 0) | 0) + "</b><b> __h: </b><b class='heal'>" + heal + '</b>';
+            }
+        }
+        return '-';
+    }
+    ,D_Option: (character, enemy) => {
+        return '';
+    }
+    ,T_Skill: (character, enemy) => {
+        if (character.weapon) {
+            return "<b class='damage'>" + calcSkillDamage(character, enemy, 25 + character.T_LEVEL.selectedIndex * 35, 0.3, 1) + '</b>';
+        }
+        return '-';
+    }
+    ,T_Option: "_ <input type='number' class='stack shoichi_t' value='0' onchange='fixLimitNum(this, 5)'><b>Stack</b>"
+    ,Help: (character) => {
+        if (!character.character) {
+            return 'select character plz';
+        }
+        if (!character.weapon) {
+            return 'select weapon plz';
+        }
+        const weapon = character.weapon.Type;
+        const type = 
+            weapon === 'Dagger' ? '단검' : 
+            '';
+        const skill = 
+            weapon === 'Dagger' ? '"최소 데미지" ~ "최대 데미지" __h: "흡혈량"' : 
+            '';
+        return '쇼이치 ( ' + type + ' )\n' + 
+            'A: "평균 데미지" ( "평타 데미지" - "치명타 데미지" )\n' + 
+            'DPS: "초당 데미지" __h/s: "초당 흡혈량"\n' + 
+            'HPS: "초당 회복량"\n' + 
+            'Q: "스킬 데미지"\n' + 
+            'W: "스킬 데미지"\n' + 
+            'E: "스킬 데미지"\n' + 
+            'R: "합산 데미지" ( "1타 데미지", "2타 데미지", "패시브 데미지" x "타수", "W 데미지" )\n' + 
+            'D: ' + skill + '\n' + 
+            'T: "스킬 데미지"_ "스택"\n';
+    }
+    ,COMBO: (character, enemy) => {
+        if (character.weapon) {
+            const type = character.weapon.Type;
+            const q = character.Q_LEVEL.selectedIndex;
+            const w = character.W_LEVEL.selectedIndex;
+            const e = character.E_LEVEL.selectedIndex;
+            const r = character.R_LEVEL.selectedIndex;
+            const t = character.T_LEVEL.selectedIndex;
+            const wm = character.WEAPON_MASTERY.selectedIndex;
+            let damage = 0, c;
+            const combo = character.COMBO_OPTION.value;
+            for (let i = 0; i < combo.length; i++) {
+                c = combo.charAt(i);
+                if (c === 'a') {
+                    damage += baseAttackDamage(character, enemy, 0, 1, 0, 1);
+                } else if (c === 'A') {
+                    damage += baseAttackDamage(character, enemy, 0, 1, 100, 1);
+                } else if (c === 'q' || c === 'Q') {
+                    damage += calcSkillDamage(character, enemy, 10 + q * 50, 0.45, 1);
+                } else if (c === 'w' || c === 'W') {
+                    damage += calcSkillDamage(character, enemy, 10 + w * 30, 0.3, 1);
+                } else if (c === 'e' || c === 'E') {
+                    damage += calcSkillDamage(character, enemy, 20 + e * 40, 0.3, 1);
+                } else if (c === 'r' || c === 'R') {
+                    damage += calcSkillDamage(character, enemy, 50 + r * 100, 0.3, 1) + 
+                        calcSkillDamage(character, enemy, 25 + r * 35, 0.3, 1);
+                } else if (c === 'd' || c === 'D') {
+                    if (wm > 5) {
+                        if (type === 'Dagger') {
+                            damage += baseAttackDamage(character, enemy, 0, 1, 100, 1) + (enemy.max_hp ? (enemy.max_hp - damage) / 10 : 0) | 0;
+                        }
+                    }
+                } else if (c === 't' || c === 'T') {
+                    damage += calcSkillDamage(character, enemy, 25 + t * 35, 0.3, 1);
+                }
+            }
+            return "<b class='damage'>" + damage + '</b><b> _ : ' + (enemy.max_hp ? (damage / enemy.max_hp * 10000 | 0) / 100 : '-') + '%</b>';
+        }
+        return '-';
+    }
+};
