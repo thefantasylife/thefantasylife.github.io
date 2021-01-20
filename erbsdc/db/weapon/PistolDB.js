@@ -2,7 +2,7 @@ const Pistol = [
     {
          Type: "Pistol"
         ,Name: "Walter_PPK"
-        ,Attack_Power: 8
+        ,Attack_Power: 14
         ,Attack_Speed: 0
         ,Critical_Strike_Chance: 0
         ,Critical_Strike_Damage: 0
@@ -22,13 +22,13 @@ const Pistol = [
         ,HP_Regen: 0
         ,HP_Regen_Percent: 0
         ,Normal_Attack_Damage_Reduction: 0
-        ,Move_Speed: 0.1
+        ,Move_Speed: 0
         ,Out_of_Combat_Movement_Speed: 0
         ,Vision_Range: 0
         ,Attack_Range: 0
         ,Base_Range: 4.2
         ,Atk_Speed: 0.505
-        ,Title: "Walther PPK\n\nAttack Power +8\nMovement Speed +0.1"
+        ,Title: "Walther PPK\n\nAttack Power +14"
         ,Rarity: "Common"
         ,Ammo: 6
     }

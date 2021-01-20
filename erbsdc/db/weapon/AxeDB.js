@@ -247,13 +247,13 @@ const Axe = [
         ,HP_Regen: 0
         ,HP_Regen_Percent: 0
         ,Normal_Attack_Damage_Reduction: 0
-        ,Move_Speed: -0.1
+        ,Move_Speed: 0
         ,Out_of_Combat_Movement_Speed: 0
         ,Vision_Range: 4
         ,Attack_Range: 0
         ,Base_Range: 1.15
         ,Atk_Speed: 0.455
-        ,Title: "Beam Axe\n\nAttack Power +137\nMovement Speed -0.1\nVision Range +4"
+        ,Title: "Beam Axe\n\nAttack Power +137\nVision Range +4"
         ,Rarity: "Epic"
     }
     ,{

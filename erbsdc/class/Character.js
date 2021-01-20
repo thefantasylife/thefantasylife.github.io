@@ -15,11 +15,7 @@ class Character {
             this.D_DAMAGE.innerHTML = this.character.D_Skill(this, this.enemy);
             this.T_DAMAGE.innerHTML = this.character.T_Skill(this, this.enemy);
             this.TRAP_DAMAGE.innerHTML = this.calcTrapDamage();
-            
-            if (this.character.COMBO) {
-                this.COMBO_DAMAGE.innerHTML = this.character.COMBO(this, this.enemy);
-            }
-            
+            this.COMBO_DAMAGE.innerHTML = this.character.COMBO(this, this.enemy);
             this.CHAR.innerHTML = this.CHARACTER.value;
             if (this.enemy.character) {
                 this.ENEMY.innerHTML = ' vs ' + this.enemy.CHARACTER.value;
@@ -37,9 +33,7 @@ class Character {
             this.D_DAMAGE.innerHTML = '';
             this.T_DAMAGE.innerHTML = '';
             this.TRAP_DAMAGE.innerHTML = '';
-
             this.COMBO_DAMAGE.innerHTML = '';
-
             this.CHAR.innerHTML = 'select character';
             this.ENEMY.innerHTML = '';
         }
@@ -103,6 +97,7 @@ class Character {
         this.OUT_OF_COMBAT_MOVEMENT_SPEED = DIV.querySelector('.out_of_combat_movement_speed');
         this.VISION_RANGE = DIV.querySelector('.vision_range');
         this.ATTACK_RANGE = DIV.querySelector('.attack_range');
+        this.CRITICAL_STRIKE_DAMAGE_REDUCTION = DIV.querySelector('.critical_strike_damage_reduction');
 
         this.BASE_ATTACK_DAMAGE = DIV.querySelector('.base_attack_damage');
         this.BASE_ATTACK_OPTION = DIV.querySelector('.base_attack_option');
@@ -122,10 +117,9 @@ class Character {
         this.T_DAMAGE = DIV.querySelector('.t_damage');
         this.T_OPTION = DIV.querySelector('.t_option');
         this.TRAP_DAMAGE = DIV.querySelector('.trap_damage');
-
         this.COMBO_DAMAGE = DIV.querySelector('.combo_damage');
         this.COMBO_OPTION = DIV.querySelector('.combo_option');
-
+        this.COMBO_TIME = DIV.querySelector('.combo_time');
         this.CHAR = DIV.querySelector('.char');
         this.ENEMY = DIV.querySelector('.enemy');
 
@@ -319,6 +313,8 @@ class Character {
                 this.ARM.innerHTML = '';
                 this.LEG.innerHTML = '';
                 this.ACCESSORY.innerHTML = '';
+                this.FOOD.innerHTML = '';
+                this.TRAP.innerHTML = '';
                 this.BASE_ATTACK_OPTION.innerHTML = '';
                 this.DPS_OPTION.innerHTML = '';
                 this.Q_OPTION.innerHTML = '';
@@ -327,10 +323,9 @@ class Character {
                 this.R_OPTION.innerHTML = '';
                 this.D_OPTION.innerHTML = '';
                 this.T_OPTION.innerHTML = '';
-                
-                this.COMBO_DAMAGE.innerHTML = '';
                 this.COMBO_OPTION.value = '';
-                this.COMBO_OPTION.readOnly = true;
+                this.COMBO_DAMAGE.innerHTML = '';
+                this.COMBO_TIME.value = '0';
             } else {
                 this.I_CHARACTER.innerHTML = "<img class='character_image' src='./img/character/" + select + ".png'>";
                 this.character = eval(select);
@@ -355,14 +350,8 @@ class Character {
                 this.R_OPTION.innerHTML = this.character.R_Option;
                 this.D_OPTION.innerHTML = this.character.D_Option(this, this.enemy);
                 this.T_OPTION.innerHTML = this.character.T_Option;
-                
-                if (this.character.COMBO) {
-                    this.COMBO_OPTION.readOnly = false;
-                } else {
-                	this.COMBO_DAMAGE.innerHTML = '-';
-                    this.COMBO_OPTION.value = '';
-                    this.COMBO_OPTION.readOnly = true;
-                }
+                this.COMBO_OPTION.value = '';
+                this.COMBO_TIME.value = '5';
             }
             updateDisplay();
         });
@@ -414,6 +403,9 @@ class Character {
         });
         this.COMBO_OPTION.addEventListener('change', (e) => {
             updateDisplay();
+        });
+        this.COMBO_TIME.addEventListener('change', (e) => {
+            fixLimitNum(e.target, 30);
         });
 
         this.ITEM_LIST.querySelector('.close_button').addEventListener('click', (e) => {
@@ -551,6 +543,15 @@ class Character {
                 this.arm && this.arm.Name === 'Sword_Stopper' ||
                 this.leg && this.leg.Name === 'White_Rhinos' ||
                 this.accessory && (this.accessory.Name === 'Gilded_Quill_Fan' || this.accessory.Name === 'White_Crane_Fan');
+
+            this.critical_strike_damage_reduction = 
+                (this.head ? this.head.Rarity === 'Common' ? 2 : 
+                    this.head.Rarity === 'Uncommon' ? 4 : 
+                    this.head.Rarity === 'Rare' ? 7 : 
+                    this.head.Rarity === 'Epic' ? 10 : 
+                    this.head.Rarity === 'Legendary' ? 10 : 0 : 0) + 
+                (this.arm && this.arm.Name === 'Sword_Stopper' ? 10 : 0);
+            this.CRITICAL_STRIKE_DAMAGE_REDUCTION.innerText = this.critical_strike_damage_reduction + '%';
 
             const jackie_tw = [0.03, 0.08, 0.15];
             const jackie_ts = [0.05, 0.12, 0.25];
@@ -698,7 +699,7 @@ class Character {
             const xiukai_t = this.DIV.querySelector('.xiukai_t');
             const chiara_r = this.DIV.querySelector('.chiara_r');
             const hp_bonus = 
-                (xiukai_t ? xiukai_t.value * 8 : 0) + 
+                (xiukai_t ? xiukai_t.value * 7 : 0) + 
                 (chiara_r && chiara_r.checked ? 100 + this.R_LEVEL.selectedIndex * 100 : 0);
             this.max_hp = 
                 (this.character.Health + this.character.Health_Growth * this.LEVEL.selectedIndex + hp_bonus + 

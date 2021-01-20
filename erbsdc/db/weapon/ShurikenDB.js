@@ -451,7 +451,7 @@ const Shuriken = [
          Type: "Shuriken"
         ,Name: "Cards_of_Tyranny"
         ,Attack_Power: 49
-        ,Attack_Speed: 30
+        ,Attack_Speed: 40
         ,Critical_Strike_Chance: 20
         ,Critical_Strike_Damage: 0
         ,Life_Steal: 0
@@ -476,7 +476,7 @@ const Shuriken = [
         ,Attack_Range: 0
         ,Base_Range: 4.4
         ,Atk_Speed: 0.55
-        ,Title: "Cards of Tyranny\n\nAttack Power +49\nAttack Speed +30%\nCritical Strike Chance +20%"
+        ,Title: "Cards of Tyranny\n\nAttack Power +49\nAttack Speed +40%\nCritical Strike Chance +20%"
         ,Rarity: "Epic"
     }
     ,{
@@ -514,7 +514,7 @@ const Shuriken = [
     ,{
          Type: "Shuriken"
         ,Name: "Fuhma_Shuriken"
-        ,Attack_Power: 48
+        ,Attack_Power: 52
         ,Attack_Speed: 0
         ,Critical_Strike_Chance: 0
         ,Critical_Strike_Damage: 0
@@ -540,7 +540,7 @@ const Shuriken = [
         ,Attack_Range: 0
         ,Base_Range: 4.4
         ,Atk_Speed: 0.55
-        ,Title: "Fuhma Shuriken\n\nAttack Power +48\nCooldown Reduction +15%\nExtra Normal Attack Damage +36"
+        ,Title: "Fuhma Shuriken\n\nAttack Power +52\nCooldown Reduction +15%\nExtra Normal Attack Damage +36"
         ,Rarity: "Epic"
     }
     ,{

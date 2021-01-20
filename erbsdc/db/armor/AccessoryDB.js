@@ -22,13 +22,13 @@ const Accessory = [
         ,HP_Regen: 0
         ,HP_Regen_Percent: 0
         ,Normal_Attack_Damage_Reduction: 0
-        ,Move_Speed: 0.08
+        ,Move_Speed: 0.06
         ,Out_of_Combat_Movement_Speed: 0
         ,Vision_Range: 0
         ,Attack_Range: 0
         ,Base_Range: 0
         ,Atk_Speed: 0
-        ,Title: "Feather\n\nMovement Speed +0.08"
+        ,Title: "Feather\n\nMovement Speed +0.06"
         ,Rarity: "Common"
     }
     ,{
@@ -418,7 +418,7 @@ const Accessory = [
     ,{
          Type: "Accessory"
         ,Name: "Sniping_Scope"
-        ,Attack_Power: 6
+        ,Attack_Power: 10
         ,Attack_Speed: 0
         ,Critical_Strike_Chance: 0
         ,Critical_Strike_Damage: 0
@@ -440,11 +440,11 @@ const Accessory = [
         ,Normal_Attack_Damage_Reduction: 0
         ,Move_Speed: 0
         ,Out_of_Combat_Movement_Speed: 0
-        ,Vision_Range: 4
+        ,Vision_Range: 4.5
         ,Attack_Range: 0
         ,Base_Range: 0
         ,Atk_Speed: 0
-        ,Title: "Sniper Scope\n\nAttack Power +6\nVision Range +4"
+        ,Title: "Sniper Scope\n\nAttack Power +10\nVision Range +4.5"
         ,Rarity: "Uncommon"
     }
     ,{

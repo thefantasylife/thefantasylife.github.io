@@ -246,13 +246,13 @@ const Glove = [
         ,HP_Regen: 0
         ,HP_Regen_Percent: 0
         ,Normal_Attack_Damage_Reduction: 0
-        ,Move_Speed: -0.1
+        ,Move_Speed: -0.05
         ,Out_of_Combat_Movement_Speed: 0
         ,Vision_Range: 0
         ,Attack_Range: 0
         ,Base_Range: 0.85
         ,Atk_Speed: 0.63
-        ,Title: "Shatter Shell Gauntlet\n\nAttack Power +32\nMovement Speed -0.1\nExtra Normal Attack Damage +15"
+        ,Title: "Shatter Shell Gauntlet\n\nAttack Power +32\nMovement Speed -0.05\nExtra Normal Attack Damage +15"
         ,Rarity: "Rare"
     }
     ,{
@@ -354,7 +354,7 @@ const Glove = [
     ,{
          Type: "Glove"
         ,Name: "Divine_Fist"
-        ,Attack_Power: 46
+        ,Attack_Power: 50
         ,Attack_Speed: 0
         ,Critical_Strike_Chance: 0
         ,Critical_Strike_Damage: 0
@@ -380,7 +380,7 @@ const Glove = [
         ,Attack_Range: 0
         ,Base_Range: 0.85
         ,Atk_Speed: 0.63
-        ,Title: "Divine Fist\n\nAttack Power +46\nMovement Speed -0.05\nExtra Normal Attack Damage +33"
+        ,Title: "Divine Fist\n\nAttack Power +50\nMovement Speed -0.05\nExtra Normal Attack Damage +33"
         ,Rarity: "Epic"
     }
     ,{
@@ -450,7 +450,7 @@ const Glove = [
     ,{
          Type: "Glove"
         ,Name: "Buddha`s_Palm"
-        ,Attack_Power: 33
+        ,Attack_Power: 37
         ,Attack_Speed: 0
         ,Critical_Strike_Chance: 0
         ,Critical_Strike_Damage: 0
@@ -476,13 +476,13 @@ const Glove = [
         ,Attack_Range: 0
         ,Base_Range: 0.85
         ,Atk_Speed: 0.63
-        ,Title: "Buddha`s Palm\n\nAttack Power +33\nCooldown Reduction +10%\nSkill Amplification +18%"
+        ,Title: "Buddha`s Palm\n\nAttack Power +37\nCooldown Reduction +10%\nSkill Amplification +18%"
         ,Rarity: "Epic"
     }
     ,{
          Type: "Glove"
         ,Name: "Brasil_Gauntlet"
-        ,Attack_Power: 48
+        ,Attack_Power: 53
         ,Attack_Speed: 30
         ,Critical_Strike_Chance: 0
         ,Critical_Strike_Damage: 0
@@ -508,7 +508,7 @@ const Glove = [
         ,Attack_Range: 0
         ,Base_Range: 0.85
         ,Atk_Speed: 0.63
-        ,Title: "Brasil Gauntlet\n\nAttack Power +48\nDefense +13\nHP Regen +1\nAttack Speed +30%\nMovement Speed -0.05"
+        ,Title: "Brasil Gauntlet\n\nAttack Power +53\nDefense +13\nHP Regen +1\nAttack Speed +30%\nMovement Speed -0.05"
         ,Rarity: "Epic"
     }
     ,{

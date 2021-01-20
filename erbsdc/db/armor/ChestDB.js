@@ -625,7 +625,7 @@ const Chest = [
         ,Skill_Damage_Reduction: 0
         ,Skill_Damage_Reduction_Percent: 0
         ,Defense: 28
-        ,Max_HP: 400
+        ,Max_HP: 360
         ,Max_SP: 0
         ,HP_Regen: 0
         ,HP_Regen_Percent: 0
@@ -636,7 +636,7 @@ const Chest = [
         ,Attack_Range: 0
         ,Base_Range: 0
         ,Atk_Speed: 0
-        ,Title: "Sunset Armor\n\nDefense +28\nMax HP +400"
+        ,Title: "Sunset Armor\n\nDefense +28\nMax HP +360"
         ,Rarity: "Rare"
     }
     ,{

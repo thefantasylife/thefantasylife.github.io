@@ -393,7 +393,7 @@ const Bow = [
         ,Life_Steal: 0
         ,Extra_Normal_Attack_Damage: 0
         ,Extra_Normal_Attack_Damage_Percent: 0
-        ,Skill_Amplification: 41
+        ,Skill_Amplification: 38
         ,Skill_Amplification_Percent: 0
         ,Cooldown_Reduction: 0
         ,SP_Regen: 0
@@ -412,7 +412,7 @@ const Bow = [
         ,Attack_Range: 0
         ,Base_Range: 5.85
         ,Atk_Speed: 0.65
-        ,Title: "Elemental Bow\n\nAttack Power +60\nMovement Speed +0.1\nSkill Amplification +41\nHealing Reduction (Skills) -40%"
+        ,Title: "Elemental Bow\n\nAttack Power +60\nMovement Speed +0.1\nSkill Amplification +38\nHealing Reduction (Skills) -40%"
         ,Rarity: "Epic"
     }
     ,{

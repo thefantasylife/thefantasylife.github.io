@@ -226,7 +226,7 @@ const Bat = [
     ,{
          Type: "Bat"
         ,Name: "Mallet"
-        ,Attack_Power: 80
+        ,Attack_Power: 85
         ,Attack_Speed: 50
         ,Critical_Strike_Chance: 0
         ,Critical_Strike_Damage: 0
@@ -252,7 +252,7 @@ const Bat = [
         ,Attack_Range: 0
         ,Base_Range: 1.2
         ,Atk_Speed: 0.56
-        ,Title: "Mallet\n\nAttack Power +80\nAttack Speed +50%\nHealing Reduction (Normal Attacks) -40%"
+        ,Title: "Mallet\n\nAttack Power +85\nAttack Speed +50%\nHealing Reduction (Normal Attacks) -40%"
         ,Rarity: "Epic"
     }
     ,{
@@ -265,7 +265,7 @@ const Bat = [
         ,Life_Steal: 0
         ,Extra_Normal_Attack_Damage: 0
         ,Extra_Normal_Attack_Damage_Percent: 0
-        ,Skill_Amplification: 25
+        ,Skill_Amplification: 28
         ,Skill_Amplification_Percent: 0
         ,Cooldown_Reduction: 0
         ,SP_Regen: 0
@@ -284,7 +284,7 @@ const Bat = [
         ,Attack_Range: 0
         ,Base_Range: 1.2
         ,Atk_Speed: 0.56
-        ,Title: "Spy Umbrella\n\nAttack Power +65\nSkill Amplification +25"
+        ,Title: "Spy Umbrella\n\nAttack Power +65\nSkill Amplification +28"
         ,Rarity: "Epic"
     }
     ,{

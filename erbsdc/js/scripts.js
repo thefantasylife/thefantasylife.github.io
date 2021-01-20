@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', (e) => {
 });
 
 function baseAttackDamage(character, enemy, base, coe, cri, onhit) {
-    return (((base + character.attack_power * coe) * (1 + cri / 100 * (1 + character.critical_strike_damage / 100)) / (1 + (!enemy.defense ? 0 : enemy.defense / 100)) + 
+    return (((base + character.attack_power * coe) * (1 + cri / 100 * (1 + (character.critical_strike_damage - (!enemy.critical_strike_damage_reduction ? 0 : enemy.critical_strike_damage_reduction)) / 100)) / (1 + (!enemy.defense ? 0 : enemy.defense / 100)) + 
         (character.extra_normal_attack_damage - (!enemy.normal_attack_damage_reduction ? 0 : enemy.normal_attack_damage_reduction)) * onhit) * 
         (1 + (character.extra_normal_attack_damage_percent - (!enemy.normal_attack_damage_reduction_percent ? 0 : enemy.normal_attack_damage_reduction_percent)) / 100)) * 
         (1 + (character.weapon ? character.character.correction[character.weapon.Type][0][character.MODE.selectedIndex] / 100 : 0)) * 

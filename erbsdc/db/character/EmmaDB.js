@@ -85,7 +85,7 @@ const Emma = {
             const max = calcSkillDamage(character, enemy, 200 + r * 50, 0.75, 1);
             const heal = calcHeal(8 + r * 3, 1, enemy);
             const cool = 10000 / ((18 - r * 3) * (100 - character.cooldown_reduction));
-            return "<b class='damage'>" + min + "</b><b> / </b><b class='damage'>" + max + "</b><b> __h: </b><b class='heal'>" + heal + "</b><b> __sd/s: </b><b class='damage'>" + round(max * cool) / 100 + '</b>';
+            return "<b class='damage'>" + min + "</b><b> / </b><b class='damage'>" + max + ' ~ ' + max * 2 + "</b><b> __h: </b><b class='heal'>" + heal + ' ~ ' + heal * 2 + "</b><b> __sd/s: </b><b class='damage'>" + round(max * cool) / 100 + '</b>';
         }
         return '-';
     }
@@ -139,7 +139,7 @@ const Emma = {
             'Q: "합산 데미지" ( "1발당 데미지" x "타수" ) __h: "회복량"\n' + 
             'W: "스킬 데미지" _h: "회복량"\n' + 
             'E: _h: "회복량"\n' + 
-            'R: "비둘기 데미지" / "모자 데미지" __h: "회복량"\n' + 
+            'R: "비둘기 데미지" / "모자 데미지" ~ "2회 사용시 데미지" __h: "회복량"\n' + 
             'D: ' + skill + '\n' + 
             'T: "패시브 데미지" ( "평타 데미지", "추가 데미지" - "치명타 데미지", "추가 데미지" ) __s: "쉴드량"\n';
     }
@@ -187,9 +187,16 @@ const Emma = {
                 } else if (c === 'T') {
                     damage += baseAttackDamage(character, enemy, 0, 1, 100, 1) + 
                         calcSkillDamage(character, enemy, character.max_sp * (0.02 + t * 0.01), 0, 1);
+                } else if (c === 'p' || c === 'P') {
+                    if (character.trap) {
+                        damage += character.trap.Trap_Damage * (1.04 + character.TRAP_MASTERY.selectedIndex * 0.04) | 0;
+                    }
                 }
             }
-            return "<b class='damage'>" + damage + '</b><b> _ : ' + (enemy.max_hp ? (damage / enemy.max_hp * 10000 | 0) / 100 : '-') + '%</b>';
+            const heal = enemy.hp_regen ? calcHeal(enemy.hp_regen * (enemy.hp_regen_percent + 100) / 100 + 
+                (enemy.food ? enemy.food.HP_Regen / 30 : 0), 2, character) : 0;
+            const percent = (enemy.max_hp ? ((damage - character.DIV.querySelector('.combo_time').value * heal) / enemy.max_hp  * 10000 | 0) / 100 : '-');
+            return "<b class='damage'>" + damage + '</b><b> _ : ' + (percent < 0 ? 0 : percent) + '%</b>';
         }
         return '-';
     }

@@ -322,7 +322,7 @@ const Throws = [
     ,{
          Type: "Throws"
         ,Name: "Incendiary_Bomb"
-        ,Attack_Power: 70
+        ,Attack_Power: 75
         ,Attack_Speed: 50
         ,Critical_Strike_Chance: 0
         ,Critical_Strike_Damage: 0
@@ -348,7 +348,7 @@ const Throws = [
         ,Attack_Range: 0
         ,Base_Range: 5.8
         ,Atk_Speed: 0.51
-        ,Title: "Incendiary Bomb\n\nAttack Power +70\nAttack Speed +50%"
+        ,Title: "Incendiary Bomb\n\nAttack Power +75\nAttack Speed +50%"
         ,Rarity: "Epic"
     }
     ,{
@@ -392,7 +392,7 @@ const Throws = [
         ,Critical_Strike_Chance: 0
         ,Critical_Strike_Damage: 0
         ,Life_Steal: 0
-        ,Extra_Normal_Attack_Damage: 30
+        ,Extra_Normal_Attack_Damage: 27
         ,Extra_Normal_Attack_Damage_Percent: 0
         ,Skill_Amplification: 0
         ,Skill_Amplification_Percent: 0
@@ -413,7 +413,7 @@ const Throws = [
         ,Attack_Range: 0
         ,Base_Range: 5.8
         ,Atk_Speed: 0.51
-        ,Title: "David`s Sling\n\nAttack Power +75\nHP Regen +150%\nExtra Normal Attack Damage +30"
+        ,Title: "David`s Sling\n\nAttack Power +75\nHP Regen +150%\nExtra Normal Attack Damage +27"
         ,Rarity: "Epic"
     }
     ,{

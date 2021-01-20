@@ -2,7 +2,7 @@ const Nunchaku = [
     {
          Type: "Nunchaku"
         ,Name: "Steel_Chain"
-        ,Attack_Power: 11
+        ,Attack_Power: 13
         ,Attack_Speed: 0
         ,Critical_Strike_Chance: 0
         ,Critical_Strike_Damage: 0
@@ -28,13 +28,13 @@ const Nunchaku = [
         ,Attack_Range: 0
         ,Base_Range: 1.4
         ,Atk_Speed: 0.57
-        ,Title: "Steel Chain\n\nAttack Power +11"
+        ,Title: "Steel Chain\n\nAttack Power +13"
         ,Rarity: "Common"
     }
     ,{
          Type: "Nunchaku"
         ,Name: "Nunchaku"
-        ,Attack_Power: 27
+        ,Attack_Power: 29
         ,Attack_Speed: 0
         ,Critical_Strike_Chance: 0
         ,Critical_Strike_Damage: 0
@@ -60,13 +60,13 @@ const Nunchaku = [
         ,Attack_Range: 0
         ,Base_Range: 1.4
         ,Atk_Speed: 0.57
-        ,Title: "Nunchaku\n\nAttack Power +27"
+        ,Title: "Nunchaku\n\nAttack Power +29"
         ,Rarity: "Uncommon"
     }
     ,{
          Type: "Nunchaku"
         ,Name: "Sharper"
-        ,Attack_Power: 27
+        ,Attack_Power: 29
         ,Attack_Speed: 0
         ,Critical_Strike_Chance: 0
         ,Critical_Strike_Damage: 0
@@ -92,7 +92,7 @@ const Nunchaku = [
         ,Attack_Range: 0
         ,Base_Range: 1.4
         ,Atk_Speed: 0.57
-        ,Title: "Sharper\n\nAttack Power +27\nHealing Reduction (Skills) -40%"
+        ,Title: "Sharper\n\nAttack Power +29\nHealing Reduction (Skills) -40%"
         ,Rarity: "Rare"
     }
     ,{
@@ -137,7 +137,7 @@ const Nunchaku = [
         ,Life_Steal: 0
         ,Extra_Normal_Attack_Damage: 0
         ,Extra_Normal_Attack_Damage_Percent: 0
-        ,Skill_Amplification: 14
+        ,Skill_Amplification: 17
         ,Skill_Amplification_Percent: 0
         ,Cooldown_Reduction: 0
         ,SP_Regen: 0
@@ -156,7 +156,7 @@ const Nunchaku = [
         ,Attack_Range: 0
         ,Base_Range: 1.4
         ,Atk_Speed: 0.57
-        ,Title: "The Smiting Dragon\n\nAttack Power +50\nSkill Amplification +15\nHealing Reduction (Skills) -40%"
+        ,Title: "The Smiting Dragon\n\nAttack Power +50\nSkill Amplification +17\nHealing Reduction (Skills) -40%"
         ,Rarity: "Epic"
     }
     ,{

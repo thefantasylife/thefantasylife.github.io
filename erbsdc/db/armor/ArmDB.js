@@ -412,7 +412,7 @@ const Arm = [
         ,Attack_Range: 0
         ,Base_Range: 0
         ,Atk_Speed: 0
-        ,Title: "Sword Stopper\n\nDefense +36\nNormal Attack Damage Reduction +11\nHealing Reduction (Normal Attacks) -40%"
+        ,Title: "Sword Stopper\n\nDefense +36\nCritical Damage Reduction + 10%\nNormal Attack Damage Reduction +11\nHealing Reduction (Normal Attacks) -40%"
         ,Rarity: "Epic"
     }
     ,{
@@ -517,7 +517,7 @@ const Arm = [
         ,Attack_Power: 30
         ,Attack_Speed: 0
         ,Critical_Strike_Chance: 0
-        ,Critical_Strike_Damage: 20
+        ,Critical_Strike_Damage: 25
         ,Life_Steal: 0
         ,Extra_Normal_Attack_Damage: 0
         ,Extra_Normal_Attack_Damage_Percent: 0
@@ -540,7 +540,7 @@ const Arm = [
         ,Attack_Range: 0
         ,Base_Range: 0
         ,Atk_Speed: 0
-        ,Title: "Creed pf the Knight\n\nAttack Power +30\nDefense +20\nHP Regen +1.5\nMovement Speed -0.05\nCritical Damage +20%"
+        ,Title: "Creed pf the Knight\n\nAttack Power +30\nDefense +20\nHP Regen +1.5\nMovement Speed -0.05\nCritical Damage +25%"
         ,Rarity: "Epic"
     }
     ,{
@@ -573,6 +573,38 @@ const Arm = [
         ,Base_Range: 0
         ,Atk_Speed: 0
         ,Title: "Sword of Shah Jahan\n\nAttack Power +25\nMax HP +300\nNormal Attack Damage Reduction +2"
+        ,Rarity: "Epic"
+    }
+    ,{
+         Type: "Arm"
+        ,Name: "Burnished_Aegis"
+        ,Attack_Power: 10
+        ,Attack_Speed: 0
+        ,Critical_Strike_Chance: 0
+        ,Critical_Strike_Damage: 0
+        ,Life_Steal: 0
+        ,Extra_Normal_Attack_Damage: 0
+        ,Extra_Normal_Attack_Damage_Percent: 0
+        ,Skill_Amplification: 0
+        ,Skill_Amplification_Percent: 0
+        ,Cooldown_Reduction: 0
+        ,SP_Regen: 0
+        ,SP_Regen_Percent: 0
+        ,Skill_Damage_Reduction: 0
+        ,Skill_Damage_Reduction_Percent: 0
+        ,Defense: 10
+        ,Max_HP: 350
+        ,Max_SP: 250
+        ,HP_Regen: 0
+        ,HP_Regen_Percent: 0
+        ,Normal_Attack_Damage_Reduction: 0
+        ,Move_Speed: 0
+        ,Out_of_Combat_Movement_Speed: 0
+        ,Vision_Range: 0
+        ,Attack_Range: 0
+        ,Base_Range: 0
+        ,Atk_Speed: 0
+        ,Title: "Burnished Aegis\n\nAttack Power +10\nDefense +10\nMax HP +350\nMax SP +250"
         ,Rarity: "Epic"
     }
     ,{

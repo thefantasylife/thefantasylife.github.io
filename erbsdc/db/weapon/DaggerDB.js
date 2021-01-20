@@ -162,7 +162,7 @@ const Dagger = [
     ,{
          Type: "Dagger"
         ,Name: "Carnwennan"
-        ,Attack_Power: 37
+        ,Attack_Power: 41
         ,Attack_Speed: 0
         ,Critical_Strike_Chance: 0
         ,Critical_Strike_Damage: 0
@@ -171,7 +171,7 @@ const Dagger = [
         ,Extra_Normal_Attack_Damage_Percent: 0
         ,Skill_Amplification: 0
         ,Skill_Amplification_Percent: 0
-        ,Cooldown_Reduction: 10
+        ,Cooldown_Reduction: 12
         ,SP_Regen: 0
         ,SP_Regen_Percent: 0
         ,Skill_Damage_Reduction: 0
@@ -188,7 +188,7 @@ const Dagger = [
         ,Attack_Range: 0
         ,Base_Range: 1
         ,Atk_Speed: 0.58
-        ,Title: "Carnwennan\n\nAttack Power +37\nHP Regen +1.5\nMovement Speed +0.1\nCooldown Reduction +10%\nExtra Normal Attack Damage +29"
+        ,Title: "Carnwennan\n\nAttack Power +41\nHP Regen +1.5\nMovement Speed +0.1\nCooldown Reduction +12%\nExtra Normal Attack Damage +29"
         ,Rarity: "Epic"
     }
     ,{

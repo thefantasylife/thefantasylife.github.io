@@ -184,6 +184,10 @@ const Magnus = {
                     }
                 } else if (c === 't' || c === 'T') {
                     damage += calcSkillDamage(character, enemy, 25 + t * 35, 0.3, 1);
+                } else if (c === 'p' || c === 'P') {
+                    if (character.trap) {
+                        damage += character.trap.Trap_Damage * (1.04 + character.TRAP_MASTERY.selectedIndex * 0.04) | 0;
+                    }
                 }
             }
 
@@ -191,7 +195,10 @@ const Magnus = {
                 enemy.defense = enemy_defense;
             }
 
-            return "<b class='damage'>" + damage + '</b><b> _ : ' + (enemy.max_hp ? (damage / enemy.max_hp * 10000 | 0) / 100 : '-') + '%</b>';
+            const heal = enemy.hp_regen ? calcHeal(enemy.hp_regen * (enemy.hp_regen_percent + 100) / 100 + 
+                (enemy.food ? enemy.food.HP_Regen / 30 : 0), 2, character) : 0;
+            const percent = (enemy.max_hp ? ((damage - character.DIV.querySelector('.combo_time').value * heal) / enemy.max_hp  * 10000 | 0) / 100 : '-');
+            return "<b class='damage'>" + damage + '</b><b> _ : ' + (percent < 0 ? 0 : percent) + '%</b>';
         }
         return '-';
     }

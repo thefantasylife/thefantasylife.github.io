@@ -226,7 +226,7 @@ const Whip = [
     ,{
          Type: "Whip"
         ,Name: "Plasma_Whip"
-        ,Attack_Power: 54
+        ,Attack_Power: 60
         ,Attack_Speed: 30
         ,Critical_Strike_Chance: 0
         ,Critical_Strike_Damage: 0
@@ -252,7 +252,7 @@ const Whip = [
         ,Attack_Range: 0
         ,Base_Range: 2.35
         ,Atk_Speed: 0.55
-        ,Title: "Plasma Whip\n\nAttack Power +54\nAttack Speed +30%\nVision Range +2.3"
+        ,Title: "Plasma Whip\n\nAttack Power +60\nAttack Speed +30%\nVision Range +2.3"
         ,Rarity: "Epic"
     }
     ,{

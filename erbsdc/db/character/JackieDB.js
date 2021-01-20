@@ -373,10 +373,12 @@ const Jackie = {
                 } else if (c === 'd' || c === 'D') {
                     if (wm > 5) {
                         if (type === 'Dagger') {
+                            const lost = enemy.max_hp ? damage - calcHeal(enemy.hp_regen * (enemy.hp_regen_percent + 100) / 100 + 
+                                (enemy.food ? enemy.food.HP_Regen / 30 : 0), 2, character) * character.DIV.querySelector('.combo_time').value * (i / combo.length) : 0;
                             if ((qq || rr > 1) && ww) {
-                                damage += baseAttackDamage(character, enemy, 0, 1 + 0.1 + w * 0.025, 100, 1) + (enemy.max_hp ? (enemy.max_hp - damage) / 10 : 0) | 0;
+                                damage += baseAttackDamage(character, enemy, 0, 1 + 0.1 + w * 0.025, 100, 1) + (lost ? (enemy.max_hp - lost) / 10 : 0) | 0;
                             } else {
-                                damage += baseAttackDamage(character, enemy, 0, 1, 100, 1) + (enemy.max_hp ? (enemy.max_hp - damage) / 10 : 0) | 0;
+                                damage += baseAttackDamage(character, enemy, 0, 1, 100, 1) + (lost ? (enemy.max_hp - lost) / 10 : 0) | 0;
                             }
                         } else if (type === 'TwoHandedSword') {
                             if ((qq || rr > 1) && ww) {
@@ -403,12 +405,19 @@ const Jackie = {
                             character.attack_power = character.calc_attack_power * ap | 0;
                         }
                     }
+                } else if (c === 'p' || c === 'P') {
+                    if (character.trap) {
+                        damage += character.trap.Trap_Damage * (1.04 + character.TRAP_MASTERY.selectedIndex * 0.04) | 0;
+                    }
                 }
             }
 
             character.attack_power = attack_power;
 
-            return "<b class='damage'>" + damage + '</b><b> _ : ' + (enemy.max_hp ? (damage / enemy.max_hp * 10000 | 0) / 100 : '-') + '%</b>';
+            const heal = enemy.hp_regen ? calcHeal(enemy.hp_regen * (enemy.hp_regen_percent + 100) / 100 + 
+                (enemy.food ? enemy.food.HP_Regen / 30 : 0), 2, character) : 0;
+            const percent = (enemy.max_hp ? ((damage - character.DIV.querySelector('.combo_time').value * heal) / enemy.max_hp  * 10000 | 0) / 100 : '-');
+            return "<b class='damage'>" + damage + '</b><b> _ : ' + (percent < 0 ? 0 : percent) + '%</b>';
         }
         return '-';
     }

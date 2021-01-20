@@ -290,7 +290,7 @@ const Spear = [
     ,{
          Type: "Spear"
         ,Name: "Lance_of_Poseidon"
-        ,Attack_Power: 120
+        ,Attack_Power: 90
         ,Attack_Speed: 0
         ,Critical_Strike_Chance: 0
         ,Critical_Strike_Damage: 0
@@ -298,7 +298,7 @@ const Spear = [
         ,Extra_Normal_Attack_Damage: 0
         ,Extra_Normal_Attack_Damage_Percent: 0
         ,Skill_Amplification: 0
-        ,Skill_Amplification_Percent: 0
+        ,Skill_Amplification_Percent: 17
         ,Cooldown_Reduction: 0
         ,SP_Regen: 0
         ,SP_Regen_Percent: 0
@@ -316,7 +316,7 @@ const Spear = [
         ,Attack_Range: 0
         ,Base_Range: 2.15
         ,Atk_Speed: 0.445
-        ,Title: "Lance of Poseidon\n\nAttack Power +120"
+        ,Title: "Lance of Poseidon\n\nAttack Power +90\nSkill Amplification +17%"
         ,Rarity: "Epic"
     }
     ,{
@@ -354,7 +354,7 @@ const Spear = [
     ,{
          Type: "Spear"
         ,Name: "Dragon_Guandao"
-        ,Attack_Power: 130
+        ,Attack_Power: 110
         ,Attack_Speed: 0
         ,Critical_Strike_Chance: 0
         ,Critical_Strike_Damage: 0
@@ -369,7 +369,7 @@ const Spear = [
         ,Skill_Damage_Reduction: 0
         ,Skill_Damage_Reduction_Percent: 0
         ,Defense: 0
-        ,Max_HP: 0
+        ,Max_HP: 300
         ,Max_SP: 0
         ,HP_Regen: 0
         ,HP_Regen_Percent: 0
@@ -380,7 +380,7 @@ const Spear = [
         ,Attack_Range: 0
         ,Base_Range: 2.15
         ,Atk_Speed: 0.445
-        ,Title: "Dragon Guandao\n\nAttack Power +130\nMovement Speed -0.05"
+        ,Title: "Dragon Guandao\n\nAttack Power +110\nMax HP +300\nMovement Speed -0.05"
         ,Rarity: "Epic"
     }
     ,{

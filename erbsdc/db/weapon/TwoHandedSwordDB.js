@@ -247,13 +247,13 @@ const TwoHandedSword = [
         ,HP_Regen: 0
         ,HP_Regen_Percent: 0
         ,Normal_Attack_Damage_Reduction: 0
-        ,Move_Speed: -0.05
+        ,Move_Speed: 0
         ,Out_of_Combat_Movement_Speed: 0
         ,Vision_Range: 0
         ,Attack_Range: 0
         ,Base_Range: 1.5
         ,Atk_Speed: 0.56
-        ,Title: "Thuan Thien\n\nAttack Power +77\nDefense +25\nMovement Speed -0.05"
+        ,Title: "Thuan Thien\n\nAttack Power +77\nDefense +25"
         ,Rarity: "Rare"
     }
     ,{
@@ -359,7 +359,7 @@ const TwoHandedSword = [
         ,Attack_Speed: 0
         ,Critical_Strike_Chance: 0
         ,Critical_Strike_Damage: 0
-        ,Life_Steal: 18
+        ,Life_Steal: 21
         ,Extra_Normal_Attack_Damage: 0
         ,Extra_Normal_Attack_Damage_Percent: 0
         ,Skill_Amplification: 0
@@ -381,13 +381,13 @@ const TwoHandedSword = [
         ,Attack_Range: 0
         ,Base_Range: 1.5
         ,Atk_Speed: 0.56
-        ,Title: "Monohoshizao\n\nAttack Power +74\nLife Steal +18%"
+        ,Title: "Monohoshizao\n\nAttack Power +74\nLife Steal +21%"
         ,Rarity: "Epic"
     }
     ,{
          Type: "TwoHandedSword"
         ,Name: "Hovud"
-        ,Attack_Power: 45
+        ,Attack_Power: 50
         ,Attack_Speed: 0
         ,Critical_Strike_Chance: 20
         ,Critical_Strike_Damage: 0
@@ -413,7 +413,7 @@ const TwoHandedSword = [
         ,Attack_Range: 0
         ,Base_Range: 1.5
         ,Atk_Speed: 0.56
-        ,Title: "Hovud\n\nAttack Power +45\nMax HP +300\nCritical Strike Chance +20%"
+        ,Title: "Hovud\n\nAttack Power +50\nMax HP +300\nCritical Strike Chance +20%"
         ,Rarity: "Epic"
     }
     ,{
@@ -455,7 +455,7 @@ const TwoHandedSword = [
         ,Attack_Speed: 0
         ,Critical_Strike_Chance: 0
         ,Critical_Strike_Damage: 0
-        ,Life_Steal: 20
+        ,Life_Steal: 25
         ,Extra_Normal_Attack_Damage: 0
         ,Extra_Normal_Attack_Damage_Percent: 0
         ,Skill_Amplification: 0
@@ -477,7 +477,7 @@ const TwoHandedSword = [
         ,Attack_Range: 0
         ,Base_Range: 1.5
         ,Atk_Speed: 0.56
-        ,Title: "Dainsleif\n\nAttack Power +80\nLife Steal +20%"
+        ,Title: "Dainsleif\n\nAttack Power +80\nLife Steal +25%"
         ,Rarity: "Legendary"
     }
 ];

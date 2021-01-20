@@ -2,7 +2,7 @@ const DualSwords = [
     {
          Type: "DualSwords"
         ,Name: "Twin_Sword"
-        ,Attack_Power: 14
+        ,Attack_Power: 18
         ,Attack_Speed: 10
         ,Critical_Strike_Chance: 0
         ,Critical_Strike_Damage: 0
@@ -28,13 +28,13 @@ const DualSwords = [
         ,Attack_Range: 0
         ,Base_Range: 1.05
         ,Atk_Speed: 0.47
-        ,Title: "Twin Sword\n\nAttack Power +14\nAttack Speed +10%"
+        ,Title: "Twin Sword\n\nAttack Power +18\nAttack Speed +10%"
         ,Rarity: "Uncommon"
     }
     ,{
          Type: "DualSwords"
         ,Name: "Florentine"
-        ,Attack_Power: 23
+        ,Attack_Power: 28
         ,Attack_Speed: 10
         ,Critical_Strike_Chance: 0
         ,Critical_Strike_Damage: 0
@@ -60,13 +60,13 @@ const DualSwords = [
         ,Attack_Range: 0
         ,Base_Range: 1.05
         ,Atk_Speed: 0.47
-        ,Title: "Florentine\n\nAttack Power +23\nAttack Speed +10%\nLife Steal +10%"
+        ,Title: "Florentine\n\nAttack Power +28\nAttack Speed +10%\nLife Steal +10%"
         ,Rarity: "Rare"
     }
     ,{
          Type: "DualSwords"
         ,Name: "Divine_Dual_Swords"
-        ,Attack_Power: 44
+        ,Attack_Power: 49
         ,Attack_Speed: 10
         ,Critical_Strike_Chance: 0
         ,Critical_Strike_Damage: 0
@@ -92,13 +92,13 @@ const DualSwords = [
         ,Attack_Range: 0
         ,Base_Range: 1.05
         ,Atk_Speed: 0.47
-        ,Title: "Divine Dual Swords\n\nAttack Power +44\nAttack Speed +10%\nLife Steal +18%\nHealing Reduction (Skills) -40%"
+        ,Title: "Divine Dual Swords\n\nAttack Power +49\nAttack Speed +10%\nLife Steal +18%\nHealing Reduction (Skills) -40%"
         ,Rarity: "Epic"
     }
     ,{
          Type: "DualSwords"
         ,Name: "Starsteel_Twin_Swords"
-        ,Attack_Power: 55
+        ,Attack_Power: 60
         ,Attack_Speed: 50
         ,Critical_Strike_Chance: 0
         ,Critical_Strike_Damage: 0
@@ -124,13 +124,13 @@ const DualSwords = [
         ,Attack_Range: 0
         ,Base_Range: 1.05
         ,Atk_Speed: 0.47
-        ,Title: "Starsteel Twin Swords\n\nAttack Power +55\nAttack Speed +50%"
+        ,Title: "Starsteel Twin Swords\n\nAttack Power +60\nAttack Speed +50%"
         ,Rarity: "Epic"
     }
     ,{
          Type: "DualSwords"
         ,Name: "Dioscuri"
-        ,Attack_Power: 40
+        ,Attack_Power: 43
         ,Attack_Speed: 50
         ,Critical_Strike_Chance: 0
         ,Critical_Strike_Damage: 0
@@ -156,13 +156,13 @@ const DualSwords = [
         ,Attack_Range: 0
         ,Base_Range: 1.05
         ,Atk_Speed: 0.47
-        ,Title: "Dioscuri\n\nAttack Power +40\nAttack Speed +50%"
+        ,Title: "Dioscuri\n\nAttack Power +43\nAttack Speed +50%"
         ,Rarity: "Epic"
     }
     ,{
          Type: "DualSwords"
         ,Name: "Lloigor_&_Zahr"
-        ,Attack_Power: 33
+        ,Attack_Power: 38
         ,Attack_Speed: 20
         ,Critical_Strike_Chance: 0
         ,Critical_Strike_Damage: 0
@@ -188,7 +188,7 @@ const DualSwords = [
         ,Attack_Range: 0
         ,Base_Range: 1.05
         ,Atk_Speed: 0.47
-        ,Title: "Lloigor & Zahr\n\nAttack Power +33\nAttack Speed +20%\nSkill Amplification +36"
+        ,Title: "Lloigor & Zahr\n\nAttack Power +38\nAttack Speed +20%\nSkill Amplification +36"
         ,Rarity: "Epic"
     }
 ];

@@ -98,7 +98,7 @@ const Hart = {
             const damage2 = calcSkillDamage(character, enemy, 20 + e * 10, 0.4, 1);
             character.skill_amplification_percent += sap;
             const damage3 = calcSkillDamage(character, enemy, 20 + e * 10, 0.4, 1);
-            const cool = 10000 / ((17 - e * 2) * (100 - character.cooldown_reduction) + 50);
+            const cool = 10000 / ((17 - e * 2) * (100 - character.cooldown_reduction) + 46);
 
             character.skill_amplification_percent = skill_amplification_percent;
 
@@ -248,6 +248,10 @@ const Hart = {
                             damage += calcSkillDamage(character, enemy, 0, character.WEAPON_MASTERY.selectedIndex < 13 ? 1.5 : 2.5, 1)
                         }
                     }
+                } else if (c === 'p' || c === 'P') {
+                    if (character.trap) {
+                        damage += character.trap.Trap_Damage * (1.04 + character.TRAP_MASTERY.selectedIndex * 0.04) | 0;
+                    }
                 }
             }
 
@@ -257,7 +261,10 @@ const Hart = {
                 enemy.defense = enemy_defense;
             }
 
-            return "<b class='damage'>" + damage + '</b><b> _ : ' + (enemy.max_hp ? (damage / enemy.max_hp * 10000 | 0) / 100 : '-') + '%</b>';
+            const heal = enemy.hp_regen ? calcHeal(enemy.hp_regen * (enemy.hp_regen_percent + 100) / 100 + 
+                (enemy.food ? enemy.food.HP_Regen / 30 : 0), 2, character) : 0;
+            const percent = (enemy.max_hp ? ((damage - character.DIV.querySelector('.combo_time').value * heal) / enemy.max_hp  * 10000 | 0) / 100 : '-');
+            return "<b class='damage'>" + damage + '</b><b> _ : ' + (percent < 0 ? 0 : percent) + '%</b>';
         }
         return '-';
     }

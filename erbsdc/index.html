@@ -117,7 +117,7 @@
             font-size: 20px;
         }
         .combo_option {
-            width: 100px;
+            width: 120px;
         }
     </style>
     <script type="text/javascript" src='./db/armor/AccessoryDB.js'></script>
@@ -166,6 +166,7 @@
     <script type="text/javascript" src='./db/character/SilviaDB.js'></script>
     <script type="text/javascript" src='./db/character/EmmaDB.js'></script>
     <script type="text/javascript" src='./db/character/LenoxDB.js'></script>
+    <script type="text/javascript" src='./db/character/RozziDB.js'></script>
     <script type="text/javascript" src='./db/consumable/FoodDB.js'></script>
     <script type="text/javascript" src='./db/consumable/TrapDB.js'></script>
     <script type="text/javascript" src='./class/Character.js'></script>
@@ -725,6 +726,7 @@
                         <span class='label' title='Out of Combat Movement Speed'> 비속 : <span class='stat out_of_combat_movement_speed'></span></span><br>
                         <span class='label' title='Vision Range'> 시야 : <span class='stat vision_range'></span></span><br>
                         <span class='label' title='Attack Range'> 사거리 : <span class='stat attack_range'></span></span><br>
+                        <span class='label' title='Attack Range'> 치감 : <span class='stat critical_strike_damage_reduction'>%</span></span><br>
                     </td>
                     <td class='trap equip_image'>
                     </td>
@@ -760,6 +762,7 @@
                             <option>Silvia</option>
                             <option>Emma</option>
                             <option>Lenox</option>
+                            <option>Rozzi</option>
                             <option></option>
                         </select>
                     </td>
@@ -842,8 +845,8 @@
             <b>R : </b><span class='r_damage'></span><span class='r_option'></span><br>
             <b>D : </b><span class='d_damage'></span><span class='d_option'></span><br>
             <b>T : </b><span class='t_damage'></span><span class='t_option'></span><br>
-            <b>Trap : </b><span class='trap_damage'></span><br>
-            <b>Combo : </b><input class='combo_option' readOnly><br>
+            <b>Trap: P: </b><span class='trap_damage'></span><br>
+            <b>Combo : </b><input class='combo_option'>&nbsp;<input class='stack combo_time' type='number'><b>s</b><br>
             <b>ㄴDamage : </b><span class='combo_damage'></span>
         </div>
     </div>
@@ -1142,6 +1145,7 @@
                         <span class='label' title='Out of Combat Movement Speed'> 비속 : <span class='stat out_of_combat_movement_speed'></span></span><br>
                         <span class='label' title='Vision Range'> 시야 : <span class='stat vision_range'></span></span><br>
                         <span class='label' title='Attack Range'> 사거리 : <span class='stat attack_range'></span></span><br>
+                        <span class='label' title='Attack Range'> 치감 : <span class='stat critical_strike_damage_reduction'>%</span></span><br>
                     </td>
                     <td class='trap equip_image'>
                     </td>
@@ -1177,6 +1181,7 @@
                             <option>Silvia</option>
                             <option>Emma</option>
                             <option>Lenox</option>
+                            <option>Rozzi</option>
                             <option></option>
                         </select>
                     </td>
@@ -1259,8 +1264,8 @@
             <b>R : </b><span class='r_damage'></span><span class='r_option'></span><br>
             <b>D : </b><span class='d_damage'></span><span class='d_option'></span><br>
             <b>T : </b><span class='t_damage'></span><span class='t_option'></span><br>
-            <b>Trap : </b><span class='trap_damage'></span><br>
-            <b>Combo : </b><input class='combo_option' readOnly><br>
+            <b>Trap: P: </b><span class='trap_damage'></span><br>
+            <b>Combo : </b><input class='combo_option'>&nbsp;<input class='stack combo_time' type='number'><b>s</b><br>
             <b>ㄴDamage : </b><span class='combo_damage'></span>
         </div>
     </div>

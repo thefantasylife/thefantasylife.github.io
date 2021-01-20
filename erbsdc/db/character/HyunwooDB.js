@@ -181,7 +181,9 @@ const Hyunwoo = {
                         ee = true;
                         enemy.defense = enemy.calc_defense * (1 - (0.07 + e * 0.02)) | 0;
                     }
-                    damage += calcSkillDamage(character, enemy, (enemy.max_hp ? (enemy.max_hp - damage) * (0.05 + e * 0.03) : 0) + character.defense, 0, 1);
+                    const lost = enemy.max_hp ? damage - calcHeal(enemy.hp_regen * (enemy.hp_regen_percent + 100) / 100 + 
+                        (enemy.food ? enemy.food.HP_Regen / 30 : 0), 2, character) * character.DIV.querySelector('.combo_time').value * (i / combo.length) : 0;
+                    damage += calcSkillDamage(character, enemy, (lost ? (enemy.max_hp - lost) * (0.05 + e * 0.03) : 0) + character.defense, 0, 1);
                     if (ww) {
                         ww = false;
                         character.defense = character.pure_defense | 0;
@@ -191,7 +193,9 @@ const Hyunwoo = {
                         ee = true;
                         enemy.defense = enemy.calc_defense * (1 - (0.07 + e * 0.02)) | 0;
                     }
-                    damage += calcSkillDamage(character, enemy, (enemy.max_hp ? (enemy.max_hp - damage) * (0.05 + e * 0.03) : 0) + character.defense, 0, 1) + 
+                    const lost = enemy.max_hp ? damage - calcHeal(enemy.hp_regen * (enemy.hp_regen_percent + 100) / 100 + 
+                        (enemy.food ? enemy.food.HP_Regen / 30 : 0), 2, character) * character.DIV.querySelector('.combo_time').value * (i / combo.length) : 0;
+                    damage += calcSkillDamage(character, enemy, (lost ? (enemy.max_hp - lost) * (0.05 + e * 0.03) : 0) + character.defense, 0, 1) + 
                         calcSkillDamage(character, enemy, 60 + e * 35, 0, 1);
                     if (ww) {
                         ww = false;
@@ -220,6 +224,10 @@ const Hyunwoo = {
                             damage += 0;
                         }
                     }
+                } else if (c === 'p' || c === 'P') {
+                    if (character.trap) {
+                        damage += character.trap.Trap_Damage * (1.04 + character.TRAP_MASTERY.selectedIndex * 0.04) | 0;
+                    }
                 }
             }
 
@@ -228,7 +236,10 @@ const Hyunwoo = {
                 enemy.defense = enemy_defense;
             }
 
-            return "<b class='damage'>" + damage + '</b><b> _ : ' + (enemy.max_hp ? (damage / enemy.max_hp * 10000 | 0) / 100 : '-') + '%</b>';
+            const heal = enemy.hp_regen ? calcHeal(enemy.hp_regen * (enemy.hp_regen_percent + 100) / 100 + 
+                (enemy.food ? enemy.food.HP_Regen / 30 : 0), 2, character) : 0;
+            const percent = (enemy.max_hp ? ((damage - character.DIV.querySelector('.combo_time').value * heal) / enemy.max_hp  * 10000 | 0) / 100 : '-');
+            return "<b class='damage'>" + damage + '</b><b> _ : ' + (percent < 0 ? 0 : percent) + '%</b>';
         }
         return '-';
     }

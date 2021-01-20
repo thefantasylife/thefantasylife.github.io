@@ -342,13 +342,13 @@ const Leg = [
         ,HP_Regen: 0
         ,HP_Regen_Percent: 0
         ,Normal_Attack_Damage_Reduction: 0
-        ,Move_Speed: 0.25
-        ,Out_of_Combat_Movement_Speed: 0.5
+        ,Move_Speed: 0.2
+        ,Out_of_Combat_Movement_Speed: 0.55
         ,Vision_Range: 0
         ,Attack_Range: 0
         ,Base_Range: 0
         ,Atk_Speed: 0
-        ,Title: "Maverick Runner\n\nAttack Speed +15%\nMovement Speed +0.25\nMovement Speed while not in combat +0.5"
+        ,Title: "Maverick Runner\n\nAttack Speed +15%\nMovement Speed +0.2\nMovement Speed while not in combat +0.55"
         ,Rarity: "Rare"
     }
     ,{

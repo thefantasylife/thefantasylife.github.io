@@ -200,7 +200,7 @@ const SniperRifle = [
     ,{
          Type: "SniperRifle"
         ,Name: "Intervention"
-        ,Attack_Power: 115
+        ,Attack_Power: 120
         ,Attack_Speed: 0
         ,Critical_Strike_Chance: 0
         ,Critical_Strike_Damage: 0
@@ -226,14 +226,14 @@ const SniperRifle = [
         ,Attack_Range: 1
         ,Base_Range: 6.7
         ,Atk_Speed: 0.43
-        ,Title: "Intervention\n\nAttack Power +115\nVision Range +4.5\nAttack Range +1"
+        ,Title: "Intervention\n\nAttack Power +120\nVision Range +4.5\nAttack Range +1"
         ,Rarity: "Epic"
         ,Ammo: 2
     }
     ,{
          Type: "SniperRifle"
         ,Name: "NTW-20"
-        ,Attack_Power: 95
+        ,Attack_Power: 100
         ,Attack_Speed: 0
         ,Critical_Strike_Chance: 0
         ,Critical_Strike_Damage: 0
@@ -259,7 +259,7 @@ const SniperRifle = [
         ,Attack_Range: 0
         ,Base_Range: 6.7
         ,Atk_Speed: 0.43
-        ,Title: "NTW-20\n\nAttack Power +95\nMovement Speed -0.07\nVision Range +2.5\nSkill Amplification +24%"
+        ,Title: "NTW-20\n\nAttack Power +100\nMovement Speed -0.07\nVision Range +2.5\nSkill Amplification +24%"
         ,Rarity: "Epic"
         ,Ammo: 1
     }
@@ -299,7 +299,7 @@ const SniperRifle = [
     ,{
          Type: "SniperRifle"
         ,Name: "The_Deadly_Ray"
-        ,Attack_Power: 95
+        ,Attack_Power: 100
         ,Attack_Speed: 0
         ,Critical_Strike_Chance: 0
         ,Critical_Strike_Damage: 0
@@ -325,7 +325,7 @@ const SniperRifle = [
         ,Attack_Range: 0
         ,Base_Range: 6.7
         ,Atk_Speed: 0.43
-        ,Title: "The Deadly Ray\n\nAttack Power +95\nMovement Speed -0.07\nVision Range +2.5\nSkill Amplification +33%"
+        ,Title: "The Deadly Ray\n\nAttack Power +100\nMovement Speed -0.07\nVision Range +2.5\nSkill Amplification +33%"
         ,Rarity: "Legendary"
         ,Ammo: 1
     }

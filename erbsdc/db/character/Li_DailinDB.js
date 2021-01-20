@@ -255,7 +255,12 @@ const Li_Dailin = {
                     }
                     damage += calcSkillDamage(character, enemy, 80 + e * 55, 0.5, 1)
                 } else if (c === 'r' || c === 'R') {
-                    const coe = enemy.max_hp ? 2 * (damage * 100.0 / enemy.max_hp > 77 ? 77 : damage * 100.0 / enemy.max_hp) / 77 + 1 : 3;
+                    let lost = enemy.max_hp ? damage - calcHeal(enemy.hp_regen * (enemy.hp_regen_percent + 100) / 100 + 
+                        (enemy.food ? enemy.food.HP_Regen / 30 : 0), 2, character) * character.DIV.querySelector('.combo_time').value * (i / combo.length) : 0;
+                    if (lost < 0) {
+                        lost = 0;
+                    }
+                    const coe = lost ? 2 * (lost * 100.0 / enemy.max_hp > 77 ? 77 : lost * 100.0 / enemy.max_hp) / 77 + 1 : 3;
                     if (bac >= 40) {
                         if (liquid > 1) {
                             damage += calcSkillDamage(character, enemy, (40 + r * 30) * coe * (1 + bac * 0.002), 0.2 * coe * (1 + bac * 0.002), 1) * 4;
@@ -322,9 +327,16 @@ const Li_Dailin = {
                         damage += baseAttackDamage(character, enemy, 0, 1, 100, 1) + 
                             baseAttackDamage(character, enemy, 0, (0.5 + t * 0.25), 100, 1);
                     }
+                } else if (c === 'p' || c === 'P') {
+                    if (character.trap) {
+                        damage += character.trap.Trap_Damage * (1.04 + character.TRAP_MASTERY.selectedIndex * 0.04) | 0;
+                    }
                 }
             }
-            return "<b class='damage'>" + damage + '</b><b> _ : ' + (enemy.max_hp ? (damage / enemy.max_hp * 10000 | 0) / 100 : '-') + '%</b>';
+            const heal = enemy.hp_regen ? calcHeal(enemy.hp_regen * (enemy.hp_regen_percent + 100) / 100 + 
+                (enemy.food ? enemy.food.HP_Regen / 30 : 0), 2, character) : 0;
+            const percent = (enemy.max_hp ? ((damage - character.DIV.querySelector('.combo_time').value * heal) / enemy.max_hp  * 10000 | 0) / 100 : '-');
+            return "<b class='damage'>" + damage + '</b><b> _ : ' + (percent < 0 ? 0 : percent) + '%</b>';
         }
         return '-';
     }
