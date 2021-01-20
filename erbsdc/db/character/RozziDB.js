@@ -147,13 +147,11 @@ const Rozzi = {
     }
     ,COMBO: (character, enemy) => {
         if (character.weapon) {
-            const type = character.weapon.Type;
             const q = character.Q_LEVEL.selectedIndex;
             const w = character.W_LEVEL.selectedIndex;
             const e = character.E_LEVEL.selectedIndex;
             const r = character.R_LEVEL.selectedIndex;
             const t = character.T_LEVEL.selectedIndex;
-            const wm = character.WEAPON_MASTERY.selectedIndex;
             let damage = 0, c;
             const coe = 0.6 + t * 0.1;
             let ee = false;
