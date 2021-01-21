@@ -1,4 +1,4 @@
-const Guitar = [
+const Guitar =  [
     {
          Type: "Guitar"
         ,Name: "Starter_Guitar"
