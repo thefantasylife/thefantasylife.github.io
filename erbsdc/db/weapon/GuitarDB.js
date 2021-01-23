@@ -451,7 +451,7 @@ const Guitar = [
          Type: "Guitar"
         ,Name: "The_Wall"
         ,Attack_Power: 75
-        ,Attack_Speed: 18
+        ,Attack_Speed: 20
         ,Critical_Strike_Chance: 0
         ,Critical_Strike_Damage: 0
         ,Life_Steal: 0
@@ -476,7 +476,7 @@ const Guitar = [
         ,Attack_Range: 0
         ,Base_Range: 3.85
         ,Atk_Speed: 0.43
-        ,Title: "The Wall\n\nAttack Power +75\nAttack Speed +18%\nExtra Normal Attack Damage +2"
+        ,Title: "The Wall\n\nAttack Power +75\nAttack Speed +20%\nExtra Normal Attack Damage +2"
         ,Rarity: "Epic"
     }
     ,{
