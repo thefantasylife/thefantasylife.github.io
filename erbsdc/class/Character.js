@@ -628,7 +628,7 @@ class Character {
                 this.accessory && (this.accessory.Name === 'Gilded_Quill_Fan' || this.accessory.Name === 'White_Crane_Fan');
 
             this.critical_strike_damage_reduction = 
-                (this.head ? this.head.Rarity === 'Common' ? 2 : 
+                round6(this.head ? this.head.Rarity === 'Common' ? 2 : 
                     this.head.Rarity === 'Uncommon' ? 4 : 
                     this.head.Rarity === 'Rare' ? 7 : 
                     this.head.Rarity === 'Epic' ? 10 : 
