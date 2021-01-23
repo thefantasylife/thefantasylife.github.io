@@ -1,17 +1,17 @@
 const Rozzi = {
      Attack_Power: 28
-    ,Attack_Power_Growth: 2.6
-    ,Health: 480
-    ,Health_Growth: 63
+    ,Attack_Power_Growth: 2
+    ,Health: 479
+    ,Health_Growth: 62
     ,Health_Regen: 0.5
-    ,Health_Regen_Growth: 0.05
+    ,Health_Regen_Growth: 0.02
     ,Stamina: 440
     ,Stamina_Growth: 22
-    ,Stamina_Regen: 2.3
-    ,Stamina_Regen_Growth: 0.07
-    ,Defense: 14
+    ,Stamina_Regen: 2.1
+    ,Stamina_Regen_Growth: 0.02
+    ,Defense: 20
     ,Defense_Growth: 1.4
-    ,Atk_Speed: 0.12
+    ,Atk_Speed: 0.1
     ,Crit_Rate: 0
     ,Move_Speed: 3.0
     ,Sight_Range: 8
@@ -19,7 +19,7 @@ const Rozzi = {
     ,weapons: [Pistol]
     ,correction: {
         Pistol: [
-            [0, -15, -11],
+            [0, -9, -18],
             [0, 0, 0]
         ],
     }

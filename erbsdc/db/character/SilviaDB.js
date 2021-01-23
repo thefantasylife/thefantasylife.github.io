@@ -21,7 +21,7 @@ const Silvia = {
         Pistol: [
             [3, -9, -18],
             [0, 0, 0],
-            [10, 0, 0]
+            [10, -5, -5]
         ]
     }
     ,Base_Attack: (character, enemy) => {
