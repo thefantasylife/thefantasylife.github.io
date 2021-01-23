@@ -212,4 +212,29 @@ const Nadine = {
         }
         return '-';
     }
+    ,COMBO_Option: 'raWaWwaaQ'
+    ,COMBO_Help: (character) => {
+        if (!character.character) {
+            return 'select character plz';
+        }
+        if (!character.weapon) {
+            return 'select weapon plz';
+        }
+        const weapon = character.weapon.Type;
+        const d = 
+            weapon === 'Bow' ? 'd: 무스 외곽 데미지\n' + 'D: 무스 중앙 데미지\n' : 
+            weapon === 'Crossbow' ? 'd: 무스 데미지\n' + 'D: 무스 벽꿍 데미지\n' : 
+            '';
+        return 'a: 기본공격 데미지\n' + 
+            'A: 치명타 데미지\n' +
+            'q: Q스킬 즉발 데미지\n' + 
+            'Q: Q스킬 최대 데미지\n' + 
+            'w: W스킬 설치 데미지\n' +  
+            'W: W스킬 덫 데미지\n' +  
+            'e & E: 데미지 없음\n' + 
+            'r & R: R스킬 On / Off\n' + 
+            't && T: 데미지 없음\n' + 
+            d + 
+            'p & P: 트랩 데미지';
+    }
 };

@@ -100,9 +100,9 @@ const Shoichi = {
             const r = character.R_LEVEL.selectedIndex;
             const damage1 = calcSkillDamage(character, enemy, 50 + r * 100, 0.3, 1);
             const damage2 = calcSkillDamage(character, enemy, 25 + r * 35, 0.3, 1);
-            const t = calcSkillDamage(character, enemy, 25 + character.T_LEVEL.selectedIndex * 35, 0.3, 1);
-            const w = calcSkillDamage(character, enemy, 10 + character.W_LEVEL.selectedIndex * 30, 0.3, 1);
-            return "<b class='damage'>" + (damage1 + damage2 + t * 4 + w) + '</b> ( ' + damage1 + ', ' + damage2 + ', ' + t + ' x 4, ' + w + ' )';
+            const tt = calcSkillDamage(character, enemy, 25 + character.T_LEVEL.selectedIndex * 35, 0.3, 1);
+            const ww = calcSkillDamage(character, enemy, 10 + character.W_LEVEL.selectedIndex * 30, 0.3, 1);
+            return "<b class='damage'>" + (damage1 + damage2 + tt * 4 + ww * 2) + '</b> ( ' + damage1 + ', ' + damage2 + ', ' + tt + ' x 4, ' + ww + ' x 2 )';
         }
         return '-';
     }
@@ -202,5 +202,27 @@ const Shoichi = {
             return "<b class='damage'>" + damage + '</b><b> _ : ' + (percent < 0 ? 0 : percent) + '%</b>';
         }
         return '-';
+    }
+    ,COMBO_Option: 'dqewtarttwttwaqtwa'
+    ,COMBO_Help: (character) => {
+        if (!character.character) {
+            return 'select character plz';
+        }
+        if (!character.weapon) {
+            return 'select weapon plz';
+        }
+        const weapon = character.weapon.Type;
+        const d = 
+            weapon === 'Dagger' ? 'd & D: 무스 데미지(현재 체력 비례)\n' : 
+            '';
+        return 'a: 기본공격 데미지\n' + 
+            'A: 치명타 데미지\n' +
+            'q & Q: Q스킬 데미지\n' + 
+            'w & W: W스킬 데미지\n' +  
+            'e & E: E스킬 1타 데미지, 재사용시 2타 데미지\n' + 
+            'r & R: R스킬 데미지\n' + 
+            't & T: 패시브 데미지\n' + 
+            d + 
+            'p & P: 트랩 데미지';
     }
 };

@@ -92,13 +92,20 @@ const Yuki = {
     }
     ,Q_Option: ''
     ,W_Skill: (character, enemy) => {
-        const damage = calcSkillDamage(character, enemy, 70 + character.E_LEVEL.selectedIndex * 50, 0.4, 1);
-        const cool = 10000 / ((18 - character.W_LEVEL.selectedIndex * 2) * (100 - character.cooldown_reduction) + 23);
-        if (character.DIV.querySelector('.yuki_t').checked) {
-            const bonus = calcTrueDamage(character, enemy, 15 + 15 * character.T_LEVEL.selectedIndex);
-            return "<b> _sd/s: </b><b class='damage'>" + round((damage + bonus) * cool) / 100 + '</b>';
+        if (character.weapon) {
+            const w = character.W_LEVEL.selectedIndex;
+            const e = character.E_LEVEL.selectedIndex;
+            const t = character.T_LEVEL.selectedIndex;
+            const damage = calcSkillDamage(character, enemy, 70 + character.E_LEVEL.selectedIndex * 50, 0.4, 1);
+            const cool = (600 + w * 50) / ((15 - e * 1) * (100 - character.cooldown_reduction)) * 
+                10000 / ((18 - w * 2) * (100 - character.cooldown_reduction));
+            if (character.DIV.querySelector('.yuki_t').checked) {
+                const bonus = calcTrueDamage(character, enemy, 15 + 15 * t);
+                return "<b> _sd/s: </b><b class='damage'>" + round((damage + bonus) * cool) / 100 + '</b>';
+            }
+            return "<b> _sd/s: </b><b class='damage'>" + round(damage * cool) / 100 + '</b>';
         }
-        return "<b> _sd/s: </b><b class='damage'>" + round(damage * cool) / 100 + '</b>';
+        return '-';
     }
     ,W_Option: "<b> _use</b><input type='checkbox' class='yuki_w' onchange='updateDisplay()'>"
     ,E_Skill: (character, enemy) => {
@@ -269,5 +276,29 @@ const Yuki = {
             return "<b class='damage'>" + damage + '</b><b> _ : ' + (percent < 0 ? 0 : percent) + '%</b>';
         }
         return '-';
+    }
+    ,COMBO_Option: 'eaQweaqr'
+    ,COMBO_Help: (character) => {
+        if (!character.character) {
+            return 'select character plz';
+        }
+        if (!character.weapon) {
+            return 'select weapon plz';
+        }
+        const weapon = character.weapon.Type;
+        const d = 
+            weapon === 'TwoHandedSword' ? 'd & D: 무스 데미지\n' :
+            weapon === 'DualSwords' ? 'd & D: 무스 6회 데미지\n' :
+            '';
+        return 'a: 기본공격 데미지\n' + 
+            'A: 치명타 데미지\n' +
+            'q: Q스킬 데미지\n' + 
+            'Q: Q스킬 치명타 데미지\n' + 
+            'w & W: 패시브 4회 충전\n' +  
+            'e & E: E스킬 데미지\n' + 
+            'r & R: R스킬 데미지\n' + 
+            't && T: 데미지 없음\n' + 
+            d + 
+            'p & P: 트랩 데미지';
     }
 };

@@ -330,11 +330,7 @@ const Jackie = {
                     }
                     qq = true;
                 } else if (c === 'w' || c === 'W') {
-                    if (!ww) {
-                        ww = true;
-                    } else {
-                        ww = false;
-                    }
+                    ww = !ww;
                 } else if (c === 'e' || c === 'E') {
                     if ((qq || rr > 1) && ww) {
                         damage += calcSkillDamage(character, enemy, 10 + e * 60, 0.3 + e * 0.1 + 0.1 + w * 0.025, 1);
@@ -349,22 +345,14 @@ const Jackie = {
                         damage += calcSkillDamage(character, enemy, 300 + r * 200, 1, 1);
                     }
                 } else if (c === 't') {
-                    if (!tt) {
-                        tt = true;
-                    } else {
-                        tt = false;
-                    }
+                    tt = !tt;
                     ap = 1 + 
                     (tt ? jackie_tw[ t ] : 0) + 
                     (ttt ? jackie_ts[ t ] : 0) + 
                     stack * (dd ? 0.05 + character.DIV.querySelector('.axe_d_hp').value * 0.001 : 0.02);
                     character.attack_power = character.calc_attack_power * ap | 0;
                 } else if (c === 'T') {
-                    if (!ttt) {
-                        ttt = true;
-                    } else {
-                        ttt = false;
-                    }
+                    ttt = !ttt;
                     ap = 1 + 
                     (tt ? jackie_tw[ t ] : 0) + 
                     (ttt ? jackie_ts[ t ] : 0) + 
@@ -393,11 +381,7 @@ const Jackie = {
                                 damage += calcSkillDamage(character, enemy, 0, wm < 13 ? 0.3 : 0.5, 1) * 6;
                             }
                         } else if (type === 'Axe') {
-                            if (!dd) {
-                                dd = true;
-                            } else {
-                                dd = false;
-                            }
+                            dd = !dd;
                             ap = 1 + 
                             (tt ? jackie_tw[ t ] : 0) + 
                             (ttt ? jackie_ts[ t ] : 0) + 
@@ -420,5 +404,32 @@ const Jackie = {
             return "<b class='damage'>" + damage + '</b><b> _ : ' + (percent < 0 ? 0 : percent) + '%</b>';
         }
         return '-';
+    }
+    ,COMBO_Option: 'tTewQradaaaa'
+    ,COMBO_Help: (character) => {
+        if (!character.character) {
+            return 'select character plz';
+        }
+        if (!character.weapon) {
+            return 'select weapon plz';
+        }
+        const weapon = character.weapon.Type;
+        const d = 
+            weapon === 'Dagger' ? 'd & D: 무스 데미지(현재 체력 비례)\n' : 
+            weapon === 'TwoHandedSword' ? 'd & D: D스킬 데미지\n' :
+            weapon === 'DualSwords' ? 'd & D: D스킬 6타 데미지\n' :
+            weapon === 'Axe' ? 'd & D: 버프 On / Off\n' :
+            '';
+        return 'a: 기본공격 데미지\n' + 
+            'A: 치명타 데미지\n' +
+            'q: Q스킬 1타 데미지\n' + 
+            'Q: Q스킬 최대 데미지\n' + 
+            'w & W: W스킬 On / Off\n' + 
+            'e & E: E스킬 데미지\n' + 
+            'r & R: R스킬 On / Off\n' + 
+            't: 패시브 닭, 멧돼지, 들개 On / Off\n' + 
+            'T: 패시브 곰, 위클라인, 실험체 On / Off\n' + 
+            d + 
+            'p & P: 트랩 데미지';
     }
 };

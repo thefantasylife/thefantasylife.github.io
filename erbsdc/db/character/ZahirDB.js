@@ -232,4 +232,28 @@ const Zahir = {
         }
         return '-';
     }
+    ,COMBO_Option: 'qawweRwawwawq'
+    ,COMBO_Help: (character) => {
+        if (!character.character) {
+            return 'select character plz';
+        }
+        if (!character.weapon) {
+            return 'select weapon plz';
+        }
+        const weapon = character.weapon.Type;
+        const d = 
+            weapon === 'Throws' ? 'd & D: 데미지 없음\n' : 
+            weapon === 'Shuriken' ? 'd: 무스 추가타 데미지\n' + 'D: 무스 첫타 데미지\n' : 
+            '';
+        return 'a: 기본공격 데미지\n' + 
+            'A: 치명타 데미지\n' +
+            'q & Q: Q스킬 데미지, 패시브 발동\n' + 
+            'w & W: W스킬 데미지, 패시브 발동\n' +  
+            'e & E: E스킬 1타 데미지, 재사용시 2타 데미지, 패시브 발동\n' + 
+            'r: R스킬 추가타 데미지\n' + 
+            'R: R스킬 첫타 데미지, 패시브 발동\n' + 
+            't & T: 데미지 없음\n' + 
+            d + 
+            'p & P: 트랩 데미지';
+    }
 };

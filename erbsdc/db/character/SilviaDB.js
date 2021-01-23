@@ -178,12 +178,10 @@ const Silvia = {
     }
     ,COMBO: (character, enemy) => {
         if (character.weapon) {
-            const type = character.weapon.Type;
             const q = character.Q_LEVEL.selectedIndex;
             const w = character.W_LEVEL.selectedIndex;
             const e = character.E_LEVEL.selectedIndex;
             const r = character.R_LEVEL.selectedIndex;
-            const wm = character.WEAPON_MASTERY.selectedIndex;
             let damage = 0, c;
             let rr = 1;
             const combo = character.COMBO_OPTION.value;
@@ -247,5 +245,28 @@ const Silvia = {
             return "<b class='damage'>" + damage + '</b><b> _ : ' + (percent < 0 ? 0 : percent) + '%</b>';
         }
         return '-';
+    }
+    ,COMBO_Option: 'rEqwraqwaeadqaE'
+    ,COMBO_Help: (character) => {
+        if (!character.character) {
+            return 'select character plz';
+        }
+        if (!character.weapon) {
+            return 'select weapon plz';
+        }
+        const weapon = character.weapon.Type;
+        const d = 
+            weapon === 'Pistol' ? 'd & D: 데미지 없음\n' : 
+            '';
+        return 'a: 기본공격 데미지 (오토바이 탑승시 데미지 없음)\n' + 
+            'A: 치명타 데미지 (오토바이 탑승시 데미지 없음)\n' +
+            'q & Q: Q스킬 데미지\n' + 
+            'w & W: W스킬 데미지\n' +  
+            'e: E스킬 최소 데미지\n' + 
+            'E: E스킬 최대 데미지\n' + 
+            'r & R: R스킬 On / Off\n' + 
+            't & T: 데미지 없음\n' + 
+            d + 
+            'p & P: 트랩 데미지';
     }
 };

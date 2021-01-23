@@ -208,4 +208,29 @@ const Hyejin = {
         }
         return '-';
     }
+    ,COMBO_Option: 'qweaeRrqdara'
+    ,COMBO_Help: (character) => {
+        if (!character.character) {
+            return 'select character plz';
+        }
+        if (!character.weapon) {
+            return 'select weapon plz';
+        }
+        const weapon = character.weapon.Type;
+        const d = 
+            weapon === 'Shuriken' ? 'd: 무스 추가타 데미지\n' + 'D: 무스 첫타 데미지\n' : 
+            weapon === 'Bow' ? 'd: 무스 외곽 데미지\n' + 'D: 무스 중앙 데미지\n' : 
+            '';
+        return 'a: 기본공격 데미지\n' + 
+            'A: 치명타 데미지\n' +
+            'q & Q: Q스킬 데미지\n' + 
+            'w: W스킬 즉발 데미지\n' +  
+            'w: W스킬 최대 데미지\n' +  
+            'e & E: E스킬 1타 데미지, 재사용시 2타 데미지\n' + 
+            'r: R스킬 구체 데미지\n' + 
+            'R: R스킬 폭발 데미지\n' + 
+            't & T: 데미지 없음\n' + 
+            d + 
+            'p & P: 트랩 데미지';
+    }
 };

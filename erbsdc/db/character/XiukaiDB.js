@@ -235,4 +235,28 @@ const Xiukai = {
         }
         return '-';
     }
+    ,COMBO_Option: 'dqewRq'
+    ,COMBO_Help: (character) => {
+        if (!character.character) {
+            return 'select character plz';
+        }
+        if (!character.weapon) {
+            return 'select weapon plz';
+        }
+        const weapon = character.weapon.Type;
+        const d = 
+            weapon === 'Dagger' ? 'd & D: 무스 데미지(현재 체력 비례)\n' : 
+            weapon === 'Spear' ? 'd: 무스 최소 데미지, CC기\n' + 'D: 무스 최대 데미지, CC기\n' : 
+            '';
+        return 'a: 기본공격 데미지\n' + 
+            'A: 치명타 데미지\n' +
+            'q & Q: Q스킬 데미지, CC기\n' + 
+            'w & W: W스킬 데미지, CC기\n' +  
+            'e & E: E스킬 1타 데미지, CC기\n' + 
+            'r: R스킬 1.5초간 데미지\n' + 
+            'R\ R스킬 3초간 데미지\n' + 
+            't & T: 데미지 없음\n' + 
+            d + 
+            'p & P: 트랩 데미지';
+    }
 };

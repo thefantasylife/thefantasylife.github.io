@@ -243,4 +243,29 @@ const Hyunwoo = {
         }
         return '-';
     }
+    ,COMBO_Option: 'ERqad'
+    ,COMBO_Help: (character) => {
+        if (!character.character) {
+            return 'select character plz';
+        }
+        if (!character.weapon) {
+            return 'select weapon plz';
+        }
+        const weapon = character.weapon.Type;
+        const d = 
+            weapon === 'Glove' ? 'd: 무스 데미지\n' + 'D: 무스 치명타 데미지\n' : 
+            weapon === 'Tonfa' ? 'd & D: 데미지 없음\n' : 
+            '';
+        return 'a: 기본공격 데미지\n' + 
+            'A: 치명타 데미지\n' +
+            'q & Q: Q스킬 데미지\n' + 
+            'w & w: 다음 E스킬 방어력 증가\n' + 
+            'e: E스킬 데미지(현재 체력 비례)\n' + 
+            'E: E스킬 벽꿍 데미지(현재 체력 비례)\n' + 
+            'r: R스킬 즉발 데미지\n' + 
+            'R: R스킬 최대 데미지\n' + 
+            't & T: 데미지 없음\n' + 
+            d + 
+            'p & P: 트랩 데미지';
+    }
 };

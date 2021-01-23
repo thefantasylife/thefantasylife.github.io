@@ -194,7 +194,7 @@ const Hart = {
             const wm = character.WEAPON_MASTERY.selectedIndex;
             let damage = 0, c;
             const sap = character.DIV.querySelector('.hart_ee').checked ? 25 : character.DIV.querySelector('.hart_e').checked ? 15 : 0;
-            let stack = 0;
+            let ww = false, stack = 0;
 
             const hart_w = character.DIV.querySelector('.hart_w');
             const hart_ww = character.DIV.querySelector('.hart_ww');
@@ -232,10 +232,16 @@ const Hart = {
                 } else if (c === 'Q') {
                     damage += calcSkillDamage(character, enemy, 160 + q * 40, 0.6, 1);
                 } else if (c === 'w' || c === 'W') {
-                    character.attack_power = character.calc_attack_power * (1 + 0.12 + w * 0.07) | 0;
-                    if (enemy.defense) {
-                        enemy.defense = enemy.calc_defense * (1 - (hart_ww.checked ? 0.3 : hart_w.checked ? 0.15 : 0)) | 0;
+                    if (ww) {
+                        character.attack_power = character.calc_attack_power | 0;
+                        enemy.defense = enemy.calc_defense;
+                    } else {
+                        character.attack_power = character.calc_attack_power * (1 + 0.12 + w * 0.07) | 0;
+                        if (enemy.defense) {
+                            enemy.defense = enemy.calc_defense * (1 - (hart_ww.checked ? 0.3 : hart_w.checked ? 0.15 : 0)) | 0;
+                        }
                     }
+                    ww = !ww;
                 } else if (c === 'e' || c === 'E') {
                     if (stack < 3) {
                         stack++;
@@ -267,5 +273,28 @@ const Hart = {
             return "<b class='damage'>" + damage + '</b><b> _ : ' + (percent < 0 ? 0 : percent) + '%</b>';
         }
         return '-';
+    }
+    ,COMBO_Option: 'waeeeadQa'
+    ,COMBO_Help: (character) => {
+        if (!character.character) {
+            return 'select character plz';
+        }
+        if (!character.weapon) {
+            return 'select weapon plz';
+        }
+        const weapon = character.weapon.Type;
+        const d = 
+            weapon === 'Guitar' ? 'd & D: D스킬 데미지\n' : 
+            '';
+        return 'a: 기본공격 데미지\n' + 
+            'A: 치명타 데미지\n' +
+            'q: Q스킬 즉발 데미지\n' + 
+            'Q: Q스킬 최대 데미지\n' + 
+            'w & W: W스킬 On / Off\n' +  
+            'e & E: E스킬 데미지\n' + 
+            'r & R: 데미지 없음\n' + 
+            't & T: 데미지 없음\n' + 
+            d + 
+            'p & P: 트랩 데미지';
     }
 };

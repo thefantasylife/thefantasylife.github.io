@@ -209,7 +209,7 @@ const Isol = {
                 } else if (c === 'q' || c === 'Q') {
                     if (qq) {
                         qq--;
-                        damage += calcSkillDamage(character, enemy, 50 + q * 25 + (8 + q * 4) * qq, 0.5 + qq * 0.3, 1);
+                        damage += calcSkillDamage(character, enemy, 50 + q * 25 + (8 + q * 4) * (qq - 1), 0.5 + (qq - 1) * 0.3, 1);
                         qq = 0;
                     } else {
                         qq = 1;
@@ -220,6 +220,10 @@ const Isol = {
                     }
                     damage += calcSkillDamage(character, enemy, 18 + w * 9, 0.5, 1) * 4;
                 } else if (c === 'r' || c === 'R') {
+                    if (!pp && enemy.defense) {
+                        pp = true;
+                        enemy.defense = enemy.calc_defense * (1 - (0.05 + t * 0.1)) | 0;
+                    }
                     damage += (100 + r * 50 + character.attack_power * 0.3) * (1.04 + character.TRAP_MASTERY.selectedIndex * 0.04) | 0;
                 } else if (c === 'p' || c === 'P') {
                     if (character.trap) {
@@ -242,5 +246,27 @@ const Isol = {
             return "<b class='damage'>" + damage + '</b><b> _ : ' + (percent < 0 ? 0 : percent) + '%</b>';
         }
         return '-';
+    }
+    ,COMBO_Option: 'rqawaQaa'
+    ,COMBO_Help: (character) => {
+        if (!character.character) {
+            return 'select character plz';
+        }
+        if (!character.weapon) {
+            return 'select weapon plz';
+        }
+        const weapon = character.weapon.Type;
+        const d = 
+            weapon === 'Pistol' ? 'd & D: 데미지 없음\n' : 
+            weapon === 'AssaultRifle' ? 'd & D: 데미지 없음\n' :
+            '';
+        return 'a: 기본공격 데미지, Q 1스택\n' + 
+            'A: 치명타 데미지, Q 1스택\n' +
+            'q & Q: Q스킬 부착, 재사용시 Q스킬 폭발\n' + 
+            'w & W: W스킬 데미지, Q 4스택\n' + 
+            'e & E: 데미지 없음\n' + 
+            'r & R: R스킬 데미지\n' + 
+            d + 
+            'p & P: 트랩 데미지';
     }
 };

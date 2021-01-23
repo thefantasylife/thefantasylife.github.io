@@ -266,4 +266,29 @@ const Fiora = {
         }
         return '-';
     }
+    ,COMBO_Option: 'rDaWaqeAaWq'
+    ,COMBO_Help: (character) => {
+        if (!character.character) {
+            return 'select character plz';
+        }
+        if (!character.weapon) {
+            return 'select weapon plz';
+        }
+        const weapon = character.weapon.Type;
+        const d = 
+            weapon === 'TwoHandedSword' ? 'd & D: 무스 데미지\n' : 
+            weapon === 'Rapier' ? 'd & D: 무스 데미지\n' : 
+            weapon === 'Spear' ? 'd: 무스 최소 데미지\n' + 'D: 무스 최대 데미지\n' : 
+            '';
+        return 'a: 기본공격 데미지, 패시브 1스택\n' + 
+            'A: 치명타 데미지, 패시브 1스택\n' +
+            'q & Q: Q스킬 데미지\n' + 
+            'w: W스킬 데미지, 패시브 2스택\n' +  
+            'W: W스킬 치명타 데미지, 패시브 2스택\n' + 
+            'e & E: E스킬 데미지\n' + 
+            'r & R: R스킬 On / Off\n' + 
+            't & T: 데미지 없음\n' + 
+            d + 
+            'p & P: 트랩 데미지';
+    }
 };

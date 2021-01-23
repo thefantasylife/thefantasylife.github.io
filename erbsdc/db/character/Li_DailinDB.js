@@ -340,4 +340,28 @@ const Li_Dailin = {
         }
         return '-';
     }
+    ,COMBO_Option: 'wwqaDetwrt'
+    ,COMBO_Help: (character) => {
+        if (!character.character) {
+            return 'select character plz';
+        }
+        if (!character.weapon) {
+            return 'select weapon plz';
+        }
+        const weapon = character.weapon.Type;
+        const d = 
+            weapon === 'Glove' ? 'd: 무스 데미지\n' + 'D: 무스 치명타 데미지\n' : 
+            weapon === 'Nunchaku' ? 'd: 무스 즉발 데미지\n' + 'D: 무스 최대 데미지\n' : 
+            '';
+        return 'a: 기본공격 데미지\n' + 
+            'A: 치명타 데미지\n' +
+            'q & Q: Q스킬 1회 데미지\n' + 
+            'w & W: W스킬 사용(최대 게이지 95)\n' +  
+            'e & E: E스킬 데미지\n' + 
+            'r & R: R스킬 데미지(잃은 체력 비례)\n' + 
+            't: 패시브 데미지\n' + 
+            'T: 패시브 치명타 데미지\n' + 
+            d + 
+            'p & P: 트랩 데미지';
+    }
 };

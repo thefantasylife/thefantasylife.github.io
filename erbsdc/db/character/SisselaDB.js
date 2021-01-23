@@ -236,4 +236,28 @@ const Sissela = {
         }
         return '-';
     }
+    ,COMBO_Option: 'tQrqeDdddawtQa'
+    ,COMBO_Help: (character) => {
+        if (!character.character) {
+            return 'select character plz';
+        }
+        if (!character.weapon) {
+            return 'select weapon plz';
+        }
+        const weapon = character.weapon.Type;
+        const d = 
+            weapon === 'Throws' ? 'd & D: 데미지 없음\n' : 
+            weapon === 'Shuriken' ? 'd: 무스 추가타 데미지\n' + 'D: 무스 첫타 데미지\n' : 
+            '';
+        return 'a: 기본공격 데미지\n' + 
+            'A: 치명타 데미지\n' +
+            'q: Q스킬 2타 데미지\n' + 
+            'Q: Q스킬 최대 데미지\n' + 
+            'w & W: W스킬 데미지\n' +  
+            'e & E: E스킬 1타 데미지, 재사용시 2타 데미지\n' + 
+            'r & R: R스킬 데미지\n' + 
+            't & T: 패시브 데미지\n' + 
+            d + 
+            'p & P: 트랩 데미지';
+    }
 };

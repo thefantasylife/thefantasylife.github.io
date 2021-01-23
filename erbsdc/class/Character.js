@@ -45,6 +45,7 @@ class Character {
 
         this.INFO = DIV.querySelector('.info');
         this.HELP = DIV.querySelector('.help');
+        this.COMBO = DIV.querySelector('.combo');
 
         this.WEAPON = DIV.querySelector('.weapon');
         this.CHEST = DIV.querySelector('.chest');
@@ -74,6 +75,7 @@ class Character {
         this.E_LEVEL = DIV.querySelector('.e_level');
         this.R_LEVEL = DIV.querySelector('.r_level');
         this.T_LEVEL = DIV.querySelector('.t_level');
+        this.PRESET = DIV.querySelector('.preset');
 
         this.ITEM_LIST = DIV.querySelector('.item_list');
 
@@ -148,6 +150,15 @@ class Character {
 				this.ITEM_LIST.style.display = 'block';
             }
         });
+        this.COMBO.addEventListener('click', (e) => {
+            if (!this.character) {
+                alert('select character plz');
+            } else {
+                this.ITEM_LIST.querySelector('.item_view').innerHTML = '<b>' + this.character.COMBO_Help(this).replaceAll(/\n/g, '<br/>') + '</b>';
+				this.ITEM_LIST.style.display = 'block';
+            }
+        });
+
 
         this.WEAPON.addEventListener('click', (e) => {
         	if (!this.character) {
@@ -350,55 +361,70 @@ class Character {
                 this.R_OPTION.innerHTML = this.character.R_Option;
                 this.D_OPTION.innerHTML = this.character.D_Option(this, this.enemy);
                 this.T_OPTION.innerHTML = this.character.T_Option;
-                this.COMBO_OPTION.value = '';
+                this.COMBO_OPTION.value = this.character.COMBO_Option;
                 this.COMBO_TIME.value = '5';
             }
             updateDisplay();
         });
 
         this.LEVEL.addEventListener('change', (e) => {
+            this.savePreset()
             updateDisplay();
         });
         this.WEAPON_MASTERY.addEventListener('change', (e) => {
+            this.savePreset()
             updateDisplay();
         });
         this.HUNT_MASTERY.addEventListener('change', (e) => {
+            this.savePreset()
             updateDisplay();
         });
         this.CRAFT_MASTERY.addEventListener('change', (e) => {
+            this.savePreset()
             updateDisplay();
         });
         this.SEARCH_MASTERY.addEventListener('change', (e) => {
+            this.savePreset()
             updateDisplay();
         });
         this.MOVE_MASTERY.addEventListener('change', (e) => {
+            this.savePreset()
             updateDisplay();
         });
         this.HEALTH_MASTERY.addEventListener('change', (e) => {
+            this.savePreset()
             updateDisplay();
         });
         this.DEFENSE_MASTERY.addEventListener('change', (e) => {
+            this.savePreset()
             updateDisplay();
         });
         this.MEDITATION_MASTERY.addEventListener('change', (e) => {
+            this.savePreset()
             updateDisplay();
         });
         this.TRAP_MASTERY.addEventListener('change', (e) => {
+            this.savePreset()
             updateDisplay();
         });
         this.Q_LEVEL.addEventListener('change', (e) => {
+            this.savePreset()
             updateDisplay();
         });
         this.W_LEVEL.addEventListener('change', (e) => {
+            this.savePreset()
             updateDisplay();
         });
         this.E_LEVEL.addEventListener('change', (e) => {
+            this.savePreset()
             updateDisplay();
         });
         this.R_LEVEL.addEventListener('change', (e) => {
+            this.savePreset()
             updateDisplay();
         });
         this.T_LEVEL.addEventListener('change', (e) => {
+            this.savePreset()
             updateDisplay();
         });
         this.COMBO_OPTION.addEventListener('change', (e) => {
@@ -412,6 +438,63 @@ class Character {
             this.ITEM_LIST.querySelector('.item_view').innerHTML = '';
             this.ITEM_LIST.style.display = 'none';
         });
+        
+        this.PRESET.addEventListener('change', (e) => {
+            const preset = decodeURIComponent(getCookie('preset' + e.target.selectedIndex));
+            console.log(preset)
+            if (preset) {
+                this.setPreset(JSON.parse(preset));
+            } else {
+                this.savePreset();
+            }
+            updateDisplay();
+        });
+    }
+
+    savePreset() {
+        setCookie('preset' + this.PRESET.selectedIndex,
+            JSON.stringify([
+                this.LEVEL.selectedIndex,
+                this.WEAPON_MASTERY.selectedIndex,
+
+                this.HUNT_MASTERY.selectedIndex,
+                this.CRAFT_MASTERY.selectedIndex,
+                this.SEARCH_MASTERY.selectedIndex,
+                this.MOVE_MASTERY.selectedIndex,
+                
+                this.HEALTH_MASTERY.selectedIndex,
+                this.DEFENSE_MASTERY.selectedIndex,
+                this.MEDITATION_MASTERY.selectedIndex,
+                this.TRAP_MASTERY.selectedIndex,
+                
+                this.Q_LEVEL.selectedIndex,
+                this.W_LEVEL.selectedIndex,
+                this.E_LEVEL.selectedIndex,
+                this.R_LEVEL.selectedIndex,
+                this.T_LEVEL.selectedIndex,
+            ]),
+        7);
+    }
+
+    setPreset(preset) {
+        this.LEVEL.selectedIndex = preset[0];
+        this.WEAPON_MASTERY.selectedIndex = preset[1];
+
+        this.HUNT_MASTERY.selectedIndex = preset[2];
+        this.CRAFT_MASTERY.selectedIndex = preset[3];
+        this.SEARCH_MASTERY.selectedIndex = preset[4];
+        this.MOVE_MASTERY.selectedIndex = preset[5];
+        
+        this.HEALTH_MASTERY.selectedIndex = preset[6];
+        this.DEFENSE_MASTERY.selectedIndex = preset[7];
+        this.MEDITATION_MASTERY.selectedIndex = preset[8];
+        this.TRAP_MASTERY.selectedIndex = preset[9];
+        
+        this.Q_LEVEL.selectedIndex = preset[10];
+        this.W_LEVEL.selectedIndex = preset[11];
+        this.E_LEVEL.selectedIndex = preset[12];
+        this.R_LEVEL.selectedIndex = preset[13];
+        this.T_LEVEL.selectedIndex = preset[14];
     }
 
     setEnemy(enemy) {

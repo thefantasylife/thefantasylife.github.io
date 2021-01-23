@@ -52,8 +52,8 @@ const Emma = {
             const q = character.Q_LEVEL.selectedIndex;
             const damage = calcSkillDamage(character, enemy, 40 + q * 40, 0.3, 1);
             const heal = calcHeal((60 + q * 10) * (0.08 + character.E_LEVEL.selectedIndex * 0.03), 1, enemy);
-            const cool = 10000 / (5.5 * (100 - character.cooldown_reduction));
-            return "<b class='damage'>" + damage * 2 + '</b> ( ' + damage + " x 2 ) <b> __h: </b><b class='heal'>" + heal + "</b><b> __sd/s: </b><b class='damage'>" + round(damage * 2 * cool) / 100 + '</b>';
+            const cool = 10000 / (5.5 * (100 - character.cooldown_reduction) + 13);
+            return "<b class='damage'>" + damage + ' - ' + damage * 2 + '</b> ( ' + damage + " x 2 ) <b> __h: </b><b class='heal'>" + heal + "</b><b> __sd/s: </b><b class='damage'>" + round(damage * 2 * cool) / 100 + '</b>';
         }
         return '-';
     }
@@ -63,7 +63,7 @@ const Emma = {
             const w = character.W_LEVEL.selectedIndex;
             const damage = calcSkillDamage(character, enemy, 100 + w * 50, 0.75, 1);
             const heal = calcHeal((60 + w * 10) * (0.08 + character.E_LEVEL.selectedIndex * 0.03), 1, enemy);
-            const cool = 10000 / ((12 - w * 1) * (100 - character.cooldown_reduction) - 300);
+            const cool = 10000 / ((12 - w * 1) * (100 - character.cooldown_reduction) - 279);
             return "<b class='damage'>" + damage + "</b><b> __h: </b><b class='heal'>" + heal + "</b><b> __sd/s: </b><b class='damage'>" + round(damage * cool) / 100 + '</b>';
         }
         return '-';
@@ -85,7 +85,7 @@ const Emma = {
             const max = calcSkillDamage(character, enemy, 200 + r * 50, 0.75, 1);
             const heal = calcHeal(8 + r * 3, 1, enemy);
             const cool = 10000 / ((18 - r * 3) * (100 - character.cooldown_reduction));
-            return "<b class='damage'>" + min + "</b><b> / </b><b class='damage'>" + max + ' ~ ' + max * 2 + "</b><b> __h: </b><b class='heal'>" + heal + ' ~ ' + heal * 2 + "</b><b> __sd/s: </b><b class='damage'>" + round(max * cool) / 100 + '</b>';
+            return "<b class='damage'>" + min + "</b><b> / </b><b class='damage'>" + max + ' - ' + max * 2 + '</b> ( ' + max + " x 2 )<b> __h: </b><b class='heal'>" + heal + ' ~ ' + heal * 2 + "</b><b> __sd/s: </b><b class='damage'>" + round(max * cool) / 100 + '</b>';
         }
         return '-';
     }
@@ -136,10 +136,10 @@ const Emma = {
             'A: "평균 데미지" ( "평타 데미지" - "치명타 데미지" )\n' + 
             'DPS: "초당 데미지" __h/s: "초당 흡혈량"\n' + 
             'HPS: "초당 회복량"\n' + 
-            'Q: "합산 데미지" ( "1발당 데미지" x "타수" ) __h: "회복량"\n' + 
+            'Q: "스킬 데미지" - "합산 데미지" ( "1발당 데미지" x "타수" ) __h: "회복량"\n' + 
             'W: "스킬 데미지" _h: "회복량"\n' + 
             'E: _h: "회복량"\n' + 
-            'R: "비둘기 데미지" / "모자 데미지" ~ "2회 사용시 데미지" __h: "회복량"\n' + 
+            'R: "비둘기 데미지" / "모자 데미지" - "2회 사용시 데미지" ( "스킬 데미지" x "타수" ) __h: "회복량"\n' + 
             'D: ' + skill + '\n' + 
             'T: "패시브 데미지" ( "평타 데미지", "추가 데미지" - "치명타 데미지", "추가 데미지" ) __s: "쉴드량"\n';
     }
@@ -199,5 +199,30 @@ const Emma = {
             return "<b class='damage'>" + damage + '</b><b> _ : ' + (percent < 0 ? 0 : percent) + '%</b>';
         }
         return '-';
+    }
+    ,COMBO_Option: 'qwRaeDddaaQWR'
+    ,COMBO_Help: (character) => {
+        if (!character.character) {
+            return 'select character plz';
+        }
+        if (!character.weapon) {
+            return 'select weapon plz';
+        }
+        const weapon = character.weapon.Type;
+        const d = 
+            weapon === 'Shuriken' ? 'd: 무스 추가타 데미지\n' + 'D: 무스 첫타 데미지\n' : 
+            '';
+        return 'a: 기본공격 데미지\n' + 
+            'A: 치명타 데미지\n' +
+            'q: Q스킬 데미지\n' + 
+            'Q: Q스킬 2히트 데미지\n' + 
+            'w & W: W스킬 데미지\n' + 
+            'e & E: 데미지 없음\n' + 
+            'r: R스킬 비둘기 데미지\n' + 
+            'R: R스킬 모자 데미지\n' + 
+            't: 패시브 데미지\n' + 
+            'T: 패시브 치명타 데미지\n' + 
+            d + 
+            'p & P: 트랩 데미지';
     }
 }
