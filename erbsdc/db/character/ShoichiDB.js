@@ -164,20 +164,44 @@ const Shoichi = {
             const t = character.T_LEVEL.selectedIndex;
             const wm = character.WEAPON_MASTERY.selectedIndex;
             let damage = 0, c;
+            let tt = 0;
             const combo = character.COMBO_OPTION.value;
             for (let i = 0; i < combo.length; i++) {
                 c = combo.charAt(i);
                 if (c === 'a') {
-                    damage += baseAttackDamage(character, enemy, 0, 1, 0, 1);
+                    if (tt === 5) {
+                        damage += baseAttackDamage(character, enemy, 0, 1 + 0.1 + 0.05 * t, 0, 1);
+                    } else {
+                        damage += baseAttackDamage(character, enemy, 0, 1, 0, 1);
+                    }
                 } else if (c === 'A') {
-                    damage += baseAttackDamage(character, enemy, 0, 1, 100, 1);
+                    if (tt === 5) {
+                        damage +=  baseAttackDamage(character, enemy, 0, 1 + 0.1 + 0.05 * t, 100, 1);
+                    } else {
+                        damage += baseAttackDamage(character, enemy, 0, 1, 100, 1);
+                    }
                 } else if (c === 'q' || c === 'Q') {
+                    if (tt < 5) {
+                        tt++;
+                    }
                     damage += calcSkillDamage(character, enemy, 10 + q * 50, 0.45, 1);
                 } else if (c === 'w' || c === 'W') {
+                    if (tt < 5) {
+                        tt++;
+                    }
                     damage += calcSkillDamage(character, enemy, 10 + w * 30, 0.3, 1);
                 } else if (c === 'e' || c === 'E') {
+                    if (tt < 5) {
+                        tt++;
+                    }
                     damage += calcSkillDamage(character, enemy, 20 + e * 40, 0.3, 1);
                 } else if (c === 'r' || c === 'R') {
+                    if (tt < 5) {
+                        tt++;
+                    }
+                    if (tt < 5) {
+                        tt++;
+                    }
                     damage += calcSkillDamage(character, enemy, 50 + r * 100, 0.3, 1) + 
                         calcSkillDamage(character, enemy, 25 + r * 35, 0.3, 1);
                 } else if (c === 'd' || c === 'D') {
@@ -189,6 +213,9 @@ const Shoichi = {
                         }
                     }
                 } else if (c === 't' || c === 'T') {
+                    if (tt < 5) {
+                        tt++;
+                    }
                     damage += calcSkillDamage(character, enemy, 25 + t * 35, 0.3, 1);
                 } else if (c === 'p' || c === 'P') {
                     if (character.trap) {
