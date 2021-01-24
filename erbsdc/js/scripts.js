@@ -49,12 +49,12 @@ function calcEquip(character, name, n) {
             coe *= 10;
         }
     }
-    let result = (!character.weapon ? 0 : round6(character.weapon[name] * coe)) + 
-        (!character.chest ? 0 : round6(character.chest[name] * coe)) + 
-        (!character.head ? 0 : round6(character.head[name] * coe)) + 
-        (!character.arm ? 0 : round6(character.arm[name] * coe)) + 
-        (!character.leg ? 0 : round6(character.leg[name] * coe)) + 
-        (!character.accessory ? 0 : round6(character.accessory[name] * coe));
+    let result = (!character.weapon || !character.weapon[name] ? 0 : round6(character.weapon[name] * coe)) + 
+        (!character.chest || !character.chest[name] ? 0 : round6(character.chest[name] * coe)) + 
+        (!character.head || !character.head[name] ? 0 : round6(character.head[name] * coe)) + 
+        (!character.arm || !character.arm[name] ? 0 : round6(character.arm[name] * coe)) + 
+        (!character.leg || !character.leg[name] ? 0 : round6(character.leg[name] * coe)) + 
+        (!character.accessory || !character.accessory[name] ? 0 : round6(character.accessory[name] * coe));
     if (n) {
         for (let i = 0; i < n; i++) {
             result /= 10;

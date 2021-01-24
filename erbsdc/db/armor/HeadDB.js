@@ -28,7 +28,8 @@ const Head = [
         ,Attack_Range: 0
         ,Base_Range: 0
         ,Atk_Speed: 0
-        ,Title: "Hairband\n\nDefense +4\nMax SP +130"
+        ,Critical_Strike_Damage_Reduction: 2
+        ,Title: "Hairband\n\nDefense +4\nMax SP +130\nCritical Damage Reduction +2%"
         ,Rarity: "Common"
     }
     ,{
@@ -60,7 +61,8 @@ const Head = [
         ,Attack_Range: 0
         ,Base_Range: 0
         ,Atk_Speed: 0
-        ,Title: "Hat\n\nDefense +4\nCooldown Reduction +5%"
+        ,Critical_Strike_Damage_Reduction: 2
+        ,Title: "Hat\n\nDefense +4\nCritical Damage Reduction +2%\nCooldown Reduction +5%"
         ,Rarity: "Common"
     }
     ,{
@@ -92,7 +94,8 @@ const Head = [
         ,Attack_Range: 0
         ,Base_Range: 0
         ,Atk_Speed: 0
-        ,Title: "Bike Helmet\n\nMax HP +90"
+        ,Critical_Strike_Damage_Reduction: 2
+        ,Title: "Bike Helmet\n\nMax HP +90\nCritical Damage Reduction +2%"
         ,Rarity: "Common"
     }
     ,{
@@ -124,7 +127,8 @@ const Head = [
         ,Attack_Range: 0
         ,Base_Range: 0
         ,Atk_Speed: 0
-        ,Title: "Mask\n\nDefense +10\nMax SP +130\nMovement Speed +0.08"
+        ,Critical_Strike_Damage_Reduction: 4
+        ,Title: "Mask\n\nDefense +10\nMax SP +130\nMovement Speed +0.08\nCritical Damage Reduction +4%"
         ,Rarity: "Uncommon"
     }
     ,{
@@ -156,7 +160,8 @@ const Head = [
         ,Attack_Range: 0
         ,Base_Range: 0
         ,Atk_Speed: 0
-        ,Title: "Circlet\n\nDefense +14\nMax SP +270"
+        ,Critical_Strike_Damage_Reduction: 4
+        ,Title: "Circlet\n\nDefense +14\nMax SP +270\nCritical Damage Reduction +4%"
         ,Rarity: "Uncommon"
     }
     ,{
@@ -188,7 +193,8 @@ const Head = [
         ,Attack_Range: 0
         ,Base_Range: 0
         ,Atk_Speed: 0
-        ,Title: "Beret\n\nDefense +10\nMax HP +60\nCooldown Reduction +7%"
+        ,Critical_Strike_Damage_Reduction: 4
+        ,Title: "Beret\n\nDefense +10\nMax HP +60\nCritical Damage Reduction +4%\nCooldown Reduction +7%"
         ,Rarity: "Uncommon"
     }
     ,{
@@ -220,7 +226,8 @@ const Head = [
         ,Attack_Range: 0
         ,Base_Range: 0
         ,Atk_Speed: 0
-        ,Title: "Chain Coif\n\nDefense +14\nCooldown Reduction +10%"
+        ,Critical_Strike_Damage_Reduction: 4
+        ,Title: "Chain Coif\n\nDefense +14\nCritical Damage Reduction +4%\nCooldown Reduction +10%"
         ,Rarity: "Uncommon"
     }
     ,{
@@ -252,7 +259,8 @@ const Head = [
         ,Attack_Range: 0
         ,Base_Range: 0
         ,Atk_Speed: 0
-        ,Title: "Safety Helmet\n\nMax HP +210"
+        ,Critical_Strike_Damage_Reduction: 4
+        ,Title: "Safety Helmet\n\nMax HP +210\nCritical Damage Reduction +4%"
         ,Rarity: "Uncommon"
     }
     ,{
@@ -284,7 +292,8 @@ const Head = [
         ,Attack_Range: 0
         ,Base_Range: 0
         ,Atk_Speed: 0
-        ,Title: "Ballistic Helmet\n\nDefense +15\nMax HP +90\nCooldown Reduction +8%"
+        ,Critical_Strike_Damage_Reduction: 7
+        ,Title: "Ballistic Helmet\n\nDefense +15\nMax HP +90\nCritical Damage Reduction +7%\nCooldown Reduction +8%"
         ,Rarity: "Rare"
     }
     ,{
@@ -316,7 +325,8 @@ const Head = [
         ,Attack_Range: 0
         ,Base_Range: 0
         ,Atk_Speed: 0
-        ,Title: "Fire Helmet\n\nMax HP +280"
+        ,Critical_Strike_Damage_Reduction: 7
+        ,Title: "Fire Helmet\n\nMax HP +280\nCritical Damage Reduction +7%"
         ,Rarity: "Rare"
     }
     ,{
@@ -348,7 +358,8 @@ const Head = [
         ,Attack_Range: 0
         ,Base_Range: 0
         ,Atk_Speed: 0
-        ,Title: "Tiara\n\nDefense +14\nMax SP +460"
+        ,Critical_Strike_Damage_Reduction: 7
+        ,Title: "Tiara\n\nDefense +14\nMax SP +460\nCritical Damage Reduction +7%"
         ,Rarity: "Rare"
     }
     ,{
@@ -380,7 +391,8 @@ const Head = [
         ,Attack_Range: 0
         ,Base_Range: 0
         ,Atk_Speed: 0
-        ,Title: "Crown\n\nDefense +16\nMax SP +360\nSkill Amplification +8%"
+        ,Critical_Strike_Damage_Reduction: 7
+        ,Title: "Crown\n\nDefense +16\nMax SP +360\nCritical Damage Reduction +7%\nSkill Amplification +8%"
         ,Rarity: "Rare"
     }
     ,{
@@ -412,7 +424,8 @@ const Head = [
         ,Attack_Range: 0
         ,Base_Range: 0
         ,Atk_Speed: 0
-        ,Title: "Close Helm\n\nDefense +20\nMax SP +130\nMovement Speed +0.1\nCooldown Reduction +10%"
+        ,Critical_Strike_Damage_Reduction: 7
+        ,Title: "Close Helm\n\nDefense +20\nMax SP +130\nMovement Speed +0.1\nCritical Damage Reduction +7%\nCooldown Reduction +10%"
         ,Rarity: "Rare"
     }
     ,{
@@ -444,7 +457,8 @@ const Head = [
         ,Attack_Range: 0
         ,Base_Range: 0
         ,Atk_Speed: 0
-        ,Title: "Motorcycle Helmet\n\nAttack Power +10\nMax HP +300\nVision Range +1.5"
+        ,Critical_Strike_Damage_Reduction: 7
+        ,Title: "Motorcycle Helmet\n\nAttack Power +10\nMax HP +300\nVision Range +1.5\nCritical Damage Reduction +7%"
         ,Rarity: "Rare"
     }
     ,{
@@ -476,7 +490,8 @@ const Head = [
         ,Attack_Range: 0
         ,Base_Range: 0
         ,Atk_Speed: 0
-        ,Title: "Mithril Helm\n\nDefense +38\nAttack Speed +12%\nMovement Speed +0.2\nCooldown Reduction +15%"
+        ,Critical_Strike_Damage_Reduction: 10
+        ,Title: "Mithril Helm\n\nDefense +38\nAttack Speed +12%\nMovement Speed +0.2\nCritical Damage Reduction +10%\nCooldown Reduction +15%"
         ,Rarity: "Epic"
     }
     ,{
@@ -508,7 +523,8 @@ const Head = [
         ,Attack_Range: 0
         ,Base_Range: 0
         ,Atk_Speed: 0
-        ,Title: "Crystal Tiara\n\nDefense +14\nMax SP +700\nCritical Strike Chance +20%"
+        ,Critical_Strike_Damage_Reduction: 10
+        ,Title: "Crystal Tiara\n\nDefense +14\nMax SP +700\nCritical Strike Chance +20%\nCritical Damage Reduction +10%"
         ,Rarity: "Epic"
     }
     ,{
@@ -540,7 +556,8 @@ const Head = [
         ,Attack_Range: 0
         ,Base_Range: 0
         ,Atk_Speed: 0
-        ,Title: "Tactical OPS Helmet\n\nDefense +15\nMax HP +120\nAttack Speed +20%\nCooldown Reduction +15%"
+        ,Critical_Strike_Damage_Reduction: 10
+        ,Title: "Tactical OPS Helmet\n\nDefense +15\nMax HP +120\nAttack Speed +20%\nCritical Damage Reduction +10%\nCooldown Reduction +15%"
         ,Rarity: "Epic"
     }
     ,{
@@ -572,7 +589,8 @@ const Head = [
         ,Attack_Range: 0
         ,Base_Range: 0
         ,Atk_Speed: 0
-        ,Title: "Helm of Banneret\n\nDefense +24\nMax SP +200\nMovement Speed +0.1\nCooldown Reduction +10%\nSkill Damage Reduction +11%"
+        ,Critical_Strike_Damage_Reduction: 10
+        ,Title: "Helm of Banneret\n\nDefense +24\nMax SP +200\nMovement Speed +0.1\nCritical Damage Reduction +10%\nCooldown Reduction +10%\nSkill Damage Reduction +11%"
         ,Rarity: "Epic"
     }
     ,{
@@ -604,7 +622,8 @@ const Head = [
         ,Attack_Range: 0
         ,Base_Range: 0
         ,Atk_Speed: 0
-        ,Title: "Imperial Crown\n\nDefense +18\nMax HP +300\nMax SP +500\nSkill Amplification +8%"
+        ,Critical_Strike_Damage_Reduction: 10
+        ,Title: "Imperial Crown\n\nDefense +18\nMax HP +300\nMax SP +500\nCritical Damage Reduction +10%\nSkill Amplification +8%"
         ,Rarity: "Epic"
     }
     ,{
@@ -636,7 +655,8 @@ const Head = [
         ,Attack_Range: 0
         ,Base_Range: 0
         ,Atk_Speed: 0
-        ,Title: "Imperial Burgonet\n\nDefense +10\nMax SP +200\nMovement Speed +0.1\nCooldown Reduction +10%\nSkill Amplification +18%"
+        ,Critical_Strike_Damage_Reduction: 10
+        ,Title: "Imperial Burgonet\n\nDefense +10\nMax SP +200\nMovement Speed +0.1\nCritical Damage Reduction +10%\nCooldown Reduction +10%\nSkill Amplification +18%"
         ,Rarity: "Epic"
     }
     ,{
@@ -668,7 +688,8 @@ const Head = [
         ,Attack_Range: 0
         ,Base_Range: 0
         ,Atk_Speed: 0
-        ,Title: "Chinese Opera Mask\n\nDefense +16\nMax SP +300\nMovement Speed +0.1\nLife Steal +22%\nMovement speed while not in combat +0.4"
+        ,Critical_Strike_Damage_Reduction: 10
+        ,Title: "Chinese Opera Mask\n\nDefense +16\nMax SP +300\nMovement Speed +0.1\nCritical Damage Reduction +10%\nLife Steal +22%\nMovement speed while not in combat +0.4"
         ,Rarity: "Epic"
     }
     ,{
@@ -700,7 +721,8 @@ const Head = [
         ,Attack_Range: 0
         ,Base_Range: 0
         ,Atk_Speed: 0
-        ,Title: "Laurel Wreath\n\nDefense +18\nMax SP +580\nHP Regen +1.5\nSP Regen +2\nExtra Normal Attack Damage +15"
+        ,Critical_Strike_Damage_Reduction: 10
+        ,Title: "Laurel Wreath\n\nDefense +18\nMax SP +580\nHP Regen +1.5\nSP Regen +2\nCritical Damage Reduction +10%\nExtra Normal Attack Damage +15"
         ,Rarity: "Legendary"
     }
 ];

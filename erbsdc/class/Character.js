@@ -627,13 +627,7 @@ class Character {
                 this.leg && this.leg.Name === 'White_Rhinos' ||
                 this.accessory && (this.accessory.Name === 'Gilded_Quill_Fan' || this.accessory.Name === 'White_Crane_Fan');
 
-            this.critical_strike_damage_reduction = 
-                round6(this.head ? this.head.Rarity === 'Common' ? 2 : 
-                    this.head.Rarity === 'Uncommon' ? 4 : 
-                    this.head.Rarity === 'Rare' ? 7 : 
-                    this.head.Rarity === 'Epic' ? 10 : 
-                    this.head.Rarity === 'Legendary' ? 10 : 0 : 0) + 
-                round6((this.arm && this.arm.Name === 'Sword_Stopper' ? 10 : 0) * (1.007 + this.CRAFT_MASTERY.selectedIndex * 0.007));
+            this.critical_strike_damage_reduction = calcEquip(this, 'Critical_Strike_Damage_Reduction');
             this.CRITICAL_STRIKE_DAMAGE_REDUCTION.innerText = this.critical_strike_damage_reduction + '%';
 
             const jackie_tw = [0.03, 0.08, 0.15];
@@ -666,12 +660,12 @@ class Character {
                 (nadine_e ? (10 + e * 5) * (nadine_e.checked ? 2 : 1) : 0) + 
                 (lida_w && lida_w.checked ? 10 + t * 15 : 0) + 
                 (silvia_t ? silvia_t.value * (1 + t * 1) : 0);
-            const attack_speed_minus = 1 - (nadine_r && nadine_r.checked ? 0.35 : 0);
+            // const attack_speed_minus = 1 - (nadine_r && nadine_r.checked ? 0.35 : 0);
             this.attack_speed = 
                 round((this.character.Atk_Speed + (!this.weapon ? 0 : this.weapon.Atk_Speed)) * 
                     (100 + attack_speed_bonus + 
                     (!this.weapon ? 0 : (1 + wm) * this.weapon_mastery_attack_speed) + 
-                    calcEquip(this, 'Attack_Speed')) * attack_speed_minus) / 100;			
+                    calcEquip(this, 'Attack_Speed')) /* * attack_speed_minus*/) / 100;			
             this.ATTACK_SPEED.innerText = this.attack_speed;
 
             const shoichi_t = this.DIV.querySelector('.shoichi_t');
@@ -818,12 +812,11 @@ class Character {
                 (silvia_r && silvia_r.checked ? 0.7 : 0);
             const move_bonus = 
                 (silvia_r && silvia_r.checked ? 0.2 + this.R_LEVEL.selectedIndex * 0.05 : 0);
-            const move_minus = 1 - 
-                (nadine_r && nadine_r.checked ? 0.35 : 0);
+            // const move_minus = 1 - (nadine_r && nadine_r.checked ? 0.35 : 0);
             this.movement_speed = 
                 round((this.character.Move_Speed + move_bonus + 
                     (1 + this.MOVE_MASTERY.selectedIndex) * 0.01 + 
-                    calcEquip(this, 'Move_Speed', 2)) * move_percent * move_minus, 2);
+                    calcEquip(this, 'Move_Speed', 2)) * move_percent /* * move_minus*/, 2);
                 if (this.movement_speed > 7) {
                     this.movement_speed = 7;
                 }

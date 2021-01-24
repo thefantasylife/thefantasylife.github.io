@@ -412,6 +412,7 @@ const Arm = [
         ,Attack_Range: 0
         ,Base_Range: 0
         ,Atk_Speed: 0
+        ,Critical_Strike_Damage_Reduction: 10
         ,Title: "Sword Stopper\n\nDefense +36\nCritical Damage Reduction + 10%\nNormal Attack Damage Reduction +11\nHealing Reduction (Normal Attacks) -40%"
         ,Rarity: "Epic"
     }
