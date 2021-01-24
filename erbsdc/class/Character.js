@@ -652,7 +652,6 @@ class Character {
 
             const jackie_r = this.DIV.querySelector('.jackie_r');
             const nadine_e = this.DIV.querySelector('.nadine_e');
-            const nadine_r = this.enemy.DIV.querySelector('.nadine_r');
             const lida_w = this.DIV.querySelector('.lida_w');
             const silvia_t = this.DIV.querySelector('.silvia_t');
             const attack_speed_bonus = 
@@ -660,12 +659,11 @@ class Character {
                 (nadine_e ? (10 + e * 5) * (nadine_e.checked ? 2 : 1) : 0) + 
                 (lida_w && lida_w.checked ? 10 + t * 15 : 0) + 
                 (silvia_t ? silvia_t.value * (1 + t * 1) : 0);
-            // const attack_speed_minus = 1 - (nadine_r && nadine_r.checked ? 0.35 : 0);
             this.attack_speed = 
                 round((this.character.Atk_Speed + (!this.weapon ? 0 : this.weapon.Atk_Speed)) * 
                     (100 + attack_speed_bonus + 
                     (!this.weapon ? 0 : (1 + wm) * this.weapon_mastery_attack_speed) + 
-                    calcEquip(this, 'Attack_Speed')) /* * attack_speed_minus*/) / 100;			
+                    calcEquip(this, 'Attack_Speed'))) / 100;			
             this.ATTACK_SPEED.innerText = this.attack_speed;
 
             const shoichi_t = this.DIV.querySelector('.shoichi_t');
@@ -812,11 +810,10 @@ class Character {
                 (silvia_r && silvia_r.checked ? 0.7 : 0);
             const move_bonus = 
                 (silvia_r && silvia_r.checked ? 0.2 + this.R_LEVEL.selectedIndex * 0.05 : 0);
-            // const move_minus = 1 - (nadine_r && nadine_r.checked ? 0.35 : 0);
             this.movement_speed = 
                 round((this.character.Move_Speed + move_bonus + 
                     (1 + this.MOVE_MASTERY.selectedIndex) * 0.01 + 
-                    calcEquip(this, 'Move_Speed', 2)) * move_percent /* * move_minus*/, 2);
+                    calcEquip(this, 'Move_Speed', 2)) * move_percent, 2);
                 if (this.movement_speed > 7) {
                     this.movement_speed = 7;
                 }
