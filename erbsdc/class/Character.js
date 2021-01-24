@@ -821,7 +821,7 @@ class Character {
 
             this.out_of_combat_movement_speed = 
                 round(((1 + this.MOVE_MASTERY.selectedIndex) * 0.02 + 
-                    calcEquip(this, 'Out_of_Combat_Movement_Speed', 2)) * move_percent * move_minus, 2);
+                    calcEquip(this, 'Out_of_Combat_Movement_Speed', 2)) * move_percent, 2);
                 if (this.movement_speed + this.out_of_combat_movement_speed > 7) {
                     this.out_of_combat_movement_speed = 7 - this.movement_speed;
                 }
